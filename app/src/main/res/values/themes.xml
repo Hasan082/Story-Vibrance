@@ -1,9 +1,13 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.StoryVibrance" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
+
+    <style name="Base.Theme.StoryVibrance" parent="Theme.Material3.Light.NoActionBar">
+        <!-- Define your body background color -->
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">true</item>
     </style>
+
 
     <style name="Theme.StoryVibrance" parent="Base.Theme.StoryVibrance" />
 </resources>
