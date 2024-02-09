@@ -7,12 +7,10 @@
     <dimen name="title_v_lg">24sp</dimen>
 
     <!-- Text sizes body -->
-    <dimen name="tx_sz_v_sm">10sp</dimen>
-    <dimen name="tx_sz_sm">12sp</dimen>
-    <dimen name="tx_sz_md">14sp</dimen>
-    <dimen name="tx_sz_semi_lg">16sp</dimen>
+    <dimen name="tx_sz_v_sm">12sp</dimen>
+    <dimen name="tx_sz_sm">14sp</dimen>
+    <dimen name="tx_sz_stand">16sp</dimen>
     <dimen name="tx_sz_lg">18sp</dimen>
-    <dimen name="tx_sz_v_lg">20sp</dimen>
 
     <!-- Padding -->
     <dimen name="padding_v_small">4dp</dimen>
@@ -33,4 +31,10 @@
 
     <!-- Radius -->
     <dimen name="btnRadius">6dp</dimen>
+
+
+    <!-- Button Height -->
+    <dimen name="btnHeight">55dp</dimen>
+    <dimen name="btnMaxWidth">270dp</dimen>
+    <dimen name="btnMinWidth">150dp</dimen>
 </resources>

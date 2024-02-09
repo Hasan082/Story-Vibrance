@@ -22,42 +22,36 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        style="@style/TextAppearance.Headline1"
         android:id="@+id/textView3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="@dimen/margin_small"
         android:text="@string/onBoard2title"
         android:textAlignment="center"
-        android:textSize="@dimen/title_large"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.333"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
     <TextView
+        style="@style/TextAppearance.Body3"
         android:id="@+id/textView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="@dimen/margin_small"
         android:text="@string/onboard2_title"
         android:textAlignment="center"
-        android:textSize="@dimen/tx_sz_md"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
     <androidx.appcompat.widget.AppCompatButton
+        style="@style/AppButtonStyle"
         android:id="@+id/nextOnboardBtn2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:layout_margin="@dimen/margin_small"
         android:layout_marginBottom="52dp"
-        android:background="@drawable/buttonstyle"
-        android:minWidth="150dp"
-        android:padding="@dimen/padding_medium"
         android:text="@string/next"
-        android:textColor="@color/black"
-        android:textSize="@dimen/tx_sz_semi_lg"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
