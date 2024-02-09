@@ -17,11 +17,11 @@ public class SignupActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
+        signup = findViewById(R.id.signup);
         loginTextBtn = findViewById(R.id.loginTextBtn);
 
-        loginTextBtn.setOnClickListener(v -> {
-            startActivity(new Intent(SignupActivity.this, LoginActivity.class));
-        });
 
+        signup.setOnClickListener(v -> startActivity(new Intent(SignupActivity.this, LoginActivity.class)));
+        loginTextBtn.setOnClickListener(v -> startActivity(new Intent(SignupActivity.this, LoginActivity.class)));
     }
 }

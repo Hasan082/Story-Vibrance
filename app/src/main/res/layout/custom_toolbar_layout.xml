@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    android:background="@color/primaryColor"
+    android:gravity="center"
+    android:orientation="horizontal">
+
+    <!-- Profile icon on the left -->
+    <ImageView
+        android:id="@+id/profileIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/person"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="16dp"
+        />
+
+    <!-- App name centered -->
+    <TextView
+        style="@style/TextAppearance.Headline3"
+        android:id="@+id/appName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:text="@string/app_name"
+        android:textStyle="bold"/>
+
+    <!-- Notification icon -->
+    <ImageView
+        android:id="@+id/notificationIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/notification"
+        android:layout_gravity="center_vertical"
+        android:layout_marginEnd="16dp"
+        />
+
+    <!-- Messenger icon -->
+    <ImageView
+        android:id="@+id/messengerIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/messenger"
+        android:layout_gravity="center_vertical"
+        android:layout_marginEnd="16dp"
+        />
+
+</LinearLayout>
