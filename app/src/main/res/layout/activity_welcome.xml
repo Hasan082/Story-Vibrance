@@ -30,7 +30,6 @@
         style="@style/AppButtonStyle"
         android:id="@+id/register"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:layout_marginBottom="15dp"
         android:text="@string/register"
         android:maxWidth="280dp"
@@ -40,7 +39,6 @@
         style="@style/AppButtonStyle"
         android:id="@+id/login"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:text="@string/login"
         android:maxWidth="280dp"
         />

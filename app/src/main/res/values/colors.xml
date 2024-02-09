@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primaryColor">#FF228C22</color>
-    <color name="btnColor">#FF228C22</color>
+    <color name="primaryColor">#FF083B08</color>
+    <color name="btnColor">#FF083B08</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 </resources>

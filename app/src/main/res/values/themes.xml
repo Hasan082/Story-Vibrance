@@ -65,7 +65,7 @@
         <item name="android:layout_height">@dimen/btnHeight</item>
         <item name="android:maxWidth">@dimen/btnMaxWidth</item>
         <item name="android:minWidth">@dimen/btnMinWidth</item>
-        <item name="android:padding">@dimen/padding_medium</item>
+        <item name="android:padding">@dimen/padding_small</item>
     </style>
 
     <!--EditText style-->

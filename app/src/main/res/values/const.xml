@@ -34,7 +34,7 @@
 
 
     <!-- Button Height -->
-    <dimen name="btnHeight">55dp</dimen>
+    <dimen name="btnHeight">48dp</dimen>
     <dimen name="btnMaxWidth">270dp</dimen>
     <dimen name="btnMinWidth">150dp</dimen>
 </resources>
