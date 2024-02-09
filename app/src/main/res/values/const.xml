@@ -7,6 +7,7 @@
     <dimen name="title_v_lg">24sp</dimen>
 
     <!-- Text sizes body -->
+    <dimen name="tx_sz_story">10sp</dimen>
     <dimen name="tx_sz_v_sm">12sp</dimen>
     <dimen name="tx_sz_sm">14sp</dimen>
     <dimen name="tx_sz_stand">16sp</dimen>
@@ -31,10 +32,15 @@
 
     <!-- Radius -->
     <dimen name="btnRadius">6dp</dimen>
+    <dimen name="cardRadius">12dp</dimen>
 
 
     <!-- Button Height -->
     <dimen name="btnHeight">48dp</dimen>
     <dimen name="btnMaxWidth">270dp</dimen>
     <dimen name="btnMinWidth">150dp</dimen>
+
+    <!--    Card size-->
+    <dimen name="cardWidth">96dp</dimen>
+    <dimen name="cardHeight">140dp</dimen>
 </resources>

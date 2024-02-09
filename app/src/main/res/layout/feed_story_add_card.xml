@@ -1,0 +1,73 @@
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="@dimen/cardWidth"
+    android:layout_height="@dimen/cardHeight"
+    app:cardCornerRadius="@dimen/cardRadius"
+    android:gravity="center">
+
+    <!-- Background image -->
+    <ImageView
+        android:id="@+id/OwnProfile_circle_img"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/hasan" />
+
+    <!-- Overlay color -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#40000000" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/own_profile_img"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:src="@drawable/hasan"
+        app:civ_border_color="@color/primaryColor"
+        android:layout_marginTop="@dimen/margin_small"
+        android:layout_marginStart="@dimen/margin_small"
+        app:civ_border_width="1dp" />
+
+    <!-- Add icon and text -->
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|center_vertical"
+        android:gravity="center">
+
+        <!-- Add icon -->
+        <ImageView
+            android:id="@+id/addStoryIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:contentDescription="@string/full_name"
+            android:src="@drawable/ic_add" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/add_story"
+            android:layout_below="@+id/addStoryIcon"
+            android:textSize="@dimen/tx_sz_story"
+            android:textColor="@color/white"
+
+            />
+
+    </RelativeLayout>
+
+    <!-- User name -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="@dimen/margin_v_small"
+        android:paddingStart="@dimen/padding_v_small"
+        android:paddingEnd="@dimen/padding_v_small"
+        android:text="You"
+        android:textColor="@color/white"
+        android:lineHeight="12dp"
+        android:textSize="@dimen/tx_sz_story" />
+
+</androidx.cardview.widget.CardView>

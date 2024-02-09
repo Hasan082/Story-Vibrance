@@ -5,6 +5,7 @@
     <style name="Base.Theme.StoryVibrance" parent="Theme.Material3.Light.NoActionBar">
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowBackground">@android:color/white</item>
 
         <!-- Text appearance styles -->
         <item name="textAppearanceHeadline1">@style/TextAppearance.Headline1</item>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/storyCardWrap"
+    android:layout_width="@dimen/cardWidth"
+    android:layout_height="@dimen/cardHeight"
+    android:layout_marginEnd="@dimen/margin_small"
+    app:cardCornerRadius="@dimen/cardRadius">
+
+    <!--    Story image-->
+    <ImageView
+        android:id="@+id/storyBgImg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/hasan"
+        />
+    <!--    profile image-->
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/userProfile_img"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:src="@drawable/hasan"
+        app:civ_border_color="@color/primaryColor"
+        android:layout_marginTop="@dimen/margin_small"
+        android:layout_marginStart="@dimen/margin_small"
+        app:civ_border_width="1dp" />
+
+    <!-- User name -->
+    <TextView
+        android:id="@+id/userNameTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="@dimen/margin_v_small"
+        android:paddingStart="@dimen/padding_v_small"
+        android:paddingEnd="@dimen/padding_v_small"
+        android:text="User Name"
+        android:textColor="@color/white"
+        android:lineHeight="12dp"
+        android:textSize="@dimen/tx_sz_story" />
+
+</androidx.cardview.widget.CardView>

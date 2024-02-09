@@ -18,4 +18,5 @@
     <string name="already_have_an_account">Have an Account?</string>
     <string name="login_below">Login Below:</string>
     <string name="not_registered_yet">Not Registered Yet?</string>
+    <string name="add_story">Add Story</string>
 </resources>
