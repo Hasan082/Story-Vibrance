@@ -20,10 +20,10 @@ public class BottomNavActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bottom_nav);
         bottomNavigationView = findViewById(R.id.bottomNavBar);
-
+        //Set Home Fragment on First Load=========
         getSupportFragmentManager().beginTransaction().replace(R.id.insertView, new FragmentHome()).commit();
 
-
+        //Switch Navigation when Bottom Nav press=====
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -43,9 +43,10 @@ public class BottomNavActivity extends AppCompatActivity {
                 }
 
 
-                if (selectedFragment != null && fragmentSelected) {
+                if (selectedFragment != null) {
                     getSupportFragmentManager().beginTransaction().replace(R.id.insertView, selectedFragment).commit();
                 }
+
                 return fragmentSelected;
             }
         });
