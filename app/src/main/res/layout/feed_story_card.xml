@@ -15,7 +15,7 @@
         android:scaleType="centerCrop"
         android:src="@drawable/hasan"
         />
-    <!--    profile image-->
+    <!--  Circular  profile image-->
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/userProfile_img"
         android:layout_width="32dp"

@@ -8,7 +8,9 @@ import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.hasan.storyvibrance.Controller.PostAdapter;
 import com.hasan.storyvibrance.Controller.StoryAdapter;
+import com.hasan.storyvibrance.Model.PostModel;
 import com.hasan.storyvibrance.Model.StoryModel;
 import com.hasan.storyvibrance.R;
 
@@ -16,8 +18,9 @@ import java.util.ArrayList;
 
 public class FragmentHome extends Fragment {
 
-    RecyclerView story_recyclerview;
+    RecyclerView story_recyclerview, post_recyclerview;
     StoryAdapter storyAdapter;
+    PostAdapter postAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -25,10 +28,18 @@ public class FragmentHome extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
+        //STORY RECYCLERVIEW======================
         story_recyclerview = view.findViewById(R.id.story_recyclerview);
         ArrayList<StoryModel> storyModels = createStoryModels();
         storyAdapter = new StoryAdapter(getContext(), storyModels);
         story_recyclerview.setAdapter(storyAdapter);
+
+        //POST RECYCLERVIEW----------
+        post_recyclerview = view.findViewById(R.id.post_recyclerview);
+        ArrayList<PostModel> postModels = createPostModels();
+        postAdapter = new PostAdapter(getContext(), postModels);
+        post_recyclerview.setAdapter(postAdapter);
+
 
         return view;
     }
@@ -46,5 +57,11 @@ public class FragmentHome extends Fragment {
         storyModels.add(new StoryModel("Rozina Parvin", R.drawable.hasan, R.drawable.hasan));
         storyModels.add(new StoryModel("Hafizul Islam", R.drawable.hasan, R.drawable.hasan));
         return storyModels;
+    }
+    private ArrayList<PostModel> createPostModels() {
+        ArrayList<PostModel> postModels = new ArrayList<>();
+        postModels.add(new PostModel("Pronob", "pronob03", "Lorem ipsum dolor", R.drawable.hasan, R.drawable.posts_img_sample, 30, 10));
+        postModels.add(new PostModel("Pronob", "pronob03", "Lorem ipsum dolor", R.drawable.hasan, R.drawable.posts_img_sample, 30, 10));
+        return postModels;
     }
 }

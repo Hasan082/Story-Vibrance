@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:padding="10dp">
+
+    <!-- Top Section: Author's Profile Image and Name -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <!--  Circular  profile image-->
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/authorImg"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/hasan"
+            app:civ_border_color="@color/primaryColor"
+            app:civ_border_width="1dp"
+             />
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginStart="@dimen/margin_small">
+
+            <TextView
+                android:id="@+id/authorName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/author_name"
+                android:textSize="@dimen/tx_sz_stand"
+                android:textStyle="bold"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="-3dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="11.5dp"
+                    android:layout_height="11.5dp"
+                    android:layout_marginTop="2dp"
+                    android:src="@drawable/attherate"
+                    />
+                <TextView
+                    android:id="@+id/authorUsername"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/username"
+                    android:textColor="@color/grayText"
+                    android:textSize="@dimen/tx_sz_sm"
+                    />
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+        <TextView
+            android:id="@+id/postTextContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/post_content"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:layout_marginTop="10dp"/>
+
+        <TextView
+            android:id="@+id/expandButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/postTextContent"
+            android:text="@string/read_more"
+            android:textColor="@color/primaryColor"
+            />
+    </RelativeLayout>
+    <!-- Text Content -->
+
+
+
+    <!-- Media Content: Images or Videos (Use RecyclerView if multiple) USE LATER-->
+    <!-- For simplicity, I'll include a single ImageView here -->
+    <!--    ToDo: Need to Implement Recycler view here  -->
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="2dp"
+        app:cardCornerRadius="@dimen/cardRadius">
+
+        <ImageView
+            android:id="@+id/postMedia"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/posts_img_sample"
+            android:scaleType="centerCrop"
+            />
+
+    </androidx.cardview.widget.CardView>
+
+
+    <!-- Bottom Section: Like, Comment, Share Icons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/margin_v_small"
+        android:layout_marginEnd="@dimen/margin_v_small"
+        android:gravity="start|center_vertical"
+        android:baselineAligned="false">
+
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_weight="1"
+            android:padding="@dimen/padding_v_small"
+            android:gravity="start|center_vertical"
+            >
+            <ImageView
+                android:id="@+id/likedIcon"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="@dimen/margin_v_small"
+                android:src="@drawable/post_like"/>
+
+            <TextView
+                android:id="@+id/likeCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/tx_sz_stand"
+                android:text="@string/likeCount"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_weight="2"
+            android:gravity="center"
+            >
+
+            <ImageView
+                android:id="@+id/commentIcon"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/post_comment"
+                android:layout_marginTop="2dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="@dimen/margin_v_small"
+                />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="@dimen/padding_v_small"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/commentCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/commentCount"
+                    android:textSize="@dimen/tx_sz_stand"
+                    android:layout_marginEnd="2dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/comments"
+                    android:textSize="@dimen/tx_sz_stand"
+                    />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_weight="1"
+            android:gravity="end|center_vertical"
+            >
+            <ImageView
+                android:id="@+id/flaggedIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/post_save"/>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>
