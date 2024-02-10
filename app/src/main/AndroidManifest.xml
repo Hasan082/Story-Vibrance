@@ -16,9 +16,6 @@
             android:name=".BottomNav.BottomNavActivity"
             android:exported="false" />
         <activity
-            android:name=".Feed.FeedActivity"
-            android:exported="false" />
-        <activity
             android:name=".auth.WelcomeActivity"
             android:exported="false" />
         <activity

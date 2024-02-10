@@ -41,6 +41,6 @@
     <dimen name="btnMinWidth">150dp</dimen>
 
     <!--    Card size-->
-    <dimen name="cardWidth">96dp</dimen>
-    <dimen name="cardHeight">140dp</dimen>
+    <dimen name="cardWidth">110dp</dimen>
+    <dimen name="cardHeight">155dp</dimen>
 </resources>

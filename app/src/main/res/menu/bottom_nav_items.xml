@@ -1,4 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <item
+        android:id="@+id/home"
+        android:title="@string/nav_home"
+        android:icon="@drawable/nav_home"
+        android:iconTint="@color/white"
+        />
+    <item
+        android:id="@+id/search"
+        android:title="@string/nav_search"
+        android:icon="@drawable/nav_search"
+        android:iconTint="@color/white"
+        />
+
+    <item
+        android:id="@+id/profile"
+        android:title="@string/nav_profile"
+        android:icon="@drawable/nav_person"
+        android:iconTint="@color/white"
+        />
 </menu>

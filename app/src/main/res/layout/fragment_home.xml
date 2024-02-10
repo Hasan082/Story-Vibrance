@@ -26,7 +26,6 @@
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             >
             <!-- Add Story card -->
             <include layout="@layout/feed_story_add_card" />
@@ -43,14 +42,14 @@
 
     </HorizontalScrollView>
 
-        <!-- Posts RecyclerView -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/posts_recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/scrolView"
-            android:layout_margin="@dimen/margin_small"
-            />
+    <!-- Posts RecyclerView -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/posts_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/scrolView"
+        android:layout_margin="@dimen/margin_small"
+        />
 
 
 </RelativeLayout>

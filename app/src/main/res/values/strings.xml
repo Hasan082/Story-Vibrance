@@ -19,4 +19,8 @@
     <string name="login_below">Login Below:</string>
     <string name="not_registered_yet">Not Registered Yet?</string>
     <string name="add_story">Add Story</string>
+    <string name="nav_home">Home</string>
+    <string name="nav_search">Search</string>
+    <string name="nav_profile">Profile</string>
+
 </resources>

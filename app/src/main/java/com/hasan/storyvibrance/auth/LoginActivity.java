@@ -7,7 +7,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.hasan.storyvibrance.Feed.FeedActivity;
+import com.hasan.storyvibrance.BottomNav.BottomNavActivity;
 import com.hasan.storyvibrance.R;
 
 public class LoginActivity extends AppCompatActivity {
@@ -22,7 +22,7 @@ public class LoginActivity extends AppCompatActivity {
         login = findViewById(R.id.login);
         signTxtBtn = findViewById(R.id.signTxtBtn);
 
-        login.setOnClickListener(v -> startActivity(new Intent(LoginActivity.this, FeedActivity.class)));
+        login.setOnClickListener(v -> startActivity(new Intent(LoginActivity.this, BottomNavActivity.class)));
         signTxtBtn.setOnClickListener(v -> startActivity(new Intent(LoginActivity.this, SignupActivity.class)));
 
     }
