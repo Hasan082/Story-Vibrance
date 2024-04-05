@@ -1,82 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="@dimen/padding_stand"
-    android:gravity="center"
-    tools:context=".auth.SignupActivity">
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:src="@mipmap/ic_launcher_round"
-        android:layout_marginBottom="@dimen/margin_small"
-        />
-
-    <TextView
-        style="@style/TextAppearance.Headline1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/register_below"
-        android:textAlignment="center"
-        />
-
-    <EditText
-        style="@style/AppEditTextStyle"
-        android:inputType="text"
-        android:hint="@string/full_name"
-        android:drawableStart="@drawable/edit_person"
-        android:autofillHints="" />
-
-    <EditText
-        style="@style/AppEditTextStyle"
-        android:hint="@string/email"
-        android:inputType="textEmailAddress"
-        android:drawableStart="@drawable/edit_email"
-        android:autofillHints="" />
-
-    <EditText
-        style="@style/AppEditTextStyle"
-        android:hint="@string/password"
-        android:inputType="textPassword"
-        android:drawableStart="@drawable/edit_password"
-        android:autofillHints="" />
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/signup"
-        style="@style/AppButtonStyle"
-        android:layout_marginTop="@dimen/margin_v_large"
-        android:text="@string/sign_up"
-         />
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_small"
-        android:orientation="horizontal"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="@dimen/padding_stand"
         android:gravity="center"
-        >
+        tools:context=".auth.SignupActivity">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@mipmap/ic_launcher_round"
+            android:layout_marginBottom="@dimen/margin_small" />
 
         <TextView
-            style="@style/TextAppearance.Body2"
-            android:layout_width="wrap_content"
+            style="@style/TextAppearance.Headline1"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/already_have_an_account"
-            android:layout_marginEnd="@dimen/margin_small"
-            />
+            android:text="@string/register_below"
+            android:textAlignment="center" />
 
-        <TextView
-            style="@style/TextAppearance.Body2"
-            android:id="@+id/loginTextBtn"
-            android:layout_width="wrap_content"
+        <EditText
+            android:id="@+id/nameEdTxt"
+            style="@style/AppEditTextStyle"
+            android:inputType="text"
+            android:hint="@string/full_name"
+            android:drawableStart="@drawable/edit_person"
+            android:autofillHints="" />
+
+        <EditText
+            android:id="@+id/usernameEdTxt"
+            style="@style/AppEditTextStyle"
+            android:hint="@string/email"
+            android:inputType="textEmailAddress"
+            android:drawableStart="@drawable/edit_email"
+            android:autofillHints="" />
+
+        <EditText
+            android:id="@+id/passEdTxt"
+            style="@style/AppEditTextStyle"
+            android:hint="@string/password"
+            android:inputType="textPassword"
+            android:drawableStart="@drawable/edit_password"
+            android:autofillHints="" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/signupBtn"
+            style="@style/AppButtonStyle"
+            android:layout_marginTop="@dimen/margin_v_large"
+            android:text="@string/sign_up" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/primaryColor"
-            android:text="@string/login"
-            />
+            android:layout_marginTop="@dimen/margin_small"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <TextView
+                style="@style/TextAppearance.Body2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/already_have_an_account"
+                android:layout_marginEnd="@dimen/margin_small" />
+
+            <TextView
+                style="@style/TextAppearance.Body2"
+                android:id="@+id/loginTextBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/primaryColor"
+                android:text="@string/login" />
+
+        </LinearLayout>
 
     </LinearLayout>
-
-</LinearLayout>
+</layout>
