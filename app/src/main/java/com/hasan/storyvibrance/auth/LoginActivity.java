@@ -16,7 +16,7 @@ public class LoginActivity extends AppCompatActivity {
 
     Button login;
     TextView signTxtBtn;
-    SharedPreferences sharedPreferences;
+    SharedPreferences sPref;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
