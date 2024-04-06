@@ -6,11 +6,11 @@ import android.os.Bundle;
 
 import com.hasan.storyvibrance.R;
 
-public class ForgetPasswordActivity extends AppCompatActivity {
+public class ForgetPassActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_forget_password);
+        setContentView(R.layout.activity_forget_pass);
     }
 }

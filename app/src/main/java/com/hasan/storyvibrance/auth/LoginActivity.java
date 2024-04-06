@@ -83,7 +83,16 @@ public class LoginActivity extends AppCompatActivity {
 
 
         //If New user send to signup page
-        binding.signTxtBtn.setOnClickListener(v -> startActivity(new Intent(LoginActivity.this, SignupActivity.class)));
+        binding.signTxtBtn.setOnClickListener(v -> {
+            startActivity(new Intent(LoginActivity.this, SignupActivity.class));
+            finish();
+        });
+
+        //Forget password redirect===========
+        binding.forgetPass.setOnClickListener(v -> {
+            startActivity(new Intent(LoginActivity.this, ForgetPassActivity.class));
+        });
+
 
     }//END OF ON CREATE====
 

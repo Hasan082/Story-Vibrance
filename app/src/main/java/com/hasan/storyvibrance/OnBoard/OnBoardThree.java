@@ -25,9 +25,9 @@ public class OnBoardThree extends Fragment {
         getStarted = view.findViewById(R.id.getStarted);
 
         getStarted.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), WelcomeActivity.class);
-            startActivity(intent);
-            // When onboarding is completed
+            //Redirect to Welcome page======
+            startActivity(new Intent(getActivity(), WelcomeActivity.class));
+            // When on boarding is completed, saved it for future to by pass
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
             SharedPreferences.Editor editor = preferences.edit();
             editor.putBoolean("onBoardDone", true);
