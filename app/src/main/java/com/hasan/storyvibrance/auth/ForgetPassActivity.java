@@ -9,6 +9,7 @@ import androidx.databinding.DataBindingUtil;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
+import com.google.firebase.auth.FirebaseUser;
 import com.hasan.storyvibrance.R;
 import com.hasan.storyvibrance.databinding.ActivityForgetPassBinding;
 
@@ -26,6 +27,7 @@ public class ForgetPassActivity extends AppCompatActivity {
 
         binding.sendEmail.setOnClickListener(v -> {
             String email = binding.emailEdTxt.getText().toString().trim();
+
             if (!email.isEmpty()) {
                 mAuth.sendPasswordResetEmail(email)
                         .addOnSuccessListener(unused -> {

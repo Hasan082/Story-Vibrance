@@ -5,26 +5,29 @@ import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.hasan.storyvibrance.R;
+import com.hasan.storyvibrance.databinding.ActivityBottomNavBinding;
 
 public class BottomNavActivity extends AppCompatActivity {
-    BottomNavigationView bottomNavigationView;
+
+    ActivityBottomNavBinding binding;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_bottom_nav);
-        bottomNavigationView = findViewById(R.id.bottomNavBar);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_bottom_nav);
+
         //Set Home Fragment on First Load=========
         getSupportFragmentManager().beginTransaction().replace(R.id.insertView, new FragmentHome()).commit();
 
         //Switch Navigation when Bottom Nav press=====
-        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+        binding.bottomNavBar.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 

@@ -1,36 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".BottomNav.BottomNavActivity"
-    android:orientation="vertical"
-    >
+    xmlns:tools="http://schemas.android.com/tools">
 
-
-    <LinearLayout
-        android:id="@+id/insertView"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        >
-    </LinearLayout>
+        tools:context=".BottomNav.BottomNavActivity"
+        android:orientation="vertical">
 
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNavBar"
-        android:background="@color/primaryColor"
-        android:paddingTop="0dp"
-        android:paddingBottom="0dp"
-        android:layout_width="match_parent"
-        android:layout_height="65dp"
-        app:labelVisibilityMode="unlabeled"
-        android:layout_alignParentBottom="true"
-        app:itemIconTint="@color/bottom_nav_icon_color"
-        app:menu="@menu/bottom_nav_items"
-        app:itemRippleColor="@color/gray"
-        app:itemActiveIndicatorStyle="@style/App.Custom.Indicator"
-        />
+        <LinearLayout
+            android:id="@+id/insertView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" />
 
-</RelativeLayout>
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottomNavBar"
+            android:background="@color/primaryColor"
+            android:paddingTop="0dp"
+            android:paddingBottom="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            app:labelVisibilityMode="unlabeled"
+            android:layout_alignParentBottom="true"
+            app:itemIconTint="@color/bottom_nav_icon_color"
+            app:menu="@menu/bottom_nav_items"
+            app:itemRippleColor="@color/gray"
+            app:itemActiveIndicatorStyle="@style/App.Custom.Indicator" />
+
+    </RelativeLayout>
+</layout>
