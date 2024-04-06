@@ -30,4 +30,7 @@
     <string name="comments">Comments</string>
     <string name="read_more">Read more</string>
     <string name="forget_password">Forget Password?</string>
+    <string name="email_address">Input Your Email Address</string>
+    <string name="forget_link_send_btn">Send</string>
+    <string name="pass_reset_link_sent">A password reset link will be sent to your registered email.</string>
 </resources>
