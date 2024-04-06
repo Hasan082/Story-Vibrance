@@ -7,33 +7,31 @@ import android.util.Log;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.hasan.storyvibrance.BottomNav.BottomNavActivity;
 import com.hasan.storyvibrance.R;
+import com.hasan.storyvibrance.databinding.ActivityWelcomeBinding;
 
 public class WelcomeActivity extends AppCompatActivity {
 
-    Button register, login;
-
+    ActivityWelcomeBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
-        register = findViewById(R.id.register);
-        login = findViewById(R.id.login);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_welcome);
 
-        // Set OnClickListener for the Register button
-        register.setOnClickListener(v -> {
-            Intent intent = new Intent(WelcomeActivity.this, SignupActivity.class);
-            startActivity(intent);
+        // Send to Signin page
+        binding.register.setOnClickListener(v -> {
+            startActivity(new Intent(WelcomeActivity.this, SignupActivity.class));
         });
 
         // Set OnClickListener for the Login button
-        login.setOnClickListener(v -> {
-            Intent intent = new Intent(WelcomeActivity.this, LoginActivity.class);
-            startActivity(intent);
+        binding.login.setOnClickListener(v -> {
+            startActivity(new Intent(WelcomeActivity.this, LoginActivity.class));
         });
 
 

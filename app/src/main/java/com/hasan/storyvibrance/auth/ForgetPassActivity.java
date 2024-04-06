@@ -29,7 +29,7 @@ public class ForgetPassActivity extends AppCompatActivity {
             if (!email.isEmpty()) {
                 mAuth.sendPasswordResetEmail(email)
                         .addOnSuccessListener(unused -> {
-                            String feedback = "A password reset link has been sent to your registered email.";
+                            String feedback = "A password reset link has been sent to email.";
                             Toast.makeText(ForgetPassActivity.this, feedback, Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(ForgetPassActivity.this, LoginActivity.class));
                             binding.emailEdTxt.setText("");
