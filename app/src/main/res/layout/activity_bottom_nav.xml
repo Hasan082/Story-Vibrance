@@ -3,33 +3,71 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <RelativeLayout
+    <androidx.drawerlayout.widget.DrawerLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        tools:openDrawer="start"
         tools:context=".BottomNav.BottomNavActivity"
-        android:orientation="vertical">
+        android:id="@+id/drawerLayout">
 
-
-        <LinearLayout
-            android:id="@+id/insertView"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical" />
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:background="@color/primaryColor"
+                    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                    app:titleTextAppearance="@style/TextAppearance.Toolbar.Title"
+                    style="@style/ToolbarStyle">
+
+                    <include
+                        android:id="@+id/customAppBarLayout"
+                        layout="@layout/custom_toolbar_layout" />
+
+                </androidx.appcompat.widget.Toolbar>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/insertView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="?attr/actionBarSize"
+                android:layout_marginBottom="?attr/actionBarSize"
+                android:orientation="vertical" />
 
 
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottomNavBar"
-            android:background="@color/primaryColor"
-            android:paddingTop="0dp"
-            android:paddingBottom="0dp"
+            <com.google.android.material.bottomnavigation.BottomNavigationView
+                android:id="@+id/bottomNavBar"
+                android:layout_width="match_parent"
+                android:layout_height="65dp"
+                android:layout_alignParentBottom="true"
+                android:background="@color/primaryColor"
+                android:paddingTop="0dp"
+                android:paddingBottom="0dp"
+                app:itemActiveIndicatorStyle="@style/App.Custom.Indicator"
+                app:itemIconTint="@color/bottom_nav_icon_color"
+                app:itemRippleColor="@color/gray"
+                app:labelVisibilityMode="unlabeled"
+                app:menu="@menu/bottom_nav_items" />
+
+        </RelativeLayout>
+
+        <com.google.android.material.navigation.NavigationView
+            android:id="@+id/drawerNavView"
             android:layout_width="match_parent"
-            android:layout_height="65dp"
-            app:labelVisibilityMode="unlabeled"
-            android:layout_alignParentBottom="true"
-            app:itemIconTint="@color/bottom_nav_icon_color"
-            app:menu="@menu/bottom_nav_items"
-            app:itemRippleColor="@color/gray"
-            app:itemActiveIndicatorStyle="@style/App.Custom.Indicator" />
+            android:layout_height="match_parent"
+            app:headerLayout="@layout/drawer_header"
+            app:menu="@menu/drawer_menu"
+            android:layout_gravity="start" />
 
-    </RelativeLayout>
+    </androidx.drawerlayout.widget.DrawerLayout>
 </layout>

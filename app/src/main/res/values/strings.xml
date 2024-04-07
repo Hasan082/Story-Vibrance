@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Story Vibrance</string>
+    <string name="open">open</string>
+    <string name="close">close</string>
     <string name="Welcome">Welcome to Story Vibrance!</string>
     <string name="onboard1_desc">Embark on a journey of creativity and connection as you dive into the vibrant world of storytelling with our unique platform. We\'re thrilled to have you join us!</string>
     <string name="next">Next</string>

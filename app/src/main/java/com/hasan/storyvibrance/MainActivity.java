@@ -29,10 +29,12 @@ public class MainActivity extends AppCompatActivity {
         // Retrieve saved UID and username and Auto login
         String savedUid = preferences.getString("uid", "");
         String savedUsername = preferences.getString("username", "");
+        //IF Already Logged In user=========
         if (!savedUid.isEmpty() && !savedUsername.isEmpty()) {
             startActivity(new Intent(this, BottomNavActivity.class));
             finish();
         } else if (onBoardDone) {
+            //If Previously open the app=====
             startActivity(new Intent(this, WelcomeActivity.class));
             finish();
         } else {

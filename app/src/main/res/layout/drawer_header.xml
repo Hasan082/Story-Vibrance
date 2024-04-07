@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="@dimen/padding_large"
+    android:background="@color/primaryColor"
+    >
+
+    <!-- Profile icon on the left -->
+    <de.hdodenhof.circleimageview.CircleImageView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/appbarImg"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/hasan"
+        app:civ_border_width="0dp"
+        />
+
+    <TextView
+        style="@style/TextAppearance.Headline3"
+        android:id="@+id/personName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:textAlignment="center"
+        android:textStyle="bold"
+        android:layout_marginTop="@dimen/margin_medium"
+        android:text="@string/app_name"
+        />
+
+    <TextView
+        style="@style/TextAppearance.Body3"
+        android:id="@+id/personEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:textAlignment="center"
+        android:text="dr.has82@gmail.com"
+        />
+
+</LinearLayout>

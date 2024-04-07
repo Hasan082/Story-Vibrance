@@ -4,6 +4,7 @@
     android:layout_height="?attr/actionBarSize"
     android:background="@color/primaryColor"
     android:gravity="center"
+    android:id="@+id/appBarLayout"
     android:orientation="horizontal">
 
     <!-- Profile icon on the left -->
