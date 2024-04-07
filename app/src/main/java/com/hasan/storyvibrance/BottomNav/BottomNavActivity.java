@@ -20,7 +20,6 @@ public class BottomNavActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_bottom_nav);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_bottom_nav);
 
 // FOR OPEN DRAWER USING HUMBER ICON WITH APP BAR BELOW(DO NOT DELETE, KEEP IT FOR FUTURE REFERENCE)====================
@@ -32,13 +31,19 @@ public class BottomNavActivity extends AppCompatActivity {
 // FOR OPEN DRAWER USING HUMBER ICON WITH APP BAR ABOVE(DO NOT DELETE, KEEP IT FOR FUTURE REFERENCE)====================
 
         //Open Drawer By Appbar Profile Image Click==============================
-        binding.customAppBarLayout.findViewById(R.id.appbarImg).setOnClickListener(new View.OnClickListener() {
+        binding.customAppBar.findViewById(R.id.appbarImg).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 binding.drawerLayout.openDrawer(GravityCompat.START);
             }
         });
 
+//        binding.customAppBar.findViewById(R.id.appbarImg).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                binding.drawerLayout.openDrawer(GravityCompat.START);
+//            }
+//        });
 
 
         //BOTTOM NAVIGATION CODE START FROM HERE==================================
