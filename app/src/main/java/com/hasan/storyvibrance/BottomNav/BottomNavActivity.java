@@ -38,6 +38,11 @@ public class BottomNavActivity extends AppCompatActivity {
             }
         });
 
+
+        // ToDo
+        // Notification and Messenger activate
+
+
 //        binding.customAppBar.findViewById(R.id.appbarImg).setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
