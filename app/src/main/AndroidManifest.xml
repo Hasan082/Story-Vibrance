@@ -43,6 +43,14 @@
         android:theme="@style/Theme.StoryVibrance"
         tools:targetApi="31">
         <activity
+            android:name=".Messenger.MessengerActivity"
+            android:parentActivityName=".BottomNav.BottomNavActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Notification.NotificationActivity"
+            android:parentActivityName=".BottomNav.BottomNavActivity"
+            android:exported="false" />
+        <activity
             android:name=".auth.ForgetPassActivity"
             android:exported="false" />
         <activity

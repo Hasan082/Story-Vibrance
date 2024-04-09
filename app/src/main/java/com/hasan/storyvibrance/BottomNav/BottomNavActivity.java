@@ -1,4 +1,5 @@
 package com.hasan.storyvibrance.BottomNav;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -9,6 +10,9 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+
+import com.hasan.storyvibrance.Messenger.MessengerActivity;
+import com.hasan.storyvibrance.Notification.NotificationActivity;
 import com.hasan.storyvibrance.R;
 import com.hasan.storyvibrance.databinding.ActivityBottomNavBinding;
 import java.util.Objects;
@@ -39,16 +43,25 @@ public class BottomNavActivity extends AppCompatActivity {
         });
 
 
-        // ToDo
-        // Notification and Messenger activate
+        // ToDo===========================
+        //profile
+        //update profile
 
+        //Go To Notification page by click Notification icon=====================
+        binding.customAppBar.findViewById(R.id.notificationIcon).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(BottomNavActivity.this, NotificationActivity.class));
+            }
+        });
 
-//        binding.customAppBar.findViewById(R.id.appbarImg).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                binding.drawerLayout.openDrawer(GravityCompat.START);
-//            }
-//        });
+        //Go To Messenger page by click messenger icon==========================
+        binding.customAppBar.findViewById(R.id.messengerIcon).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(BottomNavActivity.this, MessengerActivity.class));
+            }
+        });
 
 
         //BOTTOM NAVIGATION CODE START FROM HERE==================================
