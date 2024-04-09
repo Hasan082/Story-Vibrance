@@ -35,4 +35,6 @@
     <string name="email_address">Input Your Email Address</string>
     <string name="forget_link_send_btn">Send</string>
     <string name="pass_reset_link_sent">A password reset link will be sent to your registered email.</string>
+    <string name="my_profile">My Profile</string>
+    <string name="edit">Edit</string>
 </resources>
