@@ -26,6 +26,7 @@ public class LoginActivity extends AppCompatActivity {
 
     FirebaseAuth mAuth;
     SharedPreferences sPref;
+    SharedPreferences.Editor sPrefEdit;
     ActivityLoginBinding binding;
 
     boolean isLoggedIn = false;
@@ -36,7 +37,7 @@ public class LoginActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         SharedPreferences sPref = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences.Editor sPrefEdit = sPref.edit();
+        sPrefEdit = sPref.edit();
 
         binding.login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,17 +54,20 @@ public class LoginActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if(task.isSuccessful()){
-                                sPrefEdit.putString("username", username);
-                                sPrefEdit.apply();
+                                //Clear the filed===
                                 binding.usernameEdTxt.setText("");
                                 binding.passEdTxt.setText("");
+                                //Extract the UID from Firebase===========
                                 String uid = mAuth.getUid();
-                                SharedPreferences.Editor editor = sPref.edit();
-                                editor.putString("uid", uid);
-                                editor.putString("username", uid);
-                                editor.apply();
+                                //Set the UID and Username for autologin===
+                                sPrefEdit.putString("uid", uid);
+                                sPrefEdit.putString("username", username);
+                                sPrefEdit.apply();
+                                //Send user to Home
                                 startActivity(new Intent(LoginActivity.this, BottomNavActivity.class));
+                                //Hide the Loading animation====
                                 hideLoadingIndicator();
+                                //Kill the login page===
                                 finish();
                             }else  {
                                 String err = "Credentials do not match our records.";

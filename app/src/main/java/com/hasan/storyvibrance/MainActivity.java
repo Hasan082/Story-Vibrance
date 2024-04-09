@@ -13,17 +13,19 @@ import androidx.preference.PreferenceManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.hasan.storyvibrance.BottomNav.BottomNavActivity;
 import com.hasan.storyvibrance.OnBoard.OnBoardOne;
+import com.hasan.storyvibrance.auth.LoginActivity;
 import com.hasan.storyvibrance.auth.WelcomeActivity;
 
 public class MainActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
+    SharedPreferences preferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mAuth = FirebaseAuth.getInstance();
 
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
         boolean onBoardDone = preferences.getBoolean("onBoardDone", false);
 
         // Retrieve saved UID and username and Auto login
@@ -35,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
             finish();
         } else if (onBoardDone) {
             //If Previously open the app=====
-            startActivity(new Intent(this, WelcomeActivity.class));
+            startActivity(new Intent(this, LoginActivity.class));
             finish();
         } else {
             // Show on boarding fragment

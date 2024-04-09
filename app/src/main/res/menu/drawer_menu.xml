@@ -22,7 +22,7 @@
         />
     <item
         android:id="@+id/logout"
-        android:title="LogOut"
+        android:title="Logout"
         android:icon="@drawable/nav_person"
         android:iconTint="@color/white"
         />

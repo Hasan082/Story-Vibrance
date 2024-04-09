@@ -1,5 +1,6 @@
 package com.hasan.storyvibrance.BottomNav;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -10,22 +11,27 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
 
 import com.hasan.storyvibrance.Messenger.MessengerActivity;
 import com.hasan.storyvibrance.Notification.NotificationActivity;
 import com.hasan.storyvibrance.R;
+import com.hasan.storyvibrance.auth.LoginActivity;
 import com.hasan.storyvibrance.databinding.ActivityBottomNavBinding;
 import java.util.Objects;
 public class BottomNavActivity extends AppCompatActivity {
 
     ActivityBottomNavBinding binding;
     ActionBarDrawerToggle toggle;
+    SharedPreferences sPref;
+    SharedPreferences.Editor sPrefEdit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_bottom_nav);
-
+        sPref = PreferenceManager.getDefaultSharedPreferences(this);
+        sPrefEdit = sPref.edit();
 // FOR OPEN DRAWER USING HUMBER ICON WITH APP BAR BELOW(DO NOT DELETE, KEEP IT FOR FUTURE REFERENCE)====================
 //        setSupportActionBar(binding.toolBar);
 //        toggle = new ActionBarDrawerToggle(this, binding.drawerLayout, binding.toolBar, R.string.open, R.string.close);
@@ -62,6 +68,22 @@ public class BottomNavActivity extends AppCompatActivity {
                 startActivity(new Intent(BottomNavActivity.this, MessengerActivity.class));
             }
         });
+
+        binding.drawerNavView.setNavigationItemSelectedListener(item->{
+
+
+            if(item.getItemId()==R.id.logout){
+                sPrefEdit.remove("uid");
+                sPrefEdit.remove("username");
+                sPrefEdit.apply();
+                startActivity(new Intent(BottomNavActivity.this, LoginActivity.class));
+                Toast.makeText(BottomNavActivity.this, "Checking....", Toast.LENGTH_SHORT).show();
+            }
+
+            return true;
+        });
+
+
 
 
         //BOTTOM NAVIGATION CODE START FROM HERE==================================
