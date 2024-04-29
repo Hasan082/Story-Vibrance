@@ -34,6 +34,9 @@
         <item name="android:homeAsUpIndicator">@drawable/back_button</item>
     </style>
 
+    <style name="progressBarColor" parent="@style/Theme.AppCompat">
+        <item name="colorAccent">@color/primaryColor</item>
+    </style>
 
     <!-- Text appearance styles Heading 1 -->
     <style name="TextAppearance.Headline1" parent="@android:style/TextAppearance">
