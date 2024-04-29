@@ -35,7 +35,6 @@ public class NavigationActivity extends AppCompatActivity {
         sPrefEdit = sPref.edit();
 
 
-
         //LOGOUT FUNCTION=====================
 
         binding.drawerNavView.setNavigationItemSelectedListener(item->{
@@ -81,4 +80,10 @@ public class NavigationActivity extends AppCompatActivity {
 
 
     }
+
+
+    public void openDrawer() {
+        binding.drawerLayout.openDrawer(GravityCompat.START);
+    }
+
 }

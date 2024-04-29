@@ -51,11 +51,11 @@
         <activity
             android:name=".Messenger.MessengerActivity"
             android:exported="false"
-            android:parentActivityName=".BottomNav.BottomNavActivity" />
+            android:parentActivityName=".BottomNav.NavigationActivity" />
         <activity
             android:name=".Notification.NotificationActivity"
             android:exported="false"
-            android:parentActivityName=".BottomNav.BottomNavActivity" />
+            android:parentActivityName=".BottomNav.NavigationActivity" />
         <activity
             android:name=".auth.ForgetPassActivity"
             android:exported="false" />

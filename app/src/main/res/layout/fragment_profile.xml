@@ -74,26 +74,31 @@
                         android:id="@+id/profileImg"
                         android:layout_width="120dp"
                         android:layout_height="120dp"
-                        android:src="@drawable/hasan"
-                        app:civ_border_width="5dp"
                         android:padding="5dp"
+                        android:src="@drawable/hasan"
                         app:civ_border_color="@color/gray"
+                        app:civ_border_width="5dp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/profileImgEdit"
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_marginBottom="4dp"
                         android:clickable="true"
                         android:contentDescription="@string/edit"
                         android:src="@drawable/editblue"
                         app:civ_border_color="@color/primaryColor"
-                        app:civ_border_overlay="false"
-                        app:civ_border_width="5dp"
+                        app:civ_border_overlay="true"
+                        app:civ_border_width="3dp"
                         app:civ_circle_background_color="@color/white"
-                        app:layout_constraintBottom_toBottomOf="@id/profileImg"
-                        app:layout_constraintEnd_toEndOf="@id/profileImg" />
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@id/profileImg"
+                        app:layout_constraintHorizontal_bias="0.811"
+                        app:layout_constraintStart_toStartOf="@+id/profileImg"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.851" />
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
