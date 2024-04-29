@@ -1,10 +1,8 @@
 package com.hasan.storyvibrance.auth;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -18,7 +16,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.hasan.storyvibrance.BottomNav.BottomNavActivity;
+import com.hasan.storyvibrance.BottomNav.NavigationActivity;
 import com.hasan.storyvibrance.R;
 import com.hasan.storyvibrance.databinding.ActivityLoginBinding;
 
@@ -64,7 +62,7 @@ public class LoginActivity extends AppCompatActivity {
                                 sPrefEdit.putString("username", username);
                                 sPrefEdit.apply();
                                 //Send user to Home
-                                startActivity(new Intent(LoginActivity.this, BottomNavActivity.class));
+                                startActivity(new Intent(LoginActivity.this, NavigationActivity.class));
                                 //Hide the Loading animation====
                                 hideLoadingIndicator();
                                 //Kill the login page===

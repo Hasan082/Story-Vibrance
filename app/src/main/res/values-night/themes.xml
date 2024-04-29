@@ -4,4 +4,56 @@
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
     </style>
+
+    <!-- Text appearance style for Toolbar title -->
+    <style name="TextAppearance.Toolbar.Title" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/title_small</item>
+    </style>
+
+    <style name="ToolbarStyle" parent="Widget.AppCompat.Toolbar">
+        <item name="android:background">@color/primaryColor</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:homeAsUpIndicator">@drawable/back_button</item>
+    </style>
+
+
+    <!-- Text appearance styles Heading 1 -->
+    <style name="TextAppearance.Headline1" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/title_large</item>
+        <item name="android:fontFamily">@font/lobster</item>
+
+        <!-- Add more text attributes for Headline1 style -->
+    </style>
+    <!-- Text appearance styles Heading 2 -->
+    <style name="TextAppearance.Headline2" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/title_stand</item>
+        <!-- Add more text attributes for Headline2 style -->
+    </style>
+    <!-- Text appearance styles Heading 3 -->
+    <style name="TextAppearance.Headline3" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/title_small</item>
+        <item name="android:fontFamily">@font/lobster</item>
+    </style>
+
+    <!-- Text appearance styles Body 1-->
+    <style name="TextAppearance.Body1" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/tx_sz_lg</item>
+    </style>
+
+    <!-- Text appearance styles Body 2-->
+    <style name="TextAppearance.Body2" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/tx_sz_stand</item>
+    </style>
+
+    <!-- Text appearance styles Body 3-->
+    <style name="TextAppearance.Body3" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/tx_sz_sm</item>
+    </style>
 </resources>

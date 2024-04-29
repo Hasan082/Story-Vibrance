@@ -62,6 +62,7 @@
                     android:id="@+id/login"
                     style="@style/AppButtonStyle"
                     android:layout_marginTop="@dimen/margin_v_large"
+                    android:stateListAnimator="@null"
                     android:text="@string/login" />
 
                 <LinearLayout

@@ -8,16 +8,21 @@
         android:iconTint="@color/white"
         />
     <item
-        android:id="@+id/search"
         android:title=""
-        android:icon="@drawable/nav_search"
-        android:iconTint="@color/white"
+        />
+
+    <item
+        android:title=""
+        />
+
+    <item
+        android:title=""
         />
 
     <item
         android:id="@+id/profile"
         android:title=""
-        android:icon="@drawable/nav_person"
+        android:icon="@drawable/person"
         android:iconTint="@color/white"
         />
 </menu>

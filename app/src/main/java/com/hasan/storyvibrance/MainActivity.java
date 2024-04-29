@@ -11,10 +11,9 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.preference.PreferenceManager;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.hasan.storyvibrance.BottomNav.BottomNavActivity;
+import com.hasan.storyvibrance.BottomNav.NavigationActivity;
 import com.hasan.storyvibrance.OnBoard.OnBoardOne;
 import com.hasan.storyvibrance.auth.LoginActivity;
-import com.hasan.storyvibrance.auth.WelcomeActivity;
 
 public class MainActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
@@ -33,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         String savedUsername = preferences.getString("username", "");
         //IF Already Logged In user=========
         if (!savedUid.isEmpty() && !savedUsername.isEmpty()) {
-            startActivity(new Intent(this, BottomNavActivity.class));
+            startActivity(new Intent(this, NavigationActivity.class));
             finish();
         } else if (onBoardDone) {
             //If Previously open the app=====

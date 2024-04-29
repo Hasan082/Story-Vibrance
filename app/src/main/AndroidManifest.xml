@@ -43,10 +43,10 @@
         android:theme="@style/Theme.StoryVibrance"
         tools:targetApi="31">
         <activity
-            android:name=".Profile.UpdateProfileActivity"
+            android:name=".BottomNav.NavigationActivity"
             android:exported="false" />
         <activity
-            android:name=".Profile.ProfileActivity"
+            android:name=".Profile.UpdateProfileActivity"
             android:exported="false" />
         <activity
             android:name=".Messenger.MessengerActivity"
@@ -58,9 +58,6 @@
             android:parentActivityName=".BottomNav.BottomNavActivity" />
         <activity
             android:name=".auth.ForgetPassActivity"
-            android:exported="false" />
-        <activity
-            android:name=".BottomNav.BottomNavActivity"
             android:exported="false" />
         <activity
             android:name=".auth.WelcomeActivity"
