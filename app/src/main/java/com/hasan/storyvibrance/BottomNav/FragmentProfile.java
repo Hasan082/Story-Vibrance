@@ -1,5 +1,6 @@
 package com.hasan.storyvibrance.BottomNav;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -26,6 +27,7 @@ import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.hasan.storyvibrance.Profile.UpdateProfileActivity;
 import com.hasan.storyvibrance.R;
 import com.hasan.storyvibrance.databinding.FragmentProfileBinding;
 import com.squareup.picasso.Picasso;
@@ -91,8 +93,10 @@ public class FragmentProfile extends Fragment {
             }
         });
 
-
-
+        //Go to edit profile
+        binding.goToUpdateProfile.setOnClickListener(v->{
+            startActivity(new Intent(requireActivity(), UpdateProfileActivity.class));
+        });
         //Upload Image and set the image when image changed
         binding.profileImgEdit.setOnClickListener(v-> mGetContent.launch("image/*"));
 
