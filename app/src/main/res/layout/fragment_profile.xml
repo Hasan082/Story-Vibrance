@@ -4,15 +4,19 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-
     <data>
         <variable
             name="username"
-            type="String" />
+            type="String"
+            />
         <variable
             name="personName"
             type="String" />
+        <variable
+            name="profileImg"
+            type="String" />
     </data>
+
 
 
 
@@ -98,7 +102,7 @@
                             android:layout_width="120dp"
                             android:layout_height="120dp"
                             android:padding="5dp"
-                            android:src="@drawable/hasan"
+                            android:src="@{profileImg}"
                             app:civ_border_color="@color/gray"
                             app:civ_border_width="5dp"
                             app:layout_constraintStart_toStartOf="parent"
