@@ -4,7 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <variable
+            name="fullName"
+            type="String"
+            />
+        <variable
+            name="emailAddress"
+            type="String"
+            />
     </data>
 
     <LinearLayout
@@ -23,14 +30,15 @@
             android:layout_marginBottom="20dp"
             android:textAlignment="center" />
 
+
         <EditText
-            android:id="@+id/FullName"
+            android:id="@+id/personName"
             style="@style/AppEditTextStyle"
             android:layout_marginBottom="20dp"
-            android:autofillHints=""
             android:drawableStart="@drawable/edit_person"
-            android:hint=""
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:hint="Full Name"
+            android:text="@{fullName}" />
 
         <EditText
             android:id="@+id/userName"
@@ -39,8 +47,10 @@
             android:autofillHints=""
             android:drawableStart="@drawable/edit_email"
             android:enabled="false"
+            android:hint="Your username"
+            android:text="@{emailAddress}"
             android:inputType="textEmailAddress"
-            android:value="username" />
+             />
 
         <EditText
             android:id="@+id/userBio"
