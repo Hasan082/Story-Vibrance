@@ -161,6 +161,7 @@ public class FragmentProfile extends Fragment {
                 });
     }
 
+    //update  profile imag
     private void updateProfileImageUrl(String username, String imageDownloadUrl) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         // Create a map to update the profile image URL
