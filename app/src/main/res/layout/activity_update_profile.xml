@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-
     <data>
         <variable
             name="fullName"
@@ -22,13 +20,49 @@
         android:padding="16dp"
         tools:context=".Profile.UpdateProfileActivity">
 
-        <TextView
-            style="@style/TextAppearance.Headline1"
+        <!--Spinner show until data fully loaded-->
+        <LinearLayout
+            android:id="@+id/spinner"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:visibility="gone"
+            android:orientation="vertical">
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:theme="@style/progressBarColor"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/update_profile"
+            android:orientation="horizontal"
+            android:layout_gravity="center"
             android:layout_marginBottom="20dp"
-            android:textAlignment="center" />
+            >
+
+            <ImageView
+                android:id="@+id/backBtn"
+                android:clickable="true"
+                android:contentDescription="@string/edit"
+                android:layout_width="38dp"
+                android:layout_height="38dp"
+                android:src="@drawable/custom_back"
+                />
+            <TextView
+                style="@style/TextAppearance.Headline1"
+                android:layout_width="wrap_content"
+                android:layout_height="38dp"
+                android:gravity="center"
+                android:text="@string/update_profile"
+                android:layout_marginBottom="20dp"
+                android:textAlignment="center" />
+        </LinearLayout>
+
 
 
         <EditText
