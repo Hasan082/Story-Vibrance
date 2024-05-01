@@ -1,18 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center"
-    tools:context=".Profile.UpdateProfileActivity">
 
-    <TextView
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <LinearLayout
+        android:id="@+id/main"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Edit profile"
-        />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp"
+        tools:context=".Profile.UpdateProfileActivity">
 
-</LinearLayout>
+        <TextView
+            style="@style/TextAppearance.Headline1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/update_profile"
+            android:layout_marginBottom="20dp"
+            android:textAlignment="center" />
+
+        <EditText
+            android:id="@+id/FullName"
+            style="@style/AppEditTextStyle"
+            android:layout_marginBottom="20dp"
+            android:autofillHints=""
+            android:drawableStart="@drawable/edit_person"
+            android:hint=""
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/userName"
+            style="@style/AppEditTextStyle"
+            android:layout_marginBottom="20dp"
+            android:autofillHints=""
+            android:drawableStart="@drawable/edit_email"
+            android:enabled="false"
+            android:inputType="textEmailAddress"
+            android:value="username" />
+
+        <EditText
+            android:id="@+id/userBio"
+            style="@style/AppEditTextStyle"
+            android:autofillHints=""
+            android:layout_marginBottom="10dp"
+            android:drawableStart="@drawable/bio"
+            android:hint="@string/about_me"
+            android:inputType="text"
+            android:maxLines="2"
+            android:maxLength="80" />
+
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/updateBtn"
+            style="@style/AppButtonStyle"
+            android:layout_marginTop="@dimen/margin_v_large"
+            android:text="@string/update" />
+
+    </LinearLayout>
+</layout>

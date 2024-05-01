@@ -26,7 +26,7 @@
     <string name="nav_profile">Profile</string>
     <string name="author_name">Author Name</string>
     <string name="username">username</string>
-    <string name="post_content">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer cursus eros ac diam faucibus, et luctus felis fermentum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer cursus eros ac diam faucibus, et luctus felis fermentum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer cursus eros ac diam faucibus, et luctus felis fermentum.</string>
+    <string name="post_content">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer cursus eros aclit. Integer cursus eros ac diam faucibus, et luctus felis fermentum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer cursus eros ac diam faucibus, et luctus felis fermentum.</string>
     <string name="likeCount">100</string>
     <string name="commentCount">50</string>
     <string name="comments">Comments</string>
@@ -37,5 +37,7 @@
     <string name="pass_reset_link_sent">A password reset link will be sent to your registered email.</string>
     <string name="my_profile">My Profile</string>
     <string name="edit">Edit</string>
-    <string name="about_me">About Me</string>
+    <string name="about_me">Write your bio here</string>
+    <string name="update_profile">Update Profile</string>
+    <string name="update">Update</string>
 </resources>
