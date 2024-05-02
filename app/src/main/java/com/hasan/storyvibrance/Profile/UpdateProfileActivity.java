@@ -2,6 +2,7 @@ package com.hasan.storyvibrance.Profile;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,7 +30,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
         //GET THE USER NAME FROM SharedPreferences
         String userName = getUsernameFromSharedPreferences();
 
-
+        binding.spinner.setVisibility(View.VISIBLE);
         //GET THE FULL NAME FROM DATABASE AND SET IT
         db.collection("userdata").document(userName).get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
@@ -41,7 +42,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
                     }  // Handle the case where personName is null
                     binding.setEmailAddress(userName);
                     //Hide loader======
-//                        binding.spinner.setVisibility(View.GONE);
+                    binding.spinner.setVisibility(View.GONE);
                 } else {
                     //if no data available in database
                     Toast.makeText(UpdateProfileActivity.this, "Data Not available", Toast.LENGTH_SHORT).show();
@@ -54,9 +55,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
 
 
         //Back to profile page======================
-        binding.backBtn.setOnClickListener(v->{
-            getOnBackPressedDispatcher().onBackPressed();
-        });
+        binding.backBtn.setOnClickListener(v-> getOnBackPressedDispatcher().onBackPressed());
 
 
     }//END OF ON CREATE===============
