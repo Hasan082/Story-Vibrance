@@ -91,7 +91,7 @@
              />
 
         <EditText
-            android:id="@+id/userBio"
+            android:id="@+id/aboutBio"
             style="@style/AppEditTextStyle"
             android:autofillHints=""
             android:layout_marginBottom="10dp"

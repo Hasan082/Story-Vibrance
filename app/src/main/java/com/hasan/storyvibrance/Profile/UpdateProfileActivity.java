@@ -34,48 +34,59 @@ public class UpdateProfileActivity extends AppCompatActivity {
         //GET THE USER NAME FROM SharedPreferences
         String userName = getUsernameFromSharedPreferences();
 
-        binding.spinner.setVisibility(View.VISIBLE);
+
         //GET THE FULL NAME FROM DATABASE AND SET IT
         db.collection("userdata").document(userName).get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot documentSnapshot = task.getResult();
                 if (documentSnapshot != null && documentSnapshot.exists()) {
                     String personName = documentSnapshot.getString("name");
+                    String userBio = documentSnapshot.getString("bio");
                     if (personName != null) {
                         binding.setFullName(personName);
-                    }  // Handle the case where personName is null
+                    } else {
+                        // Handle the case where personName is null
+                        binding.setFullName(getString(R.string.full_name));
+                    }
+                    if (userBio != null) {
+                        binding.setUserBio(userBio);
+                    } else {
+                        binding.setUserBio(getString(R.string.about_me));
+                    }
                     binding.setEmailAddress(userName);
-                    //Hide loader======
+                    //Hide loader
                     binding.spinner.setVisibility(View.GONE);
                 } else {
                     //if no data available in database
-                    Toast.makeText(UpdateProfileActivity.this, "Data Not available", Toast.LENGTH_SHORT).show();
+                    showDatabaseErrorMessage();
                 }
             } else {
                 // Handle failures
-                Toast.makeText(UpdateProfileActivity.this, "Database Error!", Toast.LENGTH_SHORT).show();
+                showDatabaseErrorMessage();
             }
         });
 
-
-        //Back to profile page======================
+        //Back to profile page===========
         binding.backBtn.setOnClickListener(v-> getOnBackPressedDispatcher().onBackPressed());
 
-
-
-        //update data====
-
+        //update data here==============
         binding.updateBtn.setOnClickListener(v -> {
+            binding.spinner.setVisibility(View.VISIBLE);
             String username = getUsernameFromSharedPreferences();
             updateProfileData(username);
         });
-
-
     }//END OF ON CREATE===============
 
     private void updateProfileData(String username) {
         String fullName = binding.personName.getText().toString();
-        String userBio = binding.userBio.getText().toString();
+        String userBio = binding.aboutBio.getText().toString();
+
+        // Input Validation
+        if (fullName.isEmpty()) {
+            Toast.makeText(UpdateProfileActivity.this, "Full name cannot be empty!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         Map<String, Object> updates = new HashMap<>();
         updates.put("name", fullName);
         updates.put("bio", userBio);
@@ -84,13 +95,17 @@ public class UpdateProfileActivity extends AppCompatActivity {
             Toast.makeText(UpdateProfileActivity.this, "Info Updated!", Toast.LENGTH_SHORT).show();
             getOnBackPressedDispatcher().onBackPressed();
         });
-
     }
 
     // Retrieve the username from SharedPreferences
     private String getUsernameFromSharedPreferences() {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         return sharedPreferences.getString("username", "");
+    }
+
+    // Show database error message
+    private void showDatabaseErrorMessage() {
+        Toast.makeText(UpdateProfileActivity.this, "Database Error!", Toast.LENGTH_SHORT).show();
     }
 
 
