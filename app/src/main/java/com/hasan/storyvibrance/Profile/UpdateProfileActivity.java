@@ -9,10 +9,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.preference.PreferenceManager;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.hasan.storyvibrance.R;
 import com.hasan.storyvibrance.databinding.ActivityUpdateProfileBinding;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class UpdateProfileActivity extends AppCompatActivity {
@@ -58,7 +62,31 @@ public class UpdateProfileActivity extends AppCompatActivity {
         binding.backBtn.setOnClickListener(v-> getOnBackPressedDispatcher().onBackPressed());
 
 
+
+        //update data====
+
+        binding.updateBtn.setOnClickListener(v -> {
+            String username = getUsernameFromSharedPreferences();
+            updateProfileData(username);
+        });
+
+
     }//END OF ON CREATE===============
+
+    private void updateProfileData(String username) {
+        String fullName = binding.personName.getText().toString();
+        String userBio = binding.userBio.getText().toString();
+        Map<String, Object> updates = new HashMap<>();
+        updates.put("name", fullName);
+        updates.put("bio", userBio);
+        System.out.println("updates" +updates);
+
+        db.collection("userdata").document(username).update(updates).addOnSuccessListener(unused -> {
+            Toast.makeText(UpdateProfileActivity.this, "Info Updated!", Toast.LENGTH_SHORT).show();
+            getOnBackPressedDispatcher().onBackPressed();
+        });
+
+    }
 
     // Retrieve the username from SharedPreferences
     private String getUsernameFromSharedPreferences() {

@@ -10,6 +10,10 @@
             name="emailAddress"
             type="String"
             />
+        <variable
+            name="userBio"
+            type="String"
+            />
     </data>
 
     <LinearLayout
@@ -95,6 +99,7 @@
             android:hint="@string/about_me"
             android:inputType="text"
             android:maxLines="2"
+            android:text="@{userBio}"
             android:maxLength="80" />
 
 

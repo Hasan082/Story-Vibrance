@@ -1,13 +1,17 @@
 package com.hasan.storyvibrance.BottomNav;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultCallback;
@@ -32,6 +36,8 @@ import com.hasan.storyvibrance.R;
 import com.hasan.storyvibrance.databinding.FragmentProfileBinding;
 import com.squareup.picasso.Picasso;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -49,17 +55,13 @@ public class FragmentProfile extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_profile, container, false);
         View view = binding.getRoot();
 
-        //Get user name from sharedPreferences and pass it to database and set it to view
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
         String userName = getUsernameFromSharedPreferences();
-        //Instance for database===================
         db = FirebaseFirestore.getInstance();
 
-        //Spinner activate until data load=========
         binding.spinner.setVisibility(View.VISIBLE);
         db.collection("userdata").document(userName).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -69,142 +71,157 @@ public class FragmentProfile extends Fragment {
                     if (documentSnapshot != null && documentSnapshot.exists() && isAdded()) {
                         String personName = documentSnapshot.getString("name");
                         String profileImgUrl = documentSnapshot.getString("ProfileImg");
-                        // Check if profileImgUrl is not null
                         if (profileImgUrl != null) {
-                            // Load the profile image URL into the ImageView
                             Picasso.get().load(profileImgUrl).into(binding.profileImg);
                         } else {
-                            // If profileImgUrl is null, load a default image
-                            Picasso.get().load(R.drawable.person).into(binding.profileImg); // Replace default_image with your drawable resource
+                            Picasso.get().load(R.drawable.person).into(binding.profileImg);
                         }
-                        // Set personName and username directly
                         binding.setPersonName(personName);
                         binding.setUsername(userName);
-                        //Hide loader======
                         binding.spinner.setVisibility(View.GONE);
                     } else {
-                        //if no data available in database
                         Toast.makeText(requireContext(), "Data Not available", Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    // Handle failures
                     Toast.makeText(requireContext(), "Database Error!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
-        //Go to edit profile
-        binding.goToUpdateProfile.setOnClickListener(v->{
+        binding.goToUpdateProfile.setOnClickListener(v -> {
             startActivity(new Intent(requireActivity(), UpdateProfileActivity.class));
         });
-        //Upload Image and set the image when image changed
-        binding.profileImgEdit.setOnClickListener(v-> mGetContent.launch("image/*"));
 
+        binding.profileImgEdit.setOnClickListener(v -> mGetContent.launch("image/*"));
 
         return view;
     }
 
-    // GetContent creates an ActivityResultLauncher<String> to let you pass
-// in the mime type you want to let the user select
-    ActivityResultLauncher<String> mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(),
-            new ActivityResultCallback<Uri>() {
-                @Override
-                public void onActivityResult(Uri uri) {
-                    profileUri = uri;
-                    binding.profileImg.setImageURI(uri);
-                    uploadImageToFirestore(uri);
-                }
+    private final ActivityResultLauncher<String> mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(),
+            uri -> {
+                profileUri = uri;
+                binding.profileImg.setImageURI(uri);
+                uploadImageToFirestore(uri);
             });
 
-    //SAVE THE IMAGE URL TO DATABASE
     private void uploadImageToFirestore(Uri uri) {
+        if (uri == null) {
+            return;
+        }
+
+        Bitmap bitmap = getBitmapFromUri(uri);
+        if (bitmap == null) {
+            return;
+        }
+
+        uri = getImageUri(requireContext(), bitmap);
+
         StorageReference storageRef = FirebaseStorage.getInstance().getReference().child("profileImg");
         StorageReference imgRef = storageRef.child(System.currentTimeMillis() + ".jpg");
-        imgRef.putFile(uri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                if (task.isSuccessful()){
-                    imgRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                        @Override
-                        public void onSuccess(Uri uri) {
-                            // Save downloadUri to Firestore along with the username
-                            String username = getUsernameFromSharedPreferences();
-                            if (username != null) {
-                                uploadDataToFirestore(username, uri.toString());
-                            } else {
-                                Toast.makeText(requireActivity(), "Image Upload Failed", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-                }
-            }
-        });
+        showLoadingIndicator();//Start Loader when image upload started
+        imgRef.putFile(uri)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        imgRef.getDownloadUrl()
+                                .addOnSuccessListener(downloadUri -> {
+                                    String username = getUsernameFromSharedPreferences();
+                                    if (username != null) {
+                                        uploadDataToFirestore(username, downloadUri.toString());
+                                    } else {
+                                        Toast.makeText(requireActivity(), "Image Upload Failed", Toast.LENGTH_SHORT).show();
+                                    }
+                                })
+                                .addOnFailureListener(e -> {
+                                    // Handle failure to get download URL
+                                });
+                    } else {
+                        Toast.makeText(requireActivity(), "Image Upload Failed", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
+    private Bitmap getBitmapFromUri(Uri uri) {
+        try {
+            return MediaStore.Images.Media.getBitmap(requireContext().getContentResolver(), uri);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private Uri getImageUri(Context context, Bitmap bitmap) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), bitmap, "Title", null);
+        return Uri.parse(path);
+    }
 
     private void uploadDataToFirestore(String username, String imageDownloadUrl) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-        // Check if the document exists in Firestore
         db.collection("userdata")
                 .document(username)
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            if (document.exists()) updateProfileImageUrl(username, imageDownloadUrl);
-                            else createNewUserData(username, imageDownloadUrl);
-                        } else Toast.makeText(requireActivity(), "Database Error!", Toast.LENGTH_SHORT).show();
-                    }
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) updateProfileImageUrl(username, imageDownloadUrl);
+                        else createNewUserData(username, imageDownloadUrl);
+                    } else Toast.makeText(requireActivity(), "Database Error!", Toast.LENGTH_SHORT).show();
                 });
     }
 
-    //update  profile imag
     private void updateProfileImageUrl(String username, String imageDownloadUrl) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        // Create a map to update the profile image URL
         Map<String, Object> profileData = new HashMap<>();
         profileData.put("ProfileImg", imageDownloadUrl);
-        // Update the existing document with the new profile image URL
         db.collection("userdata")
                 .document(username)
                 .set(profileData, SetOptions.merge())
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) Toast.makeText(requireActivity(), "Image uploaded successfully!", Toast.LENGTH_SHORT).show();
-                        else {
-                            // Check if the fragment is attached to an activity before showing the toast
-                            if (isAdded()) Toast.makeText(requireActivity(), "Database Error!", Toast.LENGTH_SHORT).show();
-                        }
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()){
+                        Toast.makeText(requireActivity(), "Image uploaded successfully!", Toast.LENGTH_SHORT).show();
+                        hideLoadingIndicator();
+                    }
+                    else {
+                        if (isAdded()) Toast.makeText(requireActivity(), "Database Error!", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
 
-    //  If AFirst time added the profile image
     private void createNewUserData(String username, String imageDownloadUrl) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        // Create a new document with the profile image URL
         Map<String, Object> profileData = new HashMap<>();
         profileData.put("ProfileImg", imageDownloadUrl);
         db.collection("userdata")
                 .document(username)
                 .set(profileData)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        //Data Uploaded Successfully
-                    }
+                .addOnCompleteListener(task -> {
+                    //Data Uploaded Successfully
                 });
     }
 
-    // Retrieve the username from SharedPreferences
     private String getUsernameFromSharedPreferences() {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
         return sharedPreferences.getString("username", "");
     }
+
+
+    // Method to show the progress bar
+    private void showLoadingIndicator() {
+        binding.spinner.setVisibility(View.VISIBLE);
+//        binding.mainFrame.setVisibility(View.GONE);
+        requireActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
+
+    // Method to hide the loading indicator and enable user interaction
+    private void hideLoadingIndicator() {
+        binding.spinner.setVisibility(View.GONE);
+//        binding.mainFrame.setVisibility(View.VISIBLE);
+        requireActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
+
+
+
 
 
 }
