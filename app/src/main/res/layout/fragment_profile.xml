@@ -98,7 +98,7 @@
                                     android:layout_width="120dp"
                                     android:layout_height="120dp"
                                     android:padding="5dp"
-                                    android:src="@drawable/person"
+                                    android:src="@drawable/edit_person"
                                     app:civ_border_color="@color/gray"
                                     app:civ_border_width="5dp"
                                     app:layout_constraintStart_toStartOf="parent"

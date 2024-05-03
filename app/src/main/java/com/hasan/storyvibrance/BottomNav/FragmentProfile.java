@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -15,7 +14,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -23,15 +21,11 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.hasan.storyvibrance.Profile.UpdateProfileActivity;
 import com.hasan.storyvibrance.R;
 import com.hasan.storyvibrance.databinding.FragmentProfileBinding;
@@ -41,6 +35,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
 
 public class FragmentProfile extends Fragment {
 
@@ -62,59 +57,59 @@ public class FragmentProfile extends Fragment {
         String userName = getUsernameFromSharedPreferences();
         db = FirebaseFirestore.getInstance();
 
-        // START THE SPINNER UNTIL DATA LOAD
         binding.spinner.setVisibility(View.VISIBLE);
 
-        // Listen for real-time updates to the userdata document
         db.collection("userdata").document(userName)
                 .addSnapshotListener((documentSnapshot, e) -> {
                     if (e != null) {
-                        // Handle error
-                        Toast.makeText(requireContext(), "Database Error!", Toast.LENGTH_SHORT).show();
+                        handleFirestoreError(e);
                         return;
                     }
 
                     if (documentSnapshot != null && documentSnapshot.exists() && isAdded()) {
-                        // Extract data from the document snapshot
-                        String personName = documentSnapshot.getString("name");
-                        String userBio = documentSnapshot.getString("bio");
-                        String profileImgUrl = documentSnapshot.getString("ProfileImg");
-
-                        // Set person name and bio
-                        binding.setPersonName(personName);
-                        binding.setUsername(userName);
-                        binding.setUserBio(userBio != null ? userBio : String.valueOf(R.string.about_me));
-
-                        // Load profile image using Picasso
-                        if (profileImgUrl != null) {
-                            Picasso.get().load(profileImgUrl)
-                                    .placeholder(R.drawable.person) // Placeholder image while loading
-                                    .error(R.drawable.person) // Error image if loading fails
-                                    .into(binding.profileImg);
-                        } else {
-                            // Use default image if profile image URL is null
-                            Picasso.get().load(R.drawable.person).into(binding.profileImg);
-                        }
-
-                        // HIDE THE SPINNER WHEN ALL DATA UPDATED
-                        binding.spinner.setVisibility(View.GONE);
+                        handleUserData(documentSnapshot);
                     } else {
-                        Toast.makeText(requireContext(), "Data Not available", Toast.LENGTH_SHORT).show();
+                        handleNoDataAvailable();
                     }
                 });
 
-
-
-        binding.goToUpdateProfile.setOnClickListener(v -> {
-            startActivity(new Intent(requireActivity(), UpdateProfileActivity.class));
-        });
-
+        binding.goToUpdateProfile.setOnClickListener(v -> startActivity(new Intent(getActivity(), UpdateProfileActivity.class)));
         binding.profileImgEdit.setOnClickListener(v -> mGetContent.launch("image/*"));
 
         return view;
     }
 
-    private final ActivityResultLauncher<String> mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(),
+    private void handleFirestoreError(Exception e) {
+        Toast.makeText(getContext(), "Database Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        binding.spinner.setVisibility(View.GONE);
+    }
+
+    private void handleUserData(DocumentSnapshot documentSnapshot) {
+        String personName = documentSnapshot.getString("name");
+        String userBio = documentSnapshot.getString("bio");
+        String profileImgUrl = documentSnapshot.getString("ProfileImg");
+
+        binding.setPersonName(personName);
+        binding.setUsername(documentSnapshot.getId());
+        binding.setUserBio(userBio != null ? userBio : getString(R.string.about_me));
+
+        if (profileImgUrl != null) {
+            Picasso.get().load(profileImgUrl)
+                    .placeholder(R.drawable.edit_person)
+                    .error(R.drawable.edit_person)
+                    .into(binding.profileImg);
+        }
+
+        binding.spinner.setVisibility(View.GONE);
+    }
+
+    private void handleNoDataAvailable() {
+        Toast.makeText(getContext(), "Data Not Available", Toast.LENGTH_SHORT).show();
+        binding.spinner.setVisibility(View.GONE);
+    }
+
+    private final ActivityResultLauncher<String> mGetContent = registerForActivityResult(
+            new ActivityResultContracts.GetContent(),
             uri -> {
                 profileUri = uri;
                 binding.profileImg.setImageURI(uri);
@@ -135,24 +130,13 @@ public class FragmentProfile extends Fragment {
 
         StorageReference storageRef = FirebaseStorage.getInstance().getReference().child("profileImg");
         StorageReference imgRef = storageRef.child(System.currentTimeMillis() + ".jpg");
-        showLoadingIndicator();// Start Loader when image upload started
+        showLoadingIndicator();
         imgRef.putFile(uri)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        imgRef.getDownloadUrl()
-                                .addOnSuccessListener(downloadUri -> {
-                                    String username = getUsernameFromSharedPreferences();
-                                    if (username != null) {
-                                        uploadDataToFirestore(username, downloadUri.toString());
-                                    } else {
-                                        Toast.makeText(requireActivity(), "Image Upload Failed", Toast.LENGTH_SHORT).show();
-                                    }
-                                })
-                                .addOnFailureListener(e -> {
-                                    // Handle failure to get download URL
-                                });
+                        handleImageUploadSuccess(imgRef);
                     } else {
-                        Toast.makeText(requireActivity(), "Image Upload Failed", Toast.LENGTH_SHORT).show();
+                        handleImageUploadFailure();
                     }
                 });
     }
@@ -173,67 +157,74 @@ public class FragmentProfile extends Fragment {
         return Uri.parse(path);
     }
 
+    private void handleImageUploadSuccess(StorageReference imgRef) {
+        imgRef.getDownloadUrl().addOnSuccessListener(downloadUri -> {
+            String username = getUsernameFromSharedPreferences();
+            uploadDataToFirestore(username, downloadUri.toString());
+        });
+    }
+
+    private void handleImageUploadFailure() {
+        Toast.makeText(getActivity(), "Image Upload Failed", Toast.LENGTH_SHORT).show();
+        hideLoadingIndicator();
+    }
+
     private void uploadDataToFirestore(String username, String imageDownloadUrl) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("userdata")
-                .document(username)
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot document = task.getResult();
-                        if (document.exists()) updateProfileImageUrl(username, imageDownloadUrl);
-                        else createNewUserData(username, imageDownloadUrl);
-                    } else
-                        Toast.makeText(requireActivity(), "Database Error!", Toast.LENGTH_SHORT).show();
-                });
+        db.collection("userdata").document(username).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document != null && document.exists()) {
+                    updateProfileImageUrl(username, imageDownloadUrl);
+                } else {
+                    createNewUserData(username, imageDownloadUrl);
+                }
+            } else {
+                Toast.makeText(getActivity(), "Database Error!", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void updateProfileImageUrl(String username, String imageDownloadUrl) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
         Map<String, Object> profileData = new HashMap<>();
         profileData.put("ProfileImg", imageDownloadUrl);
-        db.collection("userdata")
-                .document(username)
+        db.collection("userdata").document(username)
                 .set(profileData, SetOptions.merge())
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        Toast.makeText(requireActivity(), "Image uploaded successfully!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Image Uploaded Successfully!", Toast.LENGTH_SHORT).show();
                         hideLoadingIndicator();
                     } else {
-                        if (isAdded())
-                            Toast.makeText(requireActivity(), "Database Error!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Database Error!", Toast.LENGTH_SHORT).show();
+                        hideLoadingIndicator();
                     }
                 });
     }
 
     private void createNewUserData(String username, String imageDownloadUrl) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
         Map<String, Object> profileData = new HashMap<>();
         profileData.put("ProfileImg", imageDownloadUrl);
-        db.collection("userdata")
-                .document(username)
+        db.collection("userdata").document(username)
                 .set(profileData)
                 .addOnCompleteListener(task -> {
-                    // Data Uploaded Successfully
+                    if (task.isSuccessful()) {
+                        Log.d("UserData", "create NewUser Data: ");
+                    } else {
+                        Toast.makeText(getActivity(), "Database Error!", Toast.LENGTH_SHORT).show();
+                    }
                 });
     }
 
     private String getUsernameFromSharedPreferences() {
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
         return sharedPreferences.getString("username", "");
     }
 
-    // Method to show the progress bar
     private void showLoadingIndicator() {
         binding.spinner.setVisibility(View.VISIBLE);
         requireActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
 
-    // Method to hide the loading indicator and enable user interaction
     private void hideLoadingIndicator() {
         binding.spinner.setVisibility(View.GONE);
         requireActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
-
-
 }
