@@ -79,7 +79,6 @@ public class UpdateProfileActivity extends AppCompatActivity {
         Map<String, Object> updates = new HashMap<>();
         updates.put("name", fullName);
         updates.put("bio", userBio);
-        System.out.println("updates" +updates);
 
         db.collection("userdata").document(username).update(updates).addOnSuccessListener(unused -> {
             Toast.makeText(UpdateProfileActivity.this, "Info Updated!", Toast.LENGTH_SHORT).show();

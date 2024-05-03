@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,7 +48,6 @@ public class FragmentProfile extends Fragment {
     FirebaseFirestore db;
 
 
-
     Uri profileUri;
 
     SharedPreferences sharedPreferences;
@@ -62,40 +62,48 @@ public class FragmentProfile extends Fragment {
         String userName = getUsernameFromSharedPreferences();
         db = FirebaseFirestore.getInstance();
 
-        //START THE SPINNER UNTIL DATA LOAD
+        // START THE SPINNER UNTIL DATA LOAD
         binding.spinner.setVisibility(View.VISIBLE);
-        db.collection("userdata").document(userName).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot documentSnapshot = task.getResult();
+
+        // Listen for real-time updates to the userdata document
+        db.collection("userdata").document(userName)
+                .addSnapshotListener((documentSnapshot, e) -> {
+                    if (e != null) {
+                        // Handle error
+                        Toast.makeText(requireContext(), "Database Error!", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
                     if (documentSnapshot != null && documentSnapshot.exists() && isAdded()) {
+                        // Extract data from the document snapshot
                         String personName = documentSnapshot.getString("name");
                         String userBio = documentSnapshot.getString("bio");
                         String profileImgUrl = documentSnapshot.getString("ProfileImg");
-                        if (profileImgUrl != null) {
-                            Picasso.get().load(profileImgUrl).into(binding.profileImg);
-                        } else {
-                            Picasso.get().load(R.drawable.person).into(binding.profileImg);
-                        }
+
+                        // Set person name and bio
                         binding.setPersonName(personName);
                         binding.setUsername(userName);
-                        if (userBio != null) {
-                            binding.setUserBio(userBio);
+                        binding.setUserBio(userBio != null ? userBio : String.valueOf(R.string.about_me));
+
+                        // Load profile image using Picasso
+                        if (profileImgUrl != null) {
+                            Picasso.get().load(profileImgUrl)
+                                    .placeholder(R.drawable.person) // Placeholder image while loading
+                                    .error(R.drawable.person) // Error image if loading fails
+                                    .into(binding.profileImg);
                         } else {
-                            binding.setUserBio(String.valueOf(R.string.about_me));
+                            // Use default image if profile image URL is null
+                            Picasso.get().load(R.drawable.person).into(binding.profileImg);
                         }
 
-                        //HIDE THE SPINNER WHEN ALL DATA UPDATED==========
+                        // HIDE THE SPINNER WHEN ALL DATA UPDATED
                         binding.spinner.setVisibility(View.GONE);
                     } else {
                         Toast.makeText(requireContext(), "Data Not available", Toast.LENGTH_SHORT).show();
                     }
-                } else {
-                    Toast.makeText(requireContext(), "Database Error!", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+                });
+
+
 
         binding.goToUpdateProfile.setOnClickListener(v -> {
             startActivity(new Intent(requireActivity(), UpdateProfileActivity.class));
@@ -127,7 +135,7 @@ public class FragmentProfile extends Fragment {
 
         StorageReference storageRef = FirebaseStorage.getInstance().getReference().child("profileImg");
         StorageReference imgRef = storageRef.child(System.currentTimeMillis() + ".jpg");
-        showLoadingIndicator();//Start Loader when image upload started
+        showLoadingIndicator();// Start Loader when image upload started
         imgRef.putFile(uri)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -175,7 +183,8 @@ public class FragmentProfile extends Fragment {
                         DocumentSnapshot document = task.getResult();
                         if (document.exists()) updateProfileImageUrl(username, imageDownloadUrl);
                         else createNewUserData(username, imageDownloadUrl);
-                    } else Toast.makeText(requireActivity(), "Database Error!", Toast.LENGTH_SHORT).show();
+                    } else
+                        Toast.makeText(requireActivity(), "Database Error!", Toast.LENGTH_SHORT).show();
                 });
     }
 
@@ -187,12 +196,12 @@ public class FragmentProfile extends Fragment {
                 .document(username)
                 .set(profileData, SetOptions.merge())
                 .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()){
+                    if (task.isSuccessful()) {
                         Toast.makeText(requireActivity(), "Image uploaded successfully!", Toast.LENGTH_SHORT).show();
                         hideLoadingIndicator();
-                    }
-                    else {
-                        if (isAdded()) Toast.makeText(requireActivity(), "Database Error!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        if (isAdded())
+                            Toast.makeText(requireActivity(), "Database Error!", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -205,7 +214,7 @@ public class FragmentProfile extends Fragment {
                 .document(username)
                 .set(profileData)
                 .addOnCompleteListener(task -> {
-                    //Data Uploaded Successfully
+                    // Data Uploaded Successfully
                 });
     }
 
@@ -214,23 +223,17 @@ public class FragmentProfile extends Fragment {
         return sharedPreferences.getString("username", "");
     }
 
-
     // Method to show the progress bar
     private void showLoadingIndicator() {
         binding.spinner.setVisibility(View.VISIBLE);
-//        binding.mainFrame.setVisibility(View.GONE);
         requireActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
 
     // Method to hide the loading indicator and enable user interaction
     private void hideLoadingIndicator() {
         binding.spinner.setVisibility(View.GONE);
-//        binding.mainFrame.setVisibility(View.VISIBLE);
         requireActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
-
-
-
 
 
 }
