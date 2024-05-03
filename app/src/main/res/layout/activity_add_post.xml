@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="@dimen/margin_large"
+            android:orientation="horizontal">
+
+            <!-- Back -->
+            <ImageView
+                android:id="@+id/backBtn"
+                android:layout_width="38dp"
+                android:layout_height="38dp"
+                android:clickable="true"
+                android:contentDescription="@string/edit"
+                android:src="@drawable/custom_back" />
+
+            <!-- Title -->
+            <TextView
+                style="@style/TextAppearance.Headline1"
+                android:layout_width="wrap_content"
+                android:layout_height="38dp"
+                android:layout_marginBottom="20dp"
+                android:gravity="center"
+                android:text="Create a Post"
+                android:textAlignment="center" />
+        </LinearLayout>
+
+        <!-- Post Content Input -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_large"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="4dp">
+
+            <EditText
+                style="@style/TextAppearance.Body2"
+                android:id="@+id/postContentInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="top"
+                android:hint="Write your post here..."
+                android:maxLines="10"
+                android:minLines="5"
+                android:padding="@dimen/padding_small" />
+
+        </androidx.cardview.widget.CardView>
+
+        <!-- Selected Media Preview -->
+        <ImageView
+            android:id="@+id/mediaPreview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_large"
+            android:adjustViewBounds="true"
+            android:src="@drawable/posts_img_sample"
+            android:scaleType="fitCenter"
+            android:visibility="gone" />
+
+        <!--    add image-->
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/addMediaButton"
+            style="@style/AppButtonStyle"
+            android:layout_marginBottom="@dimen/margin_large"
+            android:text="Add Picture" />
+
+        <!-- Post Button -->
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/postButton"
+            style="@style/AppButtonStyle"
+            android:text="Post" />
+
+    </LinearLayout>
+
+</ScrollView>

@@ -43,6 +43,9 @@
         android:theme="@style/Theme.StoryVibrance"
         tools:targetApi="31">
         <activity
+            android:name=".Posts.AddPostActivity"
+            android:exported="false" />
+        <activity
             android:name=".BottomNav.NavigationActivity"
             android:exported="false" />
         <activity

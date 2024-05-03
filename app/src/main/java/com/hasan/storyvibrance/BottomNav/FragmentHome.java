@@ -2,6 +2,7 @@ package com.hasan.storyvibrance.BottomNav;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.hasan.storyvibrance.Controller.PostAdapter;
 import com.hasan.storyvibrance.Controller.StoryAdapter;
 import com.hasan.storyvibrance.Messenger.MessengerActivity;
+import com.hasan.storyvibrance.Model.CommentModel;
+import com.hasan.storyvibrance.Model.LikeModel;
 import com.hasan.storyvibrance.Model.PostModel;
 import com.hasan.storyvibrance.Model.StoryModel;
 import com.hasan.storyvibrance.Notification.NotificationActivity;
@@ -21,6 +24,7 @@ import com.hasan.storyvibrance.R;
 import com.hasan.storyvibrance.databinding.FragmentHomeBinding;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class FragmentHome extends Fragment {
 
@@ -55,6 +59,9 @@ public class FragmentHome extends Fragment {
             // Start the MessengerActivity
             startActivity(new Intent(getActivity(), MessengerActivity.class));
         });
+
+
+
 
         // Set up story RecyclerView
         setupStoryRecyclerView();
@@ -103,9 +110,12 @@ public class FragmentHome extends Fragment {
     // Method to create a list of post models
     private ArrayList<PostModel> createPostModels() {
         ArrayList<PostModel> postModels = new ArrayList<>();
+        List<LikeModel> likes = new ArrayList<>();
+        List<CommentModel> comments = new ArrayList<>();
         // Add post models to the list
-        postModels.add(new PostModel("Pronob", "pronob03", "Lorem ipsum dolor", R.drawable.hasan, R.drawable.posts_img_sample, 30, 10));
-        postModels.add(new PostModel("Pronob", "pronob03", "Lorem ipsum dolor", R.drawable.hasan, R.drawable.posts_img_sample, 30, 10));
+        postModels.add(new PostModel("Hasan", "dr.has82@gmail.com", "Lorem Ipsum hasan", "https://picsum.photos/id/1013/600/400 ", "https://picsum.photos/id/1021/600/400 ", likes, comments, 1714755350249L));
+        postModels.add(new PostModel("Hasan", "dr.has82@gmail.com", "Lorem Ipsum hasan", "https://picsum.photos/id/1016/600/400 ", "https://picsum.photos/id/1026/600/400 ", likes, comments, 1714755350249L));
+        Log.d("postData", String.valueOf(postModels));
         return postModels;
     }
 }

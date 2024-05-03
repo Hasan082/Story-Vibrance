@@ -1,22 +1,33 @@
 package com.hasan.storyvibrance.Model;
 
-public class PostModel {
-    private String authorName;
-    private String authorUsername;
-    private String postTextContent;
-    private int authorProfileImage;
-    private int postMediaContent;
-    private int likeCount;
-    private int commentCount;
+import java.util.List;
 
-    public PostModel(String authorName, String authorUsername, String postTextContent, int authorProfileImage, int postMediaContent, int likeCount, int commentCount) {
+public class PostModel {
+    private String authorName; // Name of the author
+    private String authorUsername; // Username of the author
+    private String postTextContent; // Content of the post
+    private String authorImg; // URL or path of the author's profile image
+    private String postMedia; // URL or path of the post media (image or video)
+    private List<LikeModel> likes; // List of likes on the post
+    private List<CommentModel> comments; // List of comments on the post
+    private long timestamp; // Timestamp of when the post was created
+
+    // Constructors, getters, and setters
+
+    public PostModel() {
+    }
+
+    public PostModel(String authorName, String authorUsername, String postTextContent,
+                     String authorImg, String postMedia, List<LikeModel> likes,
+                     List<CommentModel> comments, long timestamp) {
         this.authorName = authorName;
         this.authorUsername = authorUsername;
         this.postTextContent = postTextContent;
-        this.authorProfileImage = authorProfileImage;
-        this.postMediaContent = postMediaContent;
-        this.likeCount = likeCount;
-        this.commentCount = commentCount;
+        this.authorImg = authorImg;
+        this.postMedia = postMedia;
+        this.likes = likes;
+        this.comments = comments;
+        this.timestamp = timestamp;
     }
 
     public String getAuthorName() {
@@ -43,35 +54,43 @@ public class PostModel {
         this.postTextContent = postTextContent;
     }
 
-    public int getAuthorProfileImage() {
-        return authorProfileImage;
+    public String getAuthorImg() {
+        return authorImg;
     }
 
-    public void setAuthorProfileImage(int authorProfileImage) {
-        this.authorProfileImage = authorProfileImage;
+    public void setAuthorImg(String authorImg) {
+        this.authorImg = authorImg;
     }
 
-    public int getPostMediaContent() {
-        return postMediaContent;
+    public String getPostMedia() {
+        return postMedia;
     }
 
-    public void setPostMediaContent(int postMediaContent) {
-        this.postMediaContent = postMediaContent;
+    public void setPostMedia(String postMedia) {
+        this.postMedia = postMedia;
     }
 
-    public int getLikeCount() {
-        return likeCount;
+    public List<LikeModel> getLikes() {
+        return likes;
     }
 
-    public void setLikeCount(int likeCount) {
-        this.likeCount = likeCount;
+    public void setLikes(List<LikeModel> likes) {
+        this.likes = likes;
     }
 
-    public int getCommentCount() {
-        return commentCount;
+    public List<CommentModel> getComments() {
+        return comments;
     }
 
-    public void setCommentCount(int commentCount) {
-        this.commentCount = commentCount;
+    public void setComments(List<CommentModel> comments) {
+        this.comments = comments;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
     }
 }
