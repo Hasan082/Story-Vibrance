@@ -62,6 +62,7 @@ public class FragmentProfile extends Fragment {
         String userName = getUsernameFromSharedPreferences();
         db = FirebaseFirestore.getInstance();
 
+        //START THE SPINNER UNTIL DATA LOAD
         binding.spinner.setVisibility(View.VISIBLE);
         db.collection("userdata").document(userName).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -70,6 +71,7 @@ public class FragmentProfile extends Fragment {
                     DocumentSnapshot documentSnapshot = task.getResult();
                     if (documentSnapshot != null && documentSnapshot.exists() && isAdded()) {
                         String personName = documentSnapshot.getString("name");
+                        String userBio = documentSnapshot.getString("bio");
                         String profileImgUrl = documentSnapshot.getString("ProfileImg");
                         if (profileImgUrl != null) {
                             Picasso.get().load(profileImgUrl).into(binding.profileImg);
@@ -78,6 +80,13 @@ public class FragmentProfile extends Fragment {
                         }
                         binding.setPersonName(personName);
                         binding.setUsername(userName);
+                        if (userBio != null) {
+                            binding.setUserBio(userBio);
+                        } else {
+                            binding.setUserBio(String.valueOf(R.string.about_me));
+                        }
+
+                        //HIDE THE SPINNER WHEN ALL DATA UPDATED==========
                         binding.spinner.setVisibility(View.GONE);
                     } else {
                         Toast.makeText(requireContext(), "Data Not available", Toast.LENGTH_SHORT).show();

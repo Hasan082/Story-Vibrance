@@ -6,13 +6,16 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="username"
             type="String" />
 
         <variable
             name="personName"
+            type="String" />
+
+        <variable
+            name="userBio"
             type="String" />
     </data>
 
@@ -153,7 +156,7 @@
                                     android:layout_marginTop="5dp"
                                     android:drawablePadding="5dp"
                                     android:maxLines="2"
-                                    android:text="@string/about_me" />
+                                    android:text="@{userBio}" />
 
                             </LinearLayout>
 
