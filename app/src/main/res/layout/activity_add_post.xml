@@ -46,7 +46,7 @@
                         android:layout_height="38dp"
                         android:layout_marginBottom="20dp"
                         android:gravity="center"
-                        android:text="Create a Post"
+                        android:text="Create a Story"
                         android:layout_marginStart="15dp"
                         android:textAlignment="center" />
                 </LinearLayout>
@@ -65,7 +65,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="top"
-                        android:hint="Write your post here..."
+                        android:hint="Write your story here..."
                         android:maxLines="10"
                         android:minLines="5"
                         android:padding="@dimen/padding_small" />
@@ -94,7 +94,7 @@
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/postButton"
                     style="@style/AppButtonStyle"
-                    android:text="Post" />
+                    android:text="Post Story" />
 
             </LinearLayout>
             <!--Spinner show until data fully loaded-->

@@ -17,7 +17,7 @@
         <item name="textAppearanceBodySmall">@style/TextAppearance.Body3</item>
     </style>
 
-    <!--    Bootom Nav Icon Selected Stat background color chnage-->
+    <!--    Bottom Nav Icon Selected Stat background color chnage-->
     <style name="App.Custom.Indicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
         <item name="android:color">@android:color/transparent</item>
     </style>
@@ -27,6 +27,7 @@
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">@dimen/title_small</item>
     </style>
+
 
     <style name="ToolbarStyle" parent="Widget.AppCompat.Toolbar">
         <item name="android:background">@color/primaryColor</item>
