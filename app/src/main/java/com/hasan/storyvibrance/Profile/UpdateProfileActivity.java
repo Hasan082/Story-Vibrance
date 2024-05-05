@@ -9,7 +9,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.preference.PreferenceManager;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.hasan.storyvibrance.R;
@@ -32,15 +31,18 @@ public class UpdateProfileActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        // Other initialization code
+        // Get username from SharedPreferences
         String userName = getUsernameFromSharedPreferences();
 
+        // Fetch user data from Firestore
         db.collection("userdata").document(userName).get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot documentSnapshot = task.getResult();
                 if (documentSnapshot != null && documentSnapshot.exists()) {
+                    // Extract user data from document
                     String personName = documentSnapshot.getString("name");
                     String userBio = documentSnapshot.getString("bio");
+                    // Set user data to UI
                     if (personName != null) {
                         binding.setFullName(personName);
                     } else {
@@ -54,22 +56,37 @@ public class UpdateProfileActivity extends AppCompatActivity {
                     binding.setEmailAddress(userName);
                     binding.spinner.setVisibility(View.GONE);
                 } else {
+                    // Show error message if document does not exist
                     showDatabaseErrorMessage();
                 }
             } else {
+                // Show error message if Firestore operation fails
                 showDatabaseErrorMessage();
             }
         });
 
-        binding.backBtn.setOnClickListener(v-> getOnBackPressedDispatcher().onBackPressed());
+        // Back button click listener
+        binding.backBtn.setOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
 
+        // Update button click listener
         binding.updateBtn.setOnClickListener(v -> {
+            // Show loading spinner
             binding.spinner.setVisibility(View.VISIBLE);
+            // Get username and update profile data
             String username = getUsernameFromSharedPreferences();
             updateProfileData(username);
         });
-    }
 
+        // Back to the profile page
+        binding.backBtn.setOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
+
+    } //end of onCreate
+
+    /**
+     * Updates the user's profile data in Firestore.
+     *
+     * @param username The username of the current user.
+     */
     private void updateProfileData(String username) {
         String fullName = binding.personName.getText().toString();
         String userBio = binding.aboutBio.getText().toString();
@@ -79,20 +96,30 @@ public class UpdateProfileActivity extends AppCompatActivity {
             return;
         }
 
+        // Prepare updates
         Map<String, Object> updates = new HashMap<>();
         updates.put("name", fullName);
         updates.put("bio", userBio);
 
+        // Update user data in Firestore
         db.collection("userdata").document(username).update(updates).addOnSuccessListener(unused -> {
-            Toast.makeText(this, "Info Updated!", Toast.LENGTH_SHORT).show();
-            getOnBackPressedDispatcher().onBackPressed();
+            Toast.makeText(this, "Profile Info Updated!", Toast.LENGTH_SHORT).show();
+            binding.spinner.setVisibility(View.GONE);
         });
     }
 
+    /**
+     * Retrieves the username from SharedPreferences.
+     *
+     * @return The username stored in SharedPreferences.
+     */
     private String getUsernameFromSharedPreferences() {
         return sharedPreferences.getString("username", "");
     }
 
+    /**
+     * Shows a toast message indicating a database error.
+     */
     private void showDatabaseErrorMessage() {
         Toast.makeText(this, "Database Error!", Toast.LENGTH_SHORT).show();
     }

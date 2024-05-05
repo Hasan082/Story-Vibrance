@@ -104,9 +104,12 @@ public class FragmentProfile extends Fragment {
     }
 
     private void handleNoDataAvailable() {
-        Toast.makeText(getContext(), "Data Not Available", Toast.LENGTH_SHORT).show();
-        binding.spinner.setVisibility(View.GONE);
+        if (getActivity() != null) {
+            Toast.makeText(getActivity(), "Data Not Available", Toast.LENGTH_SHORT).show();
+            binding.spinner.setVisibility(View.GONE);
+        }
     }
+
 
     private final ActivityResultLauncher<String> mGetContent = registerForActivityResult(
             new ActivityResultContracts.GetContent(),
@@ -165,7 +168,7 @@ public class FragmentProfile extends Fragment {
     }
 
     private void handleImageUploadFailure() {
-        Toast.makeText(getActivity(), "Image Upload Failed", Toast.LENGTH_SHORT).show();
+        Toast.makeText(requireContext(), "Image Upload Failed", Toast.LENGTH_SHORT).show();
         hideLoadingIndicator();
     }
 
