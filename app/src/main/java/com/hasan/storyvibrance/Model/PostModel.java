@@ -3,6 +3,7 @@ package com.hasan.storyvibrance.Model;
 import java.util.List;
 
 public class PostModel {
+    private String postId;
     private String authorName; // Name of the author
     private String authorUsername; // Username of the author
     private String postTextContent; // Content of the post
@@ -10,16 +11,17 @@ public class PostModel {
     private String postMedia; // URL or path of the post media (image or video)
     private List<LikeModel> likes; // List of likes on the post
     private List<CommentModel> comments; // List of comments on the post
-    private long timestamp; // Timestamp of when the post was created
+    private String timestamp; // Timestamp of when the post was created
 
     // Constructors, getters, and setters
 
     public PostModel() {
     }
 
-    public PostModel(String authorName, String authorUsername, String postTextContent,
+    public PostModel(String postId,String authorName, String authorUsername, String postTextContent,
                      String authorImg, String postMedia, List<LikeModel> likes,
-                     List<CommentModel> comments, long timestamp) {
+                     List<CommentModel> comments, String timestamp) {
+        this.postId=postId;
         this.authorName = authorName;
         this.authorUsername = authorUsername;
         this.postTextContent = postTextContent;
@@ -29,6 +31,15 @@ public class PostModel {
         this.comments = comments;
         this.timestamp = timestamp;
     }
+
+    public String getPostId() {
+        return postId;
+    }
+
+    public void setPostId(String postId) {
+        this.postId = postId;
+    }
+
 
     public String getAuthorName() {
         return authorName;
@@ -86,11 +97,30 @@ public class PostModel {
         this.comments = comments;
     }
 
-    public long getTimestamp() {
+    public String getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(long timestamp) {
+    public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
     }
+
+    public boolean isLikedByUser(String userId) {
+        // Ensure likes list is not null
+        if (likes != null) {
+            // Iterate through the list of likes
+            for (LikeModel like : likes) {
+                // Check if the user ID matches
+                if (like.getUserId().equals(userId)) {
+                    // User has liked the post
+                    return true;
+                }
+            }
+        }
+        // User has not liked the post or likes list is null
+        return false;
+    }
+
+
+
 }

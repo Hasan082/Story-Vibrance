@@ -92,8 +92,8 @@ public class AddPostActivity extends AppCompatActivity {
         if (!TextUtils.isEmpty(postContent)) {
             // Create a map to store post data
             Map<String, Object> posts = new HashMap<>();
-            posts.put("content", postContent);
-            posts.put("authorName", userName);
+            posts.put("postTextContent", postContent);
+            posts.put("authorUsername", userName);
             posts.put("timestamp", timeStamp);
 
             // Check if an image is available
@@ -180,7 +180,7 @@ public class AddPostActivity extends AppCompatActivity {
                     // Get the download URL for the uploaded image
                     storageReference.child(fileName).getDownloadUrl().addOnSuccessListener(uri -> {
                         // Add media URL to post data
-                        posts.put("mediaUrl", uri.toString());
+                        posts.put("postMedia", uri.toString());
                         // Upload post data to Firestore
                         uploadPostToFirestore(posts, db);
                         hideLoadingIndicator();

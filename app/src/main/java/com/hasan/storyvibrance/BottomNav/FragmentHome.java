@@ -1,17 +1,19 @@
 package com.hasan.storyvibrance.BottomNav;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.core.view.GravityCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.preference.PreferenceManager;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.hasan.storyvibrance.Controller.PostAdapter;
 import com.hasan.storyvibrance.Controller.StoryAdapter;
 import com.hasan.storyvibrance.Messenger.MessengerActivity;
@@ -21,16 +23,21 @@ import com.hasan.storyvibrance.Model.PostModel;
 import com.hasan.storyvibrance.Model.StoryModel;
 import com.hasan.storyvibrance.Notification.NotificationActivity;
 import com.hasan.storyvibrance.R;
+import com.hasan.storyvibrance.Utility.PostSorter;
 import com.hasan.storyvibrance.databinding.FragmentHomeBinding;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class FragmentHome extends Fragment {
 
     FragmentHomeBinding binding;
 
+    FirebaseFirestore db;
 
+    SharedPreferences sharedPreferences;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -42,6 +49,11 @@ public class FragmentHome extends Fragment {
         // Set the lifecycle owner for observing LiveData
         binding.setLifecycleOwner(this);
 
+        //CREATE FIREBASE INSTANCES==========
+        db=FirebaseFirestore.getInstance();
+        //CREATE sharedPreferences INSTANCES==========
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
+        String username = getUsernameFromSharedPreferences();
         // Set up click listener for opening drawer on app bar icon click
         binding.customAppBar.findViewById(R.id.appbarImg).setOnClickListener(v -> {
             // Call the openDrawer method of NavigationActivity
@@ -63,23 +75,110 @@ public class FragmentHome extends Fragment {
 
 
 
+
+
+
         // Set up story RecyclerView
         setupStoryRecyclerView();
         // Set up post RecyclerView
-        setupPostRecyclerView();
+        setupPostRecyclerView(db);
 
         return view;
 
     }
     // Method to set up RecyclerView for posts
-    private void setupPostRecyclerView() {
-        // Create a list of post models
-        ArrayList<PostModel> postModels = createPostModels();
-        // Create a PostAdapter with the post models
-        PostAdapter postAdapter = new PostAdapter(getContext(), postModels);
-        // Set the adapter to the post RecyclerView
-        binding.postRecyclerview.setAdapter(postAdapter);
+
+    // Method to set up RecyclerView for posts
+    private void setupPostRecyclerView(FirebaseFirestore db) {
+        // Create a map to associate document IDs with PostModel objects
+        Map<String, PostModel> postMap = new HashMap<>();
+
+        // Set up a real-time listener on the entire "posts" collection
+        db.collection("posts").addSnapshotListener((querySnapshot, error) -> {
+            if (error != null) {
+                Log.e("hello", "Listen failed.", error);
+                return;
+            }
+
+            // Clear the postMap before adding new posts
+            postMap.clear();
+
+            for (QueryDocumentSnapshot doc : querySnapshot) {
+                if (doc.exists()) {
+                    String postId = doc.getId();
+                    // Check if the postMap already contains the postId
+                    if (postMap.containsKey(postId)) {
+                        // If yes, retrieve the corresponding PostModel object
+                        PostModel post = postMap.get(postId);
+                        // Update the PostModel object with new data, if needed
+                        // For example: post.setAuthorName(doc.getString("authorName"));
+                        // Continue updating other fields...
+                    } else {
+                        // If not, create a new PostModel object
+                        PostModel post = doc.toObject(PostModel.class);
+                        // Set the postId for the new PostModel object
+                        post.setPostId(postId);
+                        // Add the PostModel object to the map
+                        postMap.put(postId, post);
+                    }
+                } else {
+                    Log.d("postError", "No such document");
+                }
+            }
+
+            // Create a list of PostModel objects from the map
+            ArrayList<PostModel> postModels = new ArrayList<>(postMap.values());
+
+            // Sort the postModels list, if needed
+            PostSorter.sortByTimestampDescending(postModels);
+
+            // Create a PostAdapter with the updated post models
+            PostAdapter postAdapter = new PostAdapter(getContext(), postModels);
+            // Set the adapter to the post RecyclerView
+            binding.postRecyclerview.setAdapter(postAdapter);
+        });
     }
+
+
+
+
+
+
+
+
+
+//    private void setupPostRecyclerView(FirebaseFirestore db) {
+//        // Create an ArrayList to hold the post models
+//        ArrayList<PostModel> postModels = new ArrayList<>();
+//
+//        // Set up a real-time listener on the entire "posts" collection
+//        db.collection("posts").addSnapshotListener((querySnapshot, error) -> {
+//            if (error != null) {
+//                Log.e("hello", "Listen failed.", error);
+//                return;
+//            }
+//
+//            // Clear the postModels list before adding new posts
+//            postModels.clear();
+//
+//            for (QueryDocumentSnapshot doc : querySnapshot) {
+//                if (doc.exists()) {
+//                    // Convert Firestore document to PostModel object
+//                    PostModel post = doc.toObject(PostModel.class);
+//                    // Add the post to the list
+//                    postModels.add(post);
+//                } else {
+//                    Log.d("postError", "No such document");
+//                }
+//            }
+//            PostSorter.sortByTimestampDescending(postModels);
+//            // Create a PostAdapter with the updated post models
+//            PostAdapter postAdapter = new PostAdapter(getContext(), postModels);
+//            // Set the adapter to the post RecyclerView
+//            binding.postRecyclerview.setAdapter(postAdapter);
+//        });
+//    }
+
 
     // Method to set up RecyclerView for stories
     private void setupStoryRecyclerView() {
@@ -107,15 +206,14 @@ public class FragmentHome extends Fragment {
         return storyModels;
     }
 
-    // Method to create a list of post models
-    private ArrayList<PostModel> createPostModels() {
-        ArrayList<PostModel> postModels = new ArrayList<>();
-        List<LikeModel> likes = new ArrayList<>();
-        List<CommentModel> comments = new ArrayList<>();
-        // Add post models to the list
-        postModels.add(new PostModel("Hasan", "dr.has82@gmail.com", "Lorem Ipsum hasan", "https://picsum.photos/id/1013/600/400 ", "https://picsum.photos/id/1021/600/400 ", likes, comments, 1714755350249L));
-        postModels.add(new PostModel("Hasan", "dr.has82@gmail.com", "Lorem Ipsum hasan", "https://picsum.photos/id/1016/600/400 ", "https://picsum.photos/id/1026/600/400 ", likes, comments, 1714755350249L));
-        Log.d("postData", String.valueOf(postModels));
-        return postModels;
+
+
+
+
+    private String getUsernameFromSharedPreferences() {
+        return sharedPreferences.getString("username", "");
     }
+
+
+
 }

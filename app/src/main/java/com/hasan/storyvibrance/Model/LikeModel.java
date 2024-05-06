@@ -2,16 +2,15 @@ package com.hasan.storyvibrance.Model;
 
 public class LikeModel {
     private String userId;
-    private long timestamp;
+    private String postId;
 
-    public LikeModel() {
+    public LikeModel(String userId, long l) {
     }
 
-    public LikeModel(String userId, long timestamp) {
+    public LikeModel(String userId, String postId) {
         this.userId = userId;
-        this.timestamp = timestamp;
+        this.postId = postId;
     }
-
 
     public String getUserId() {
         return userId;
@@ -21,11 +20,11 @@ public class LikeModel {
         this.userId = userId;
     }
 
-    public long getTimestamp() {
-        return timestamp;
+    public String getPostId() {
+        return postId;
     }
 
-    public void setTimestamp(long timestamp) {
-        this.timestamp = timestamp;
+    public void setPostId(String postId) {
+        this.postId = postId;
     }
 }
