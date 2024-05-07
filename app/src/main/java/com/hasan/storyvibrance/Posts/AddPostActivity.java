@@ -104,18 +104,6 @@ public class AddPostActivity extends AppCompatActivity {
         // Check if post content is not empty
         if (!TextUtils.isEmpty(postContent)) {
             Map<String, Object> posts = new HashMap<>();
-            db.collection("userdata").document(userName).get().addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot documentSnapshot = task.getResult();
-                    if (documentSnapshot != null && documentSnapshot.exists()) {
-                        // Extract user data from document
-                        String personName = documentSnapshot.getString("name");
-                        String imgUrl = documentSnapshot.getString("ProfileImg");
-                        posts.put("authorName", personName);
-                        posts.put("authorImg", imgUrl);
-                    }
-                }
-            });
             // Create a map to store post data
             posts.put("postTextContent", postContent);
             posts.put("authorUsername", userName);

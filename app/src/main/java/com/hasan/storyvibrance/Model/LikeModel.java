@@ -4,7 +4,8 @@ public class LikeModel {
     private String userId;
     private String postId;
 
-    public LikeModel(String userId, long l) {
+    public LikeModel() {
+
     }
 
     public LikeModel(String userId, String postId) {

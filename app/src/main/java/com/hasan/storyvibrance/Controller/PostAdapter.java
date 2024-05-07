@@ -12,27 +12,30 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.core.UserData;
+import com.hasan.storyvibrance.Model.LikeModel;
 import com.hasan.storyvibrance.Model.PostModel;
 import com.hasan.storyvibrance.R;
 import com.hasan.storyvibrance.Utility.TimeUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
 
-    Context context;
-    ArrayList<PostModel> postModels;
-
+    private Context context;
+    private ArrayList<PostModel> postModels;
 
     public PostAdapter(Context context, ArrayList<PostModel> postModels) {
         this.context = context;
@@ -41,55 +44,79 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
 
     @NonNull
     @Override
-    public PostAdapter.PostHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public PostHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.feed_post_card, parent, false);
         return new PostHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull PostAdapter.PostHolder holder, int position) {
+    public void onBindViewHolder(@NonNull PostHolder holder, int position) {
         PostModel post = postModels.get(position);
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-
-        holder.authorName.setText(postModels.get(position).getAuthorName());
-        Picasso.get().load(postModels.get(position).getAuthorImg()).into(holder.authorImg);
-        Picasso.get().load(postModels.get(position).getPostMedia()).into(holder.postMedia);
-        holder.authorUsername.setText(postModels.get(position).getAuthorUsername());
-        holder.postTextContent.setText(postModels.get(position).getPostTextContent());
-        if (post.getLikes() != null && !post.getLikes().isEmpty()) holder.likeCount.setText(String.valueOf(post.getLikes().size()));
-        else holder.likeCount.setText("0");
-        if (post.getComments() != null && !post.getComments().isEmpty()) holder.commentCount.setText(String.valueOf(post.getComments().size()));
-        else holder.commentCount.setText("Be first?");
+        // Populate post data directly from the PostModel object
+        holder.postTextContent.setText(post.getPostTextContent());
+        // Load post media
+        Picasso.get().load(post.getPostMedia()).into(holder.postMedia);
         // Set timestamp
-        String timeAgo = TimeUtils.getTimeAgo(Long.parseLong(postModels.get(position).getTimestamp()));
+        String timeAgo = TimeUtils.getTimeAgo(Long.parseLong(post.getTimestamp()));
         holder.timeStamp.setText(timeAgo);
+
+        // Fetch user data for the author of this post
+
+        db.collection("userdata").document(post.getAuthorUsername()).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        // Retrieve user data from the document snapshot
+                        String fullName = documentSnapshot.getString("name");
+                        String profileImg = documentSnapshot.getString("ProfileImg");
+
+                        // Populate author name and profile image
+                        holder.authorName.setText(fullName);
+                        Picasso.get().load(profileImg).into(holder.authorImg);
+                    } else {
+                        Log.d("Firestore", "User document not found for post author");
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("Firestore", "Error fetching user document: " + e.getMessage(), e);
+                });
+
+        // Populate other post details like author username, like count, comment count, etc.
+        holder.authorUsername.setText(post.getAuthorUsername());
+        if (post.getLikes() != null && !post.getLikes().isEmpty()) {
+            holder.likeCount.setText(String.valueOf(post.getLikes().size()));
+        } else {
+            holder.likeCount.setText("0");
+        }
+        if (post.getComments() != null && !post.getComments().isEmpty()) {
+            holder.commentCount.setText(String.valueOf(post.getComments().size()));
+        } else {
+            holder.commentCount.setText("Be first?");
+        }
+
+        //Fetch current user id
+        FirebaseUser user = mAuth.getCurrentUser();
+        assert user != null;
+        String currentUser = user.getUid();
 
         //LIKE CONTROLLER==========
 
         // Handle like button click
+        boolean isLiked = post.isLikedByUser(currentUser);
+
+
+        if (isLiked) {
+            holder.likeIcon.setImageResource(R.drawable.post_save);
+        } else {
+            holder.likeIcon.setImageResource(R.drawable.post_like);
+        }
 
         holder.likeIcon.setOnClickListener(v -> {
-            // Get the adapter position of the clicked item
-            int pos = holder.getAdapterPosition();
-            // Check if the position is valid
-            if (pos != RecyclerView.NO_POSITION) {
-                // Retrieve the PostModel associated with the clicked item
-                PostModel clickedPost = postModels.get(pos);
-
-                // Retrieve the post ID from the PostModel
-                String postId = clickedPost.getPostId();
-
-                // Log the post ID
-                Log.d("Post Click", "Clicked like icon for post with ID: " + postId);
-
-                // Example: Check if the post is already liked by the user
-                // boolean isLiked = clickedPost.isLikedByUser(userId);
-            } else {
-                Log.e("Error", "Invalid position");
-            }
+            String postId = post.getPostId();
+            System.out.println("postamar:- " + postId);
         });
-
-
 
 
 
@@ -105,8 +132,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
         ImageView authorImg, postMedia, likeIcon;
         TextView authorName, authorUsername, postTextContent, likeCount, commentCount, timeStamp;
 
-
-
         public PostHolder(@NonNull View itemView) {
             super(itemView);
             // Initialize ViewHolder components here
@@ -121,10 +146,4 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
             timeStamp = itemView.findViewById(R.id.timeStamp);
         }
     }
-
-
-
-
-
-
 }
