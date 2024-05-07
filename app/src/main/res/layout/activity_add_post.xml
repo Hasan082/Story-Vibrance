@@ -96,6 +96,8 @@
                     style="@style/AppButtonStyle"
                     android:text="Post Story" />
 
+
+
             </LinearLayout>
             <!--Spinner show until data fully loaded-->
 

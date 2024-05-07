@@ -17,6 +17,7 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.core.UserData;
 import com.hasan.storyvibrance.Model.PostModel;
 import com.hasan.storyvibrance.R;
 import com.hasan.storyvibrance.Utility.TimeUtils;
@@ -32,6 +33,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
     Context context;
     ArrayList<PostModel> postModels;
 
+
     public PostAdapter(Context context, ArrayList<PostModel> postModels) {
         this.context = context;
         this.postModels = postModels;
@@ -46,38 +48,17 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull PostAdapter.PostHolder holder, int position) {
-
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
         PostModel post = postModels.get(position);
 
 
-        db.collection("userdata").addSnapshotListener((value, error) -> {
-            if (error != null) {
-                Log.e("Firestore", "Listen failed.", error);
-                return;
-            }
-            // Check if the query snapshot contains any documents
-            if (value != null && !value.isEmpty()) {
-                for (QueryDocumentSnapshot doc : value) {
-                    Map<String, Object> data = doc.getData();
-                    String fullName = (String) data.get("name");
-                    String profileImg = (String) data.get("ProfileImg");
-                    Picasso.get().load(profileImg).into(holder.authorImg);
-                    holder.authorName.setText(fullName);
-                }
-            } else {
-                Log.d("Firestore", "No documents found in the 'userdata' collection.");
-            }
-        });
-
-
-
+        holder.authorName.setText(postModels.get(position).getAuthorName());
+        Picasso.get().load(postModels.get(position).getAuthorImg()).into(holder.authorImg);
         Picasso.get().load(postModels.get(position).getPostMedia()).into(holder.postMedia);
         holder.authorUsername.setText(postModels.get(position).getAuthorUsername());
         holder.postTextContent.setText(postModels.get(position).getPostTextContent());
-        if (post.getLikes() != null && post.getLikes().size() != 0) holder.likeCount.setText(String.valueOf(post.getLikes().size()));
+        if (post.getLikes() != null && !post.getLikes().isEmpty()) holder.likeCount.setText(String.valueOf(post.getLikes().size()));
         else holder.likeCount.setText("0");
-        if (post.getComments() != null && post.getComments().size() != 0) holder.commentCount.setText(String.valueOf(post.getComments().size()));
+        if (post.getComments() != null && !post.getComments().isEmpty()) holder.commentCount.setText(String.valueOf(post.getComments().size()));
         else holder.commentCount.setText("Be first?");
         // Set timestamp
         String timeAgo = TimeUtils.getTimeAgo(Long.parseLong(postModels.get(position).getTimestamp()));

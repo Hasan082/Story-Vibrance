@@ -89,6 +89,10 @@ public class FragmentHome extends Fragment {
     // Method to set up RecyclerView for posts
 
     // Method to set up RecyclerView for posts
+
+
+
+
     private void setupPostRecyclerView(FirebaseFirestore db) {
         // Create a map to associate document IDs with PostModel objects
         Map<String, PostModel> postMap = new HashMap<>();
@@ -99,7 +103,6 @@ public class FragmentHome extends Fragment {
                 Log.e("hello", "Listen failed.", error);
                 return;
             }
-
             // Clear the postMap before adding new posts
             postMap.clear();
 
@@ -110,15 +113,9 @@ public class FragmentHome extends Fragment {
                     if (postMap.containsKey(postId)) {
                         // If yes, retrieve the corresponding PostModel object
                         PostModel post = postMap.get(postId);
-                        // Update the PostModel object with new data, if needed
-                        // For example: post.setAuthorName(doc.getString("authorName"));
-                        // Continue updating other fields...
                     } else {
-                        // If not, create a new PostModel object
                         PostModel post = doc.toObject(PostModel.class);
-                        // Set the postId for the new PostModel object
                         post.setPostId(postId);
-                        // Add the PostModel object to the map
                         postMap.put(postId, post);
                     }
                 } else {
@@ -131,7 +128,6 @@ public class FragmentHome extends Fragment {
 
             // Sort the postModels list, if needed
             PostSorter.sortByTimestampDescending(postModels);
-
             // Create a PostAdapter with the updated post models
             PostAdapter postAdapter = new PostAdapter(getContext(), postModels);
             // Set the adapter to the post RecyclerView
