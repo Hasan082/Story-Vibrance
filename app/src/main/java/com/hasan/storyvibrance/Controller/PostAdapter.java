@@ -21,9 +21,11 @@ import com.hasan.storyvibrance.Model.PostModel;
 import com.hasan.storyvibrance.Model.UserDataModel;
 import com.hasan.storyvibrance.R;
 import com.hasan.storyvibrance.Utility.TimeUtils;
+import com.hasan.storyvibrance.Utility.UserDataLoader;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,18 +60,22 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
         PostModel post = postModels.get(position);
         holder.bind(post, userDataCache);
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        assert user != null;
         String userId = user.getUid();
 
-        // Check if the post is saved locally
-        boolean isIdSaved = isPostSavedLocally(post.getPostId());
+        UserDataLoader.loadUserData(userId, holder.authorName, holder.authorImg);
 
+
+        // Check if the post is saved locally
+        boolean dataSaved = isPostSavedLocally(post.getPostId());
+        System.out.println("isIdSaved " + dataSaved + " " + post.getPostId());
         // Set the icon based on the saved state
-        if (isIdSaved) {
+        if (dataSaved) {
             holder.savedIcon.setImageResource(R.drawable.post_saved);
         } else {
             holder.savedIcon.setImageResource(R.drawable.post_save);
         }
-
+        //ToDo====================
         // Set click listener for save icon
         holder.savedIcon.setOnClickListener(v -> {
             // Toggle saved state
@@ -120,13 +126,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
      * @param post The PostModel object to be removed.
      */
     private void removeSavedPost(PostModel post, String userId) {
-        // Get SharedPreferences instance
-        SharedPreferences sharedPreferences = context.getSharedPreferences("SavedPosts_" + userId, Context.MODE_PRIVATE);
-        // Get editor
+        SharedPreferences sharedPreferences = context.getSharedPreferences("SavedPosts" + userId, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        // Remove post from SharedPreferences using its unique key (e.g., post ID)
         editor.remove(post.getPostId());
-        // Commit changes
         editor.apply();
     }
 
@@ -139,7 +141,15 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
         // Get SharedPreferences instance
         SharedPreferences sharedPreferences = context.getSharedPreferences("SavedPosts", Context.MODE_PRIVATE);
         // Check if the post with the given postId exists in SharedPreferences
-        return sharedPreferences.contains(postId);
+        boolean isSaved = sharedPreferences.contains(postId);
+
+        // Print out the contents of SharedPreferences for debugging
+        Map<String, ?> allEntries = sharedPreferences.getAll();
+        for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
+            Log.d("SharedPreferences", "Key: " + entry.getKey() + ", Value: " + entry.getValue().toString());
+        }
+
+        return isSaved;
     }
 
     // Method to check if the current user has saved posts
@@ -183,34 +193,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
             // Set timestamp
             String timeAgo = TimeUtils.getTimeAgo(Long.parseLong(post.getTimestamp()));
             timeStamp.setText(timeAgo);
-
-            // Fetch user data for the author of the post
-            String authorUserId = post.getAuthorUsername();
-            UserDataModel authorData = userDataCache.get(authorUserId);
-            if (authorData != null) {
-                authorName.setText(authorData.getFullName());
-                Picasso.get().load(authorData.getProfileImg()).into(authorImg);
-            } else {
-                // Author data is not available in the cache, fetch from Firestore
-                FirebaseFirestore.getInstance().collection("userdata").document(authorUserId).get()
-                        .addOnSuccessListener(documentSnapshot -> {
-                            if (documentSnapshot.exists()) {
-                                // Retrieve user data from the document snapshot
-                                String fullName = documentSnapshot.getString("name");
-                                String profileImg = documentSnapshot.getString("ProfileImg");
-
-                                // Populate author name and profile image
-                                authorName.setText(fullName);
-                                Picasso.get().load(profileImg).into(authorImg);
-
-                                // Update the cache with the fetched user data
-                                userDataCache.put(authorUserId, new UserDataModel(fullName, profileImg));
-                            } else {
-                                Log.d("Firestore", "User document not found for post author");
-                            }
-                        })
-                        .addOnFailureListener(e -> Log.e("Firestore", "Error fetching user document: " + e.getMessage(), e));
-            }
 
             // Populate other post details like author username, like count, comment count, etc.
             authorUsername.setText(post.getAuthorUsername());
