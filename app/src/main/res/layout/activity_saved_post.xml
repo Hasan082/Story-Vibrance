@@ -27,7 +27,7 @@
                 android:layout_height="38dp"
                 android:contentDescription="@string/edit"
                 android:src="@drawable/back_black"
-                tools:ignore="TouchTargetSizeCheck" />
+                 />
 
             <TextView
                 style="@style/TextAppearance.Headline1"

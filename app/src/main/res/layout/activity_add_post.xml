@@ -35,7 +35,6 @@
                         android:id="@+id/backBtn"
                         android:layout_width="38dp"
                         android:layout_height="38dp"
-                        android:clickable="true"
                         android:contentDescription="@string/edit"
                         android:src="@drawable/back_black" />
 
