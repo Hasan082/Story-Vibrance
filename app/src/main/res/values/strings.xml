@@ -41,4 +41,5 @@
     <string name="update_profile">Update Profile</string>
     <string name="update">Update</string>
     <string name="saved_post">Saved Post</string>
+    <string name="saved_post_empty">You haven\'t saved any posts yet! Go back and start saving.</string>
 </resources>

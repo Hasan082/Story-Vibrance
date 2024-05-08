@@ -6,6 +6,9 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.hasan.storyvibrance.Controller.SavedPostsAdapter;
@@ -25,7 +28,10 @@ public class SavedPostActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_saved_post);
-        List<PostModel> savedPosts = getSavedPostsFromSharedPreferences();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        assert user != null;
+        String userId = user.getUid();
+        List<PostModel> savedPosts = getSavedPostsFromSharedPreferences(userId);
         SavedPostsAdapter savedPostsAdapter = new SavedPostsAdapter(savedPosts);
         binding.savedPostRecyclerView.setAdapter(savedPostsAdapter);
 
@@ -43,9 +49,9 @@ public class SavedPostActivity extends AppCompatActivity {
     }
 
 
-    public List<PostModel> getSavedPostsFromSharedPreferences() {
+    public List<PostModel> getSavedPostsFromSharedPreferences(String userId) {
         List<PostModel> savedPosts = new ArrayList<>();
-        SharedPreferences sharedPreferences = getSharedPreferences("SavedPosts", MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences("SavedPosts_" + userId, MODE_PRIVATE);
         Gson gson = new Gson();
         Map<String, ?> allEntries = sharedPreferences.getAll();
         for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
@@ -60,6 +66,7 @@ public class SavedPostActivity extends AppCompatActivity {
         }
         return savedPosts;
     }
+
 
 
 }

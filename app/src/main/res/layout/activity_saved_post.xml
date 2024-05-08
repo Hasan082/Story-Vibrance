@@ -25,7 +25,6 @@
                 android:id="@+id/backBtn"
                 android:layout_width="38dp"
                 android:layout_height="38dp"
-                android:clickable="true"
                 android:contentDescription="@string/edit"
                 android:src="@drawable/back_black"
                 tools:ignore="TouchTargetSizeCheck" />
@@ -49,7 +48,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:text="You haven't saved any posts yet! Go back and start saving."
+            android:text="@string/saved_post_empty"
             android:visibility="gone"
             />
 

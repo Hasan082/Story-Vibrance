@@ -57,7 +57,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
     public void onBindViewHolder(@NonNull PostHolder holder, int position) {
         PostModel post = postModels.get(position);
         holder.bind(post, userDataCache);
-
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String userId = user.getUid();
 
         // Check if the post is saved locally
         boolean isIdSaved = isPostSavedLocally(post.getPostId());
@@ -84,9 +85,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
 
             // Save post locally (e.g., in SharedPreferences) or remove it
             if (newSavedState) {
-                savePostLocally(post);
+                savePostLocally(post, userId);
             } else {
-                removeSavedPost(post);
+                removeSavedPost(post, userId);
             }
 
             // Update the post's saved state
@@ -100,8 +101,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
      * Saves the given post locally using SharedPreferences.
      * @param post The PostModel object to be saved.
      */
-    private void savePostLocally(PostModel post) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences("SavedPosts", Context.MODE_PRIVATE);
+    private void savePostLocally(PostModel post, String userId) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("SavedPosts_" + userId, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         Gson gson = new Gson();
         String postJson = gson.toJson(post);
@@ -113,13 +114,14 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
     }
 
 
+
     /**
      * Removes the saved post locally using SharedPreferences.
      * @param post The PostModel object to be removed.
      */
-    private void removeSavedPost(PostModel post) {
+    private void removeSavedPost(PostModel post, String userId) {
         // Get SharedPreferences instance
-        SharedPreferences sharedPreferences = context.getSharedPreferences("SavedPosts", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences("SavedPosts_" + userId, Context.MODE_PRIVATE);
         // Get editor
         SharedPreferences.Editor editor = sharedPreferences.edit();
         // Remove post from SharedPreferences using its unique key (e.g., post ID)
@@ -140,7 +142,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
         return sharedPreferences.contains(postId);
     }
 
-
+    // Method to check if the current user has saved posts
+    private boolean hasSavedPostsLocally(String userId) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("SavedPosts_" + userId, Context.MODE_PRIVATE);
+        return !sharedPreferences.getAll().isEmpty();
+    }
 
     @Override
     public int getItemCount() {
