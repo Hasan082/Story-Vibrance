@@ -73,11 +73,6 @@ public class FragmentHome extends Fragment {
         });
 
 
-
-
-
-
-
         // Set up story RecyclerView
         setupStoryRecyclerView();
         // Set up post RecyclerView
@@ -88,14 +83,14 @@ public class FragmentHome extends Fragment {
     }
     // Method to set up RecyclerView for posts
 
-    // Method to set up RecyclerView for posts
-
-
-
-
     private void setupPostRecyclerView(FirebaseFirestore db) {
         // Create a map to associate document IDs with PostModel objects
         Map<String, PostModel> postMap = new HashMap<>();
+
+        // Create a new instance of the PostAdapter
+        PostAdapter postAdapter = new PostAdapter(getContext(), new ArrayList<>());
+        // Set the adapter to the post RecyclerView
+        binding.postRecyclerview.setAdapter(postAdapter);
 
         // Set up a real-time listener on the entire "posts" collection
         db.collection("posts").addSnapshotListener((querySnapshot, error) -> {
@@ -110,15 +105,9 @@ public class FragmentHome extends Fragment {
             for (QueryDocumentSnapshot doc : querySnapshot) {
                 if (doc.exists()) {
                     String postId = doc.getId();
-                    // Check if the postMap already contains the postId
-                    if (postMap.containsKey(postId)) {
-                        // If yes, retrieve the corresponding PostModel object
-                        PostModel post = postMap.get(postId);
-                    } else {
-                        PostModel post = doc.toObject(PostModel.class);
-                        post.setPostId(postId);
-                        postMap.put(postId, post);
-                    }
+                    PostModel post = doc.toObject(PostModel.class);
+                    post.setPostId(postId);
+                    postMap.put(postId, post);
                 } else {
                     Log.d("postError", "No such document");
                 }
@@ -129,12 +118,12 @@ public class FragmentHome extends Fragment {
 
             // Sort the postModels list, if needed
             PostSorter.sortByTimestampDescending(postModels);
-            // Create a PostAdapter with the updated post models
-            PostAdapter postAdapter = new PostAdapter(getContext(), postModels);
-            // Set the adapter to the post RecyclerView
-            binding.postRecyclerview.setAdapter(postAdapter);
+
+            // Update the data in the adapter
+            postAdapter.updateData(postModels);
         });
     }
+
 
 
 
