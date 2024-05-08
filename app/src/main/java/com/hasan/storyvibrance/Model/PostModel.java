@@ -1,5 +1,8 @@
 package com.hasan.storyvibrance.Model;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -159,23 +162,37 @@ public class PostModel {
         return likes != null ? likes.size() : 0;
     }
 
+
+    public boolean isSaved() {
+        return saved;
+    }
+
+
+    public void setSaved(boolean saved) {
+        this.saved = saved;
+    }
     /**
      * Checks if the post is saved.
      * @return true if the post is saved, false otherwise.
      */
-    public boolean isSaved() {
-        return saved;
+    public boolean isSaved(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("SavedPosts", Context.MODE_PRIVATE);
+        String savedAsString = sharedPreferences.getString(postId, "false");
+        return Boolean.parseBoolean(savedAsString);
     }
+
 
     /**
      * Sets the saved status of the post.
      * @param saved true if the post should be saved, false otherwise.
      */
-    public void setSaved(boolean saved) {
+    public void setSaved(Context context, boolean saved) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("SavedPosts", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(postId, String.valueOf(saved));
+        editor.apply();
         this.saved = saved;
     }
-
-
 
 
 }

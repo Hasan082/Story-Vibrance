@@ -1,7 +1,6 @@
 package com.hasan.storyvibrance.Controller;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -60,8 +59,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
         holder.bind(post, userDataCache);
 
 
-        // Set initial saved state and icon
-        if (post.isSaved()) {
+        // Check if the post is saved locally
+        boolean isIdSaved = isPostSavedLocally(post.getPostId());
+
+        // Set the icon based on the saved state
+        if (isIdSaved) {
             holder.savedIcon.setImageResource(R.drawable.post_saved);
         } else {
             holder.savedIcon.setImageResource(R.drawable.post_save);
@@ -89,28 +91,32 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
 
             // Update the post's saved state
             post.setSaved(newSavedState);
-
         });
 
 
     }
 
-    // Method to save post locally
+    /**
+     * Saves the given post locally using SharedPreferences.
+     * @param post The PostModel object to be saved.
+     */
     private void savePostLocally(PostModel post) {
-        // Get SharedPreferences instance
         SharedPreferences sharedPreferences = context.getSharedPreferences("SavedPosts", Context.MODE_PRIVATE);
-        // Get editor
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        // Serialize the post object to JSON string
         Gson gson = new Gson();
         String postJson = gson.toJson(post);
+        // Log the saved JSON string
+        Log.d("SavedPostJson", postJson);
         // Save post JSON string with unique key (e.g., post ID)
         editor.putString(post.getPostId(), postJson);
-        // Commit changes
         editor.apply();
     }
 
-    // Method to remove saved post
+
+    /**
+     * Removes the saved post locally using SharedPreferences.
+     * @param post The PostModel object to be removed.
+     */
     private void removeSavedPost(PostModel post) {
         // Get SharedPreferences instance
         SharedPreferences sharedPreferences = context.getSharedPreferences("SavedPosts", Context.MODE_PRIVATE);
@@ -122,6 +128,18 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
         editor.apply();
     }
 
+    /**
+     * Checks if the post with the given postId is saved locally in SharedPreferences.
+     * @param postId The ID of the post to check.
+     * @return true if the post is saved locally, false otherwise.
+     */
+    private boolean isPostSavedLocally(String postId) {
+        // Get SharedPreferences instance
+        SharedPreferences sharedPreferences = context.getSharedPreferences("SavedPosts", Context.MODE_PRIVATE);
+        // Check if the post with the given postId exists in SharedPreferences
+        return sharedPreferences.contains(postId);
+    }
+
 
 
     @Override
@@ -130,13 +148,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
     }
 
     public class PostHolder extends RecyclerView.ViewHolder {
-        // ViewHolder components here
-        ImageView authorImg, postMedia, likeIcon, savedIcon;
+          ImageView authorImg, postMedia, likeIcon, savedIcon;
         TextView authorName, authorUsername, postTextContent, likeCount, commentCount, timeStamp;
 
         public PostHolder(@NonNull View itemView) {
             super(itemView);
-            // Initialize ViewHolder components here
             savedIcon = itemView.findViewById(R.id.savedIcon);
             likeIcon = itemView.findViewById(R.id.likeIcon);
             authorImg = itemView.findViewById(R.id.authorImg);
@@ -149,10 +165,14 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
             timeStamp = itemView.findViewById(R.id.timeStamp);
         }
 
+        /**
+         * Binds the post data to the ViewHolder.
+         * @param post The PostModel object containing post data.
+         * @param userDataCache The cache containing user data.
+         */
         public void bind(PostModel post, Map<String, UserDataModel> userDataCache) {
             // Populate post data directly from the PostModel object
             postTextContent.setText(post.getPostTextContent());
-            // Load post media
             Picasso.get().load(post.getPostMedia()).into(postMedia);
             // Set timestamp
             String timeAgo = TimeUtils.getTimeAgo(Long.parseLong(post.getTimestamp()));
@@ -162,7 +182,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
             String authorUserId = post.getAuthorUsername();
             UserDataModel authorData = userDataCache.get(authorUserId);
             if (authorData != null) {
-                // Author data is available in the cache, populate UI from cache
                 authorName.setText(authorData.getFullName());
                 Picasso.get().load(authorData.getProfileImg()).into(authorImg);
             } else {
@@ -201,18 +220,15 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
 
             // Set the click listener for the like button
             likeIcon.setOnClickListener(v -> {
-                // Toggle the like state immediately
                 if (user != null) {
                     String currentUser = user.getUid();
                     boolean isLiked = post.isLikedByUser(currentUser);
                     if (!isLiked) {
                         likeIcon.setImageResource(R.drawable.post_liked);
-                        // Add like locally
                         LikeModel like = new LikeModel(currentUser);
                         post.addLike(like);
                     } else {
                         likeIcon.setImageResource(R.drawable.post_like);
-                        // Remove like locally
                         post.removeLike(currentUser);
                     }
 
@@ -225,17 +241,14 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
                     FirebaseFirestore.getInstance().collection("posts").document(post.getPostId()).update(updates)
                             .addOnSuccessListener(aVoid -> Log.d("Firestore", "Likes updated"))
                             .addOnFailureListener(e -> {
-                                // Handle failure if necessary
-                                Log.e("Firestore", "Error updating likes", e);
+                                Log.e("likes Error", "Error updating likes", e);
                                 // Revert UI changes if necessary
                                 notifyItemChanged(getAdapterPosition());
                                 if (!isLiked) {
                                     likeIcon.setImageResource(R.drawable.post_like);
-                                    // Remove like locally
                                     post.removeLike(currentUser);
                                 } else {
                                     likeIcon.setImageResource(R.drawable.post_liked);
-                                    // Add like locally
                                     LikeModel like = new LikeModel(currentUser);
                                     post.addLike(like);
                                 }
