@@ -1,4 +1,4 @@
-package com.hasan.storyvibrance.Drawer;
+package com.hasan.storyvibrance.Posts;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,7 +26,7 @@ public class SavedPostActivity extends AppCompatActivity {
         binding.savedPostRecyclerView.setAdapter(savedPostsAdapter);
 
         //Back to previous page====
-        binding.customBack.setOnClickListener(v->{
+        binding.backBtn.setOnClickListener(v->{
             getOnBackPressedDispatcher().onBackPressed();
         });
 

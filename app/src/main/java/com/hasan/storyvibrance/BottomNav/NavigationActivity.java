@@ -3,7 +3,6 @@ package com.hasan.storyvibrance.BottomNav;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
@@ -11,7 +10,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
-import com.hasan.storyvibrance.Drawer.SavedPostActivity;
+import com.hasan.storyvibrance.Posts.SavedPostActivity;
 import com.hasan.storyvibrance.Posts.AddPostActivity;
 import com.hasan.storyvibrance.R;
 import com.hasan.storyvibrance.auth.LoginActivity;
@@ -36,7 +35,6 @@ public class NavigationActivity extends AppCompatActivity {
 
         //Drawer NAV FUNCTION======================
 
-
         binding.drawerNavView.setNavigationItemSelectedListener(item->{
             //LOGOUT=====================
             if(item.getItemId()==R.id.logout){
@@ -49,6 +47,7 @@ public class NavigationActivity extends AppCompatActivity {
             if(item.getItemId()==R.id.SavedPost){
                 startActivity(new Intent(NavigationActivity.this, SavedPostActivity.class));
             }
+            binding.drawerLayout.closeDrawer(GravityCompat.START);
             return true;
         });
 

@@ -58,24 +58,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
     public void onBindViewHolder(@NonNull PostHolder holder, int position) {
         PostModel post = postModels.get(position);
         holder.bind(post, userDataCache);
-        
-        // Set click listener for save icon
-        holder.savedIcon.setOnClickListener(v -> {
-            // Toggle saved state
-            boolean isSaved = post.isSaved();
-            post.setSaved(!isSaved);
 
-            // Update UI to reflect saved state
-            if (isSaved) {
-                holder.savedIcon.setImageResource(R.drawable.post_saved);
-                // Save post locally (e.g., in SharedPreferences)
-                savePostLocally(post);
-            } else {
-                holder.savedIcon.setImageResource(R.drawable.post_save);
-                // Remove post from saved list
-                removeSavedPost(post);
-            }
-        });
 
         // Set initial saved state and icon
         if (post.isSaved()) {
@@ -83,6 +66,33 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
         } else {
             holder.savedIcon.setImageResource(R.drawable.post_save);
         }
+
+        // Set click listener for save icon
+        holder.savedIcon.setOnClickListener(v -> {
+            // Toggle saved state
+            boolean isSaved = post.isSaved();
+            boolean newSavedState = !isSaved;
+
+            // Update UI to reflect saved state immediately
+            if (newSavedState) {
+                holder.savedIcon.setImageResource(R.drawable.post_saved);
+            } else {
+                holder.savedIcon.setImageResource(R.drawable.post_save);
+            }
+
+            // Save post locally (e.g., in SharedPreferences) or remove it
+            if (newSavedState) {
+                savePostLocally(post);
+            } else {
+                removeSavedPost(post);
+            }
+
+            // Update the post's saved state
+            post.setSaved(newSavedState);
+
+        });
+
+
     }
 
     // Method to save post locally

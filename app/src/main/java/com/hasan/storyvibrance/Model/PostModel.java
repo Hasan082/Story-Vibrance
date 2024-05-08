@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class PostModel {
-    private String postId;
+    private String postId; //Post Id
     private String authorName; // Name of the author
     private String authorUsername; // Username of the author
     private String postTextContent; // Content of the post
@@ -14,8 +14,7 @@ public class PostModel {
     private List<LikeModel> likes; // List of likes on the post
     private List<CommentModel> comments; // List of comments on the post
     private String timestamp; // Timestamp of when the post was created
-
-    private boolean saved;
+    private boolean saved; //Save post
 
     // Constructors, getters, and setters
 
@@ -109,7 +108,10 @@ public class PostModel {
         this.timestamp = timestamp;
     }
 
-    // Method to add a like to the post
+    /**
+     * Adds a like to the post.
+     * @param like The LikeModel object representing the like to be added.
+     */
     public void addLike(LikeModel like) {
         if (likes == null) {
             likes = new ArrayList<>();
@@ -117,20 +119,27 @@ public class PostModel {
         likes.add(like);
     }
 
-    // Method to remove a like from the post
+    /**
+     * Removes a like from the post.
+     * @param userId The ID of the user whose like is to be removed.
+     */
     public void removeLike(String userId) {
         if (likes != null) {
             for (Iterator<LikeModel> iterator = likes.iterator(); iterator.hasNext();) {
                 LikeModel like = iterator.next();
                 if (like.getUserId().equals(userId)) {
                     iterator.remove();
-                    break; // Assuming each user can like a post only once, so no need to continue iterating
+                    break;
                 }
             }
         }
     }
 
-    // Method to check if a user liked the post
+    /**
+     * Checks if the post is liked by a specific user.
+     * @param userId The ID of the user to check for liking the post.
+     * @return True if the post is liked by the specified user, otherwise false.
+     */
     public boolean isLikedByUser(String userId) {
         if (likes != null) {
             for (LikeModel like : likes) {
@@ -142,16 +151,31 @@ public class PostModel {
         return false;
     }
 
-    // Method to get the total like count
+    /**
+     * Gets the total number of likes on the post.
+     * @return The total number of likes on the post.
+     */
     public int getLikeCount() {
         return likes != null ? likes.size() : 0;
     }
 
+    /**
+     * Checks if the post is saved.
+     * @return true if the post is saved, false otherwise.
+     */
     public boolean isSaved() {
         return saved;
     }
 
+    /**
+     * Sets the saved status of the post.
+     * @param saved true if the post should be saved, false otherwise.
+     */
     public void setSaved(boolean saved) {
         this.saved = saved;
     }
+
+
+
+
 }
