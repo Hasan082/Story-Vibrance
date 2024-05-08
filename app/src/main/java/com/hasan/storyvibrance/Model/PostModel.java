@@ -15,6 +15,8 @@ public class PostModel {
     private List<CommentModel> comments; // List of comments on the post
     private String timestamp; // Timestamp of when the post was created
 
+    private boolean saved;
+
     // Constructors, getters, and setters
 
     public PostModel() {
@@ -145,4 +147,11 @@ public class PostModel {
         return likes != null ? likes.size() : 0;
     }
 
+    public boolean isSaved() {
+        return saved;
+    }
+
+    public void setSaved(boolean saved) {
+        this.saved = saved;
+    }
 }

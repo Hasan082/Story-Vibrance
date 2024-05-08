@@ -43,6 +43,9 @@
         android:theme="@style/Theme.StoryVibrance"
         tools:targetApi="31">
         <activity
+            android:name=".Drawer.SavedPostActivity"
+            android:exported="false" />
+        <activity
             android:name=".Posts.AddPostActivity"
             android:exported="false" />
         <activity

@@ -3,21 +3,21 @@
 
     <item
         android:id="@+id/home"
-        android:title="Home"
+        android:title="Search Post"
         android:icon="@drawable/nav_home"
         android:iconTint="@color/white"
         />
     <item
-        android:id="@+id/search"
-        android:title="Search"
-        android:icon="@drawable/nav_search"
+        android:id="@+id/search_friend"
+        android:title="Search Friend"
+        android:icon="@drawable/person"
         android:iconTint="@color/white"
         />
 
     <item
-        android:id="@+id/addPost"
-        android:title="Add Post"
-        android:icon="@drawable/nav_person"
+        android:id="@+id/SavedPost"
+        android:title="Saved Post"
+        android:icon="@drawable/post_save"
         android:iconTint="@color/white"
         />
     <item

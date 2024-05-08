@@ -1,6 +1,8 @@
 package com.hasan.storyvibrance.Controller;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.gson.Gson;
 import com.hasan.storyvibrance.Model.LikeModel;
 import com.hasan.storyvibrance.Model.PostModel;
 import com.hasan.storyvibrance.Model.UserDataModel;
@@ -55,7 +58,61 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
     public void onBindViewHolder(@NonNull PostHolder holder, int position) {
         PostModel post = postModels.get(position);
         holder.bind(post, userDataCache);
+        
+        // Set click listener for save icon
+        holder.savedIcon.setOnClickListener(v -> {
+            // Toggle saved state
+            boolean isSaved = post.isSaved();
+            post.setSaved(!isSaved);
+
+            // Update UI to reflect saved state
+            if (isSaved) {
+                holder.savedIcon.setImageResource(R.drawable.post_saved);
+                // Save post locally (e.g., in SharedPreferences)
+                savePostLocally(post);
+            } else {
+                holder.savedIcon.setImageResource(R.drawable.post_save);
+                // Remove post from saved list
+                removeSavedPost(post);
+            }
+        });
+
+        // Set initial saved state and icon
+        if (post.isSaved()) {
+            holder.savedIcon.setImageResource(R.drawable.post_saved);
+        } else {
+            holder.savedIcon.setImageResource(R.drawable.post_save);
+        }
     }
+
+    // Method to save post locally
+    private void savePostLocally(PostModel post) {
+        // Get SharedPreferences instance
+        SharedPreferences sharedPreferences = context.getSharedPreferences("SavedPosts", Context.MODE_PRIVATE);
+        // Get editor
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        // Serialize the post object to JSON string
+        Gson gson = new Gson();
+        String postJson = gson.toJson(post);
+        // Save post JSON string with unique key (e.g., post ID)
+        editor.putString(post.getPostId(), postJson);
+        // Commit changes
+        editor.apply();
+    }
+
+    // Method to remove saved post
+    private void removeSavedPost(PostModel post) {
+        // Get SharedPreferences instance
+        SharedPreferences sharedPreferences = context.getSharedPreferences("SavedPosts", Context.MODE_PRIVATE);
+        // Get editor
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        // Remove post from SharedPreferences using its unique key (e.g., post ID)
+        editor.remove(post.getPostId());
+        // Commit changes
+        editor.apply();
+    }
+
+
 
     @Override
     public int getItemCount() {
@@ -64,12 +121,13 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
 
     public class PostHolder extends RecyclerView.ViewHolder {
         // ViewHolder components here
-        ImageView authorImg, postMedia, likeIcon;
+        ImageView authorImg, postMedia, likeIcon, savedIcon;
         TextView authorName, authorUsername, postTextContent, likeCount, commentCount, timeStamp;
 
         public PostHolder(@NonNull View itemView) {
             super(itemView);
             // Initialize ViewHolder components here
+            savedIcon = itemView.findViewById(R.id.savedIcon);
             likeIcon = itemView.findViewById(R.id.likeIcon);
             authorImg = itemView.findViewById(R.id.authorImg);
             postMedia = itemView.findViewById(R.id.postMedia);

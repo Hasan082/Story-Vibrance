@@ -2,6 +2,7 @@
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
@@ -95,7 +96,8 @@
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
                 android:background="@drawable/posts_img_sample"
-                android:scaleType="fitCenter"/>
+                android:scaleType="fitCenter"
+                android:contentDescription="TODO" />
         </androidx.cardview.widget.CardView>
 
 
@@ -111,15 +113,18 @@
                 android:id="@+id/likeIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:clickable="true"
+                android:contentDescription="@string/Welcome"
                 android:src="@drawable/post_like"
-                android:layout_gravity="center_vertical"/>
+                tools:ignore="TouchTargetSizeCheck" />
 
             <TextView
                 style="@style/TextAppearance.Body3"
                 android:id="@+id/likeCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="4dp"
                 android:text="100"
                 android:textStyle="bold"/>
 
@@ -128,16 +133,19 @@
                 android:id="@+id/commentIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/post_comment"
                 android:layout_gravity="center_vertical"
-                android:layout_marginStart="16dp"/>
+                android:layout_marginStart="16dp"
+                android:clickable="true"
+                android:contentDescription="@string/about_me"
+                android:src="@drawable/post_comment"
+                tools:ignore="TouchTargetSizeCheck" />
 
             <TextView
                 style="@style/TextAppearance.Body3"
                 android:id="@+id/commentCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="4dp"
                 android:text="50"
                 android:textStyle="bold"/>
 
@@ -149,14 +157,17 @@
                 android:orientation="horizontal"
                 android:gravity="end"
                 >
+
                 <ImageView
-                    android:id="@+id/shareIcon"
+                    android:id="@+id/savedIcon"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/post_share"
+                    android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:layout_marginStart="16dp"
-                    />
+                    android:clickable="true"
+                    android:contentDescription="@string/app_name"
+                    android:src="@drawable/post_save"
+                    tools:ignore="TouchTargetSizeCheck" />
             </LinearLayout>
 
         </LinearLayout>
