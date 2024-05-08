@@ -106,6 +106,7 @@ public class FragmentHome extends Fragment {
             // Clear the postMap before adding new posts
             postMap.clear();
 
+            assert querySnapshot != null;
             for (QueryDocumentSnapshot doc : querySnapshot) {
                 if (doc.exists()) {
                     String postId = doc.getId();
@@ -135,45 +136,6 @@ public class FragmentHome extends Fragment {
         });
     }
 
-
-
-
-
-
-
-
-
-//    private void setupPostRecyclerView(FirebaseFirestore db) {
-//        // Create an ArrayList to hold the post models
-//        ArrayList<PostModel> postModels = new ArrayList<>();
-//
-//        // Set up a real-time listener on the entire "posts" collection
-//        db.collection("posts").addSnapshotListener((querySnapshot, error) -> {
-//            if (error != null) {
-//                Log.e("hello", "Listen failed.", error);
-//                return;
-//            }
-//
-//            // Clear the postModels list before adding new posts
-//            postModels.clear();
-//
-//            for (QueryDocumentSnapshot doc : querySnapshot) {
-//                if (doc.exists()) {
-//                    // Convert Firestore document to PostModel object
-//                    PostModel post = doc.toObject(PostModel.class);
-//                    // Add the post to the list
-//                    postModels.add(post);
-//                } else {
-//                    Log.d("postError", "No such document");
-//                }
-//            }
-//            PostSorter.sortByTimestampDescending(postModels);
-//            // Create a PostAdapter with the updated post models
-//            PostAdapter postAdapter = new PostAdapter(getContext(), postModels);
-//            // Set the adapter to the post RecyclerView
-//            binding.postRecyclerview.setAdapter(postAdapter);
-//        });
-//    }
 
 
     // Method to set up RecyclerView for stories

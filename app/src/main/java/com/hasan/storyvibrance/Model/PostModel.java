@@ -1,5 +1,7 @@
 package com.hasan.storyvibrance.Model;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class PostModel {
@@ -105,22 +107,42 @@ public class PostModel {
         this.timestamp = timestamp;
     }
 
-    public boolean isLikedByUser(String userId) {
-        // Ensure likes list is not null
+    // Method to add a like to the post
+    public void addLike(LikeModel like) {
+        if (likes == null) {
+            likes = new ArrayList<>();
+        }
+        likes.add(like);
+    }
+
+    // Method to remove a like from the post
+    public void removeLike(String userId) {
         if (likes != null) {
-            // Iterate through the list of likes
-            for (LikeModel like : likes) {
-                // Check if the user ID matches
+            for (Iterator<LikeModel> iterator = likes.iterator(); iterator.hasNext();) {
+                LikeModel like = iterator.next();
                 if (like.getUserId().equals(userId)) {
-                    // User has liked the post
+                    iterator.remove();
+                    break; // Assuming each user can like a post only once, so no need to continue iterating
+                }
+            }
+        }
+    }
+
+    // Method to check if a user liked the post
+    public boolean isLikedByUser(String userId) {
+        if (likes != null) {
+            for (LikeModel like : likes) {
+                if (like.getUserId().equals(userId)) {
                     return true;
                 }
             }
         }
-        // User has not liked the post or likes list is null
         return false;
     }
 
-
+    // Method to get the total like count
+    public int getLikeCount() {
+        return likes != null ? likes.size() : 0;
+    }
 
 }

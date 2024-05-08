@@ -1,5 +1,6 @@
 package com.hasan.storyvibrance.Controller;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,17 +10,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.core.UserData;
 import com.hasan.storyvibrance.Model.LikeModel;
 import com.hasan.storyvibrance.Model.PostModel;
 import com.hasan.storyvibrance.R;
@@ -27,15 +23,16 @@ import com.hasan.storyvibrance.Utility.TimeUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
 
-    private Context context;
-    private ArrayList<PostModel> postModels;
+    private final Context context;
+    private final ArrayList<PostModel> postModels;
 
     public PostAdapter(Context context, ArrayList<PostModel> postModels) {
         this.context = context;
@@ -49,6 +46,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
         return new PostHolder(view);
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     public void onBindViewHolder(@NonNull PostHolder holder, int position) {
         PostModel post = postModels.get(position);
@@ -79,9 +77,16 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
                         Log.d("Firestore", "User document not found for post author");
                     }
                 })
-                .addOnFailureListener(e -> {
-                    Log.e("Firestore", "Error fetching user document: " + e.getMessage(), e);
-                });
+                .addOnFailureListener(e -> Log.e("Firestore", "Error fetching user document: " + e.getMessage(), e));
+
+
+
+
+
+
+
+
+
 
         // Populate other post details like author username, like count, comment count, etc.
         holder.authorUsername.setText(post.getAuthorUsername());
@@ -96,27 +101,80 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
             holder.commentCount.setText("Be first?");
         }
 
-        //Fetch current user id
+        //CONTROL LIKE =====================================
+
+        // Fetch current user id
         FirebaseUser user = mAuth.getCurrentUser();
         assert user != null;
         String currentUser = user.getUid();
 
-        //LIKE CONTROLLER==========
+        // Get the likes list for the current post
+        List<LikeModel> likes = post.getLikes();
+        if (likes == null) {
+            likes = new ArrayList<>();
+        }
 
-        // Handle like button click
-        boolean isLiked = post.isLikedByUser(currentUser);
-
-
-        if (isLiked) {
-            holder.likeIcon.setImageResource(R.drawable.post_save);
+        if (post.isLikedByUser(currentUser)) {
+            holder.likeIcon.setImageResource(R.drawable.post_liked);
         } else {
             holder.likeIcon.setImageResource(R.drawable.post_like);
         }
 
+
+
+        final List<LikeModel> finalLikes = likes; // Final reference to the likes list
+
+        //LIKE CONTROLLER==========
         holder.likeIcon.setOnClickListener(v -> {
-            String postId = post.getPostId();
-            System.out.println("postamar:- " + postId);
+            // Toggle the like state immediately
+            boolean isLiked = post.isLikedByUser(currentUser);
+            if (!isLiked) {
+                holder.likeIcon.setImageResource(R.drawable.post_liked);
+                // Add like locally
+                LikeModel like = new LikeModel(currentUser);
+                post.addLike(like);
+            } else {
+                holder.likeIcon.setImageResource(R.drawable.post_like);
+                // Remove like locally
+                post.removeLike(currentUser);
+            }
+
+            // Update like count in UI immediately
+            holder.likeCount.setText(String.valueOf(post.getLikes().size()));
+
+            // Update Firestore
+            Map<String, Object> updates = new HashMap<>();
+            updates.put("likes", post.getLikes());
+            db.collection("posts").document(post.getPostId()).update(updates)
+                    .addOnSuccessListener(aVoid -> {
+                        // Log success message
+                        Log.d("Firestore", "Likes updated");
+                        notifyItemChanged(position);
+                    })
+                    .addOnFailureListener(e -> {
+                        // Handle failure if necessary
+                        Log.w("Firestore", "Error updating likes", e);
+                        // Revert UI changes if necessary
+                        if (!isLiked) {
+                            holder.likeIcon.setImageResource(R.drawable.post_like);
+                            // Remove like locally
+                            post.removeLike(currentUser);
+                        } else {
+                            holder.likeIcon.setImageResource(R.drawable.post_liked);
+                            // Add like locally
+                            LikeModel like = new LikeModel(currentUser);
+                            post.addLike(like);
+                        }
+                        // Update like count in UI
+                        holder.likeCount.setText(String.valueOf(post.getLikes().size()));
+                        // Notify the adapter that only this item has changed
+                        notifyItemChanged(position);
+                    });
         });
+
+
+
+
 
 
 

@@ -89,18 +89,6 @@ public class AddPostActivity extends AppCompatActivity {
         String userName = getUsernameFromSharedPreferences();
         String timeStamp = String.valueOf(System.currentTimeMillis());
 
-
-        db.collection("userdata").document(userName).get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                DocumentSnapshot documentSnapshot = task.getResult();
-                if (documentSnapshot != null && documentSnapshot.exists()) {
-                    // Extract user data from document
-                    String personName = documentSnapshot.getString("name");
-                    String imgUrl = documentSnapshot.getString("ProfileImg");
-                }
-            }
-        });
-
         // Check if post content is not empty
         if (!TextUtils.isEmpty(postContent)) {
             Map<String, Object> posts = new HashMap<>();
