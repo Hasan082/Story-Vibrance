@@ -22,19 +22,18 @@
             android:orientation="horizontal"
             android:padding="8dp">
 
-
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/authorImg"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:src="@drawable/hasan"
                 app:civ_border_color="@color/gray"
-                app:civ_border_width="2dp"
-                />
+                app:civ_border_width="2dp" />
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:orientation="vertical"
                 android:layout_marginStart="8dp">
 
@@ -45,7 +44,7 @@
                     android:layout_height="wrap_content"
                     android:text="Author Name"
                     android:textStyle="bold"
-                    android:textSize="14sp"/>
+                    android:textSize="14sp" />
 
                 <TextView
                     style="@style/TextAppearance.Body3"
@@ -54,20 +53,18 @@
                     android:layout_height="wrap_content"
                     android:text="1 hour ago"
                     android:textColor="@color/black"
-                    android:textSize="11sp"/>
+                    android:textSize="11sp" />
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/autUSer"
-                android:layout_width="0dp"
+            <ImageView
+                android:id="@+id/optionIcon"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textAlignment="textEnd"
-                style="@style/TextAppearance.Body3"
-                android:textSize="11sp"
-                android:text="User Name"
-                />
+                android:src="@drawable/option"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="8dp" />
         </LinearLayout>
+
 
 
         <!-- Post content: text and media (image or video) -->
