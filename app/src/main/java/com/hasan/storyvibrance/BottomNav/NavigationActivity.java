@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.databinding.DataBindingUtil;
@@ -42,6 +43,7 @@ public class NavigationActivity extends AppCompatActivity {
                 sPrefEdit.remove("username");
                 sPrefEdit.apply();
                 startActivity(new Intent(NavigationActivity.this, LoginActivity.class));
+                finish();
             }
             //Saved Post=====================
             if(item.getItemId()==R.id.SavedPost){
@@ -50,8 +52,6 @@ public class NavigationActivity extends AppCompatActivity {
             binding.drawerLayout.closeDrawer(GravityCompat.START);
             return true;
         });
-
-
 
 
 
@@ -80,6 +80,7 @@ public class NavigationActivity extends AppCompatActivity {
 
             return fragmentSelected;
         });
+
 
         //Add post button press======================
         binding.addPost.setOnClickListener(v -> startActivity(new Intent(NavigationActivity.this, AddPostActivity.class)));

@@ -1,7 +1,6 @@
 package com.hasan.storyvibrance.Controller;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,18 +13,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.gson.Gson;
 import com.hasan.storyvibrance.Model.LikeModel;
 import com.hasan.storyvibrance.Model.PostModel;
-import com.hasan.storyvibrance.Model.UserDataModel;
 import com.hasan.storyvibrance.R;
 import com.hasan.storyvibrance.Utility.TimeUtils;
-import com.hasan.storyvibrance.Utility.UserDataLoader;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,12 +31,13 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
 
     private final Context context;
     private final ArrayList<PostModel> postModels;
-    private final Map<String, UserDataModel> userDataCache;
+
+    FirebaseFirestore db;
+
 
     public PostAdapter(Context context, ArrayList<PostModel> postModels) {
         this.context = context;
         this.postModels = postModels;
-        this.userDataCache = new HashMap<>();
     }
 
     public void updateData(List<PostModel> newPostModels) {
@@ -58,114 +55,113 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
     @Override
     public void onBindViewHolder(@NonNull PostHolder holder, int position) {
         PostModel post = postModels.get(position);
-        holder.bind(post, userDataCache);
+        db = FirebaseFirestore.getInstance();
+
+        // Populate post data directly from the PostModel object
+        holder.authorName.setText(post.getAuthorName());
+        holder.postTextContent.setText(post.getPostTextContent());
+        Picasso.get().load(post.getPostMedia()).into(holder.postMedia);
+        Picasso.get().load(post.getAuthorImg()).into(holder.authorImg);
+        // Set timestamp
+        String timeAgo = TimeUtils.getTimeAgo(Long.parseLong(post.getTimestamp()));
+        holder.timeStamp.setText(timeAgo);
+
+        holder.likeCount.setText(String.valueOf(post.getLikes() != null ? post.getLikes().size() : 0));
+        holder.commentCount.setText(String.valueOf(post.getComments() != null ? post.getComments().size() : 0));
+
+
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        assert user != null;
-        String userId = user.getUid();
+        String userId = user != null ? user.getUid() : null;
+        holder.likeIcon.setImageResource(post.isLikedByUser(userId) ? R.drawable.post_liked : R.drawable.post_like);
 
-        UserDataLoader.loadUserData(userId, holder.authorName, holder.authorImg);
+        // HANDLE LIKE UNLIKE ACTIVITIES===========================
+        holder.likeIcon.setOnClickListener(v -> {
+            String currentUser = user != null ? user.getUid() : null;
+            boolean isLiked = post.isLikedByUser(currentUser);
+            if (!isLiked) {
+                holder.likeIcon.setImageResource(R.drawable.post_liked);
+                LikeModel like = new LikeModel(currentUser);
+                post.addLike(like);
+            } else {
+                holder.likeIcon.setImageResource(R.drawable.post_like);
+                post.removeLike(currentUser);
+            }
+
+            // Update like count in UI immediately
+            holder.likeCount.setText(String.valueOf(post.getLikes().size()));
+
+            // Update Firestore
+            Map<String, Object> updates = new HashMap<>();
+            updates.put("likes", post.getLikes());
+            db.collection("posts").document(post.getPostId()).update(updates)
+                    .addOnSuccessListener(aVoid -> Log.d("Likes done", "Likes updated"))
+                    .addOnFailureListener(e -> {
+                        Log.e("likes Error", "Error updating likes", e);
+                        // Revert UI changes if necessary
+                        if (!isLiked) {
+                            holder.likeIcon.setImageResource(R.drawable.post_like);
+                            post.removeLike(currentUser);
+                        } else {
+                            holder.likeIcon.setImageResource(R.drawable.post_liked);
+                            LikeModel like = new LikeModel(currentUser);
+                            post.addLike(like);
+                        }
+                        // Update like count in UI
+                        holder.likeCount.setText(String.valueOf(post.getLikes().size()));
+                    });
+        });
 
 
-        // Check if the post is saved locally
-        boolean dataSaved = isPostSavedLocally(post.getPostId());
-        System.out.println("isIdSaved " + dataSaved + " " + post.getPostId());
-        // Set the icon based on the saved state
-        if (dataSaved) {
-            holder.savedIcon.setImageResource(R.drawable.post_saved);
-        } else {
-            holder.savedIcon.setImageResource(R.drawable.post_save);
-        }
-        //ToDo====================
-        // Set click listener for save icon
+
+        // HANDLE POST SAVED==============================================
+        // Set the saved icon based on the current saved state of the post
+        holder.savedIcon.setImageResource(post.isSaved() ? R.drawable.post_saved : R.drawable.post_save);
+
+        // Set click listener for the saved icon
         holder.savedIcon.setOnClickListener(v -> {
-            // Toggle saved state
             boolean isSaved = post.isSaved();
             boolean newSavedState = !isSaved;
 
-            // Update UI to reflect saved state immediately
-            if (newSavedState) {
-                holder.savedIcon.setImageResource(R.drawable.post_saved);
-            } else {
-                holder.savedIcon.setImageResource(R.drawable.post_save);
-            }
-
-            // Save post locally (e.g., in SharedPreferences) or remove it
-            if (newSavedState) {
-                savePostLocally(post, userId);
-            } else {
-                removeSavedPost(post, userId);
-            }
-
+            if (newSavedState) holder.savedIcon.setImageResource(R.drawable.post_saved);
+            else holder.savedIcon.setImageResource(R.drawable.post_save);
+            // Save or remove the post as "saved" in the database
+            saveOrRemovePostAsSaved(post, newSavedState);
             // Update the post's saved state
             post.setSaved(newSavedState);
         });
 
 
-    }
 
-    /**
-     * Saves the given post locally using SharedPreferences.
-     * @param post The PostModel object to be saved.
-     */
-    private void savePostLocally(PostModel post, String userId) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences("SavedPosts_" + userId, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        Gson gson = new Gson();
-        String postJson = gson.toJson(post);
-        // Log the saved JSON string
-        Log.d("SavedPostJson", postJson);
-        // Save post JSON string with unique key (e.g., post ID)
-        editor.putString(post.getPostId(), postJson);
-        editor.apply();
+
     }
 
 
 
     /**
-     * Removes the saved post locally using SharedPreferences.
-     * @param post The PostModel object to be removed.
+     * Helper function to save or remove the post as saved in Firestore.
+     *
+     * @param post  The PostModel object representing the post to be saved or removed.
+     * @param saved A boolean indicating whether the post should be saved (true) or removed (false).
      */
-    private void removeSavedPost(PostModel post, String userId) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences("SavedPosts" + userId, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.remove(post.getPostId());
-        editor.apply();
+    private void saveOrRemovePostAsSaved(PostModel post, boolean saved) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference postRef = db.collection("posts").document(post.getPostId());
+
+        // Update the "saved" field of the post in the database
+        postRef.update("saved", saved)
+                .addOnSuccessListener(aVoid -> Log.d("Post Saved", "Post saved state updated successfully"))
+                .addOnFailureListener(e -> Log.e("Post not Saved", "Error updating post saved state: " + e.getMessage(), e));
     }
 
-    /**
-     * Checks if the post with the given postId is saved locally in SharedPreferences.
-     * @param postId The ID of the post to check.
-     * @return true if the post is saved locally, false otherwise.
-     */
-    private boolean isPostSavedLocally(String postId) {
-        // Get SharedPreferences instance
-        SharedPreferences sharedPreferences = context.getSharedPreferences("SavedPosts", Context.MODE_PRIVATE);
-        // Check if the post with the given postId exists in SharedPreferences
-        boolean isSaved = sharedPreferences.contains(postId);
-
-        // Print out the contents of SharedPreferences for debugging
-        Map<String, ?> allEntries = sharedPreferences.getAll();
-        for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
-            Log.d("SharedPreferences", "Key: " + entry.getKey() + ", Value: " + entry.getValue().toString());
-        }
-
-        return isSaved;
-    }
-
-    // Method to check if the current user has saved posts
-    private boolean hasSavedPostsLocally(String userId) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences("SavedPosts_" + userId, Context.MODE_PRIVATE);
-        return !sharedPreferences.getAll().isEmpty();
-    }
 
     @Override
     public int getItemCount() {
         return postModels.size();
     }
 
-    public class PostHolder extends RecyclerView.ViewHolder {
+    public static class PostHolder extends RecyclerView.ViewHolder {
           ImageView authorImg, postMedia, likeIcon, savedIcon;
-        TextView authorName, authorUsername, postTextContent, likeCount, commentCount, timeStamp;
+        TextView authorName, postTextContent, likeCount, commentCount, timeStamp;
 
         public PostHolder(@NonNull View itemView) {
             super(itemView);
@@ -174,77 +170,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
             authorImg = itemView.findViewById(R.id.authorImg);
             postMedia = itemView.findViewById(R.id.postMedia);
             authorName = itemView.findViewById(R.id.authorName);
-            authorUsername = itemView.findViewById(R.id.authorUsername);
             postTextContent = itemView.findViewById(R.id.postTextContent);
             likeCount = itemView.findViewById(R.id.likeCount);
             commentCount = itemView.findViewById(R.id.commentCount);
             timeStamp = itemView.findViewById(R.id.timeStamp);
         }
 
-        /**
-         * Binds the post data to the ViewHolder.
-         * @param post The PostModel object containing post data.
-         * @param userDataCache The cache containing user data.
-         */
-        public void bind(PostModel post, Map<String, UserDataModel> userDataCache) {
-            // Populate post data directly from the PostModel object
-            postTextContent.setText(post.getPostTextContent());
-            Picasso.get().load(post.getPostMedia()).into(postMedia);
-            // Set timestamp
-            String timeAgo = TimeUtils.getTimeAgo(Long.parseLong(post.getTimestamp()));
-            timeStamp.setText(timeAgo);
-
-            // Populate other post details like author username, like count, comment count, etc.
-            authorUsername.setText(post.getAuthorUsername());
-            likeCount.setText(String.valueOf(post.getLikes() != null ? post.getLikes().size() : 0));
-            commentCount.setText(String.valueOf(post.getComments() != null ? post.getComments().size() : 0));
-
-            // Set the initial like button state
-            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            if (user != null) {
-                String currentUser = user.getUid();
-                likeIcon.setImageResource(post.isLikedByUser(currentUser) ? R.drawable.post_liked : R.drawable.post_like);
-            }
-
-            // Set the click listener for the like button
-            likeIcon.setOnClickListener(v -> {
-                if (user != null) {
-                    String currentUser = user.getUid();
-                    boolean isLiked = post.isLikedByUser(currentUser);
-                    if (!isLiked) {
-                        likeIcon.setImageResource(R.drawable.post_liked);
-                        LikeModel like = new LikeModel(currentUser);
-                        post.addLike(like);
-                    } else {
-                        likeIcon.setImageResource(R.drawable.post_like);
-                        post.removeLike(currentUser);
-                    }
-
-                    // Update like count in UI immediately
-                    likeCount.setText(String.valueOf(post.getLikes().size()));
-
-                    // Update Firestore
-                    Map<String, Object> updates = new HashMap<>();
-                    updates.put("likes", post.getLikes());
-                    FirebaseFirestore.getInstance().collection("posts").document(post.getPostId()).update(updates)
-                            .addOnSuccessListener(aVoid -> Log.d("Firestore", "Likes updated"))
-                            .addOnFailureListener(e -> {
-                                Log.e("likes Error", "Error updating likes", e);
-                                // Revert UI changes if necessary
-                                notifyItemChanged(getAdapterPosition());
-                                if (!isLiked) {
-                                    likeIcon.setImageResource(R.drawable.post_like);
-                                    post.removeLike(currentUser);
-                                } else {
-                                    likeIcon.setImageResource(R.drawable.post_liked);
-                                    LikeModel like = new LikeModel(currentUser);
-                                    post.addLike(like);
-                                }
-                                // Update like count in UI
-                                likeCount.setText(String.valueOf(post.getLikes().size()));
-                            });
-                }
-            });
-        }
     }
 }

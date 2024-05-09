@@ -49,23 +49,23 @@
 
                 <TextView
                     style="@style/TextAppearance.Body3"
-                    android:id="@+id/authorUsername"
+                    android:id="@+id/timeStamp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="username"
+                    android:text="1 hour ago"
                     android:textColor="@color/black"
                     android:textSize="11sp"/>
             </LinearLayout>
 
             <TextView
-                android:id="@+id/timeStamp"
+                android:id="@+id/autUSer"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textAlignment="textEnd"
                 style="@style/TextAppearance.Body3"
                 android:textSize="11sp"
-                android:text="1 hour ago"
+                android:text="User Name"
                 />
         </LinearLayout>
 

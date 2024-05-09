@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.webkit.MimeTypeMap;
@@ -89,9 +90,23 @@ public class AddPostActivity extends AppCompatActivity {
         String userName = getUsernameFromSharedPreferences();
         String timeStamp = String.valueOf(System.currentTimeMillis());
 
+
+
+
         // Check if post content is not empty
         if (!TextUtils.isEmpty(postContent)) {
             Map<String, Object> posts = new HashMap<>();
+
+            db.collection("userdata").get().addOnSuccessListener(queryDocumentSnapshots -> {
+                for (DocumentSnapshot document : queryDocumentSnapshots) {
+                    // Get name and profile image URL from each document
+                    String name = document.getString("name");
+                    posts.put("authorName", name);
+                    String profileImg = document.getString("ProfileImg");
+                    posts.put("authorImg", profileImg);
+                }
+            });
+
             // Create a map to store post data
             posts.put("postTextContent", postContent);
             posts.put("authorUsername", userName);

@@ -22,11 +22,13 @@ public class WelcomeActivity extends AppCompatActivity {
         // Send to Signin page
         binding.register.setOnClickListener(v -> {
             startActivity(new Intent(WelcomeActivity.this, SignupActivity.class));
+            finish();
         });
 
         // Set OnClickListener for the Login button
         binding.login.setOnClickListener(v -> {
             startActivity(new Intent(WelcomeActivity.this, LoginActivity.class));
+            finish();
         });
 
 

@@ -10,7 +10,6 @@ import java.util.List;
 public class PostModel {
     private String postId; //Post Id
     private String authorName; // Name of the author
-    private String authorUsername; // Username of the author
     private String postTextContent; // Content of the post
     private String authorImg; // URL or path of the author's profile image
     private String postMedia; // URL or path of the post media (image or video)
@@ -29,7 +28,6 @@ public class PostModel {
                      List<CommentModel> comments, String timestamp) {
         this.postId=postId;
         this.authorName = authorName;
-        this.authorUsername = authorUsername;
         this.postTextContent = postTextContent;
         this.authorImg = authorImg;
         this.postMedia = postMedia;
@@ -55,13 +53,6 @@ public class PostModel {
         this.authorName = authorName;
     }
 
-    public String getAuthorUsername() {
-        return authorUsername;
-    }
-
-    public void setAuthorUsername(String authorUsername) {
-        this.authorUsername = authorUsername;
-    }
 
     public String getPostTextContent() {
         return postTextContent;
@@ -169,28 +160,6 @@ public class PostModel {
 
 
     public void setSaved(boolean saved) {
-        this.saved = saved;
-    }
-    /**
-     * Checks if the post is saved.
-     * @return true if the post is saved, false otherwise.
-     */
-    public boolean isSaved(Context context) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences("SavedPosts", Context.MODE_PRIVATE);
-        String savedAsString = sharedPreferences.getString(postId, "false");
-        return Boolean.parseBoolean(savedAsString);
-    }
-
-
-    /**
-     * Sets the saved status of the post.
-     * @param saved true if the post should be saved, false otherwise.
-     */
-    public void setSaved(Context context, boolean saved) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences("SavedPosts", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(postId, String.valueOf(saved));
-        editor.apply();
         this.saved = saved;
     }
 

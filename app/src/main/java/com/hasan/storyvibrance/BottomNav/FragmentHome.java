@@ -8,8 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.preference.PreferenceManager;
 
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -30,6 +32,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class FragmentHome extends Fragment {
 
@@ -73,6 +76,7 @@ public class FragmentHome extends Fragment {
         });
 
 
+
         // Set up story RecyclerView
         setupStoryRecyclerView();
         // Set up post RecyclerView
@@ -92,7 +96,7 @@ public class FragmentHome extends Fragment {
         // Set the adapter to the post RecyclerView
         binding.postRecyclerview.setAdapter(postAdapter);
 
-        // Set up a real-time listener on the entire "posts" collection
+//         Set up a real-time listener on the entire "posts" collection
         db.collection("posts").addSnapshotListener((querySnapshot, error) -> {
             if (error != null) {
                 Log.e("hello", "Listen failed.", error);
@@ -121,10 +125,9 @@ public class FragmentHome extends Fragment {
 
             // Update the data in the adapter
             postAdapter.updateData(postModels);
-        });
+        }
+        );
     }
-
-
 
 
     // Method to set up RecyclerView for stories
