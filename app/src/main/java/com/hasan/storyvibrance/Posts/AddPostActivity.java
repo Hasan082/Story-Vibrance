@@ -16,17 +16,22 @@ import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.preference.PreferenceManager;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.hasan.storyvibrance.R;
+import com.hasan.storyvibrance.Utility.DataBaseError;
 import com.hasan.storyvibrance.databinding.ActivityAddPostBinding;
 
 import java.io.ByteArrayOutputStream;
@@ -90,20 +95,27 @@ public class AddPostActivity extends AppCompatActivity {
         String userName = getUsernameFromSharedPreferences();
         String timeStamp = String.valueOf(System.currentTimeMillis());
 
-
-
-
         // Check if post content is not empty
         if (!TextUtils.isEmpty(postContent)) {
             Map<String, Object> posts = new HashMap<>();
-
-            db.collection("userdata").get().addOnSuccessListener(queryDocumentSnapshots -> {
-                for (DocumentSnapshot document : queryDocumentSnapshots) {
-                    // Get name and profile image URL from each document
-                    String name = document.getString("name");
-                    posts.put("authorName", name);
-                    String profileImg = document.getString("ProfileImg");
-                    posts.put("authorImg", profileImg);
+            String username = getUsernameFromSharedPreferences();
+            // Fetch user data from Firestore
+            db.collection("userdata").document(userName).get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot documentSnapshot = task.getResult();
+                    if (documentSnapshot != null && documentSnapshot.exists()) {
+                        // Extract user data from document
+                        String personName = documentSnapshot.getString("name");
+                        String userBio = documentSnapshot.getString("bio");
+                        // Set user data to UI
+                        DataBaseError.showDatabaseErrorMessage(getApplicationContext());
+                    } else {
+                        // Show error message if document does not exist
+                        DataBaseError.showDatabaseErrorMessage(getApplicationContext());
+                    }
+                } else {
+                    // Show error message if Firestore operation fails
+                    DataBaseError.showDatabaseErrorMessage(getApplicationContext());
                 }
             });
 

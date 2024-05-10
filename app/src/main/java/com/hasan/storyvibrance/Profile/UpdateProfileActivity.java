@@ -12,6 +12,8 @@ import androidx.preference.PreferenceManager;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.hasan.storyvibrance.R;
+import com.hasan.storyvibrance.Utility.DataBaseError;
+import com.hasan.storyvibrance.Utility.GetUserName;
 import com.hasan.storyvibrance.databinding.ActivityUpdateProfileBinding;
 
 import java.util.HashMap;
@@ -20,7 +22,6 @@ import java.util.Map;
 
 public class UpdateProfileActivity extends AppCompatActivity {
 
-    private SharedPreferences sharedPreferences;
     private ActivityUpdateProfileBinding binding;
     private FirebaseFirestore db;
 
@@ -29,10 +30,10 @@ public class UpdateProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_update_profile);
         db = FirebaseFirestore.getInstance();
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         // Get username from SharedPreferences
-        String userName = getUsernameFromSharedPreferences();
+        String userName = GetUserName.getUsernameFromSharedPreferences(sharedPreferences);
 
         // Fetch user data from Firestore
         db.collection("userdata").document(userName).get().addOnCompleteListener(task -> {
@@ -57,12 +58,13 @@ public class UpdateProfileActivity extends AppCompatActivity {
                     binding.spinner.setVisibility(View.GONE);
                 } else {
                     // Show error message if document does not exist
-                    showDatabaseErrorMessage();
+                    DataBaseError.showDatabaseErrorMessage(this);
                 }
             } else {
                 // Show error message if Firestore operation fails
-                showDatabaseErrorMessage();
+                DataBaseError.showDatabaseErrorMessage(this);
             }
+
         });
 
         // Back button click listener
@@ -73,8 +75,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
             // Show loading spinner
             binding.spinner.setVisibility(View.VISIBLE);
             // Get username and update profile data
-            String username = getUsernameFromSharedPreferences();
-            updateProfileData(username);
+            updateProfileData(userName);
         });
 
         // Back to the profile page
@@ -108,19 +109,5 @@ public class UpdateProfileActivity extends AppCompatActivity {
         });
     }
 
-    /**
-     * Retrieves the username from SharedPreferences.
-     *
-     * @return The username stored in SharedPreferences.
-     */
-    private String getUsernameFromSharedPreferences() {
-        return sharedPreferences.getString("username", "");
-    }
 
-    /**
-     * Shows a toast message indicating a database error.
-     */
-    private void showDatabaseErrorMessage() {
-        Toast.makeText(this, "Database Error!", Toast.LENGTH_SHORT).show();
-    }
 }

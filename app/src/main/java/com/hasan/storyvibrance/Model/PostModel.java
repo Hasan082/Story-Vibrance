@@ -1,8 +1,5 @@
 package com.hasan.storyvibrance.Model;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -10,6 +7,8 @@ import java.util.List;
 public class PostModel {
     private String postId; //Post Id
     private String authorName; // Name of the author
+
+    private String authorUsername; // Name of the author
     private String postTextContent; // Content of the post
     private String authorImg; // URL or path of the author's profile image
     private String postMedia; // URL or path of the post media (image or video)
@@ -53,6 +52,14 @@ public class PostModel {
         this.authorName = authorName;
     }
 
+
+    public String getAuthorUsername() {
+        return authorUsername;
+    }
+
+    public void setAuthorUsername(String authorName) {
+        this.authorUsername = authorUsername;
+    }
 
     public String getPostTextContent() {
         return postTextContent;
