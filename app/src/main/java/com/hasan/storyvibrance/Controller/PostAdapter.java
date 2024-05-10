@@ -29,6 +29,7 @@ import com.hasan.storyvibrance.Utility.DataBaseError;
 import com.hasan.storyvibrance.Utility.GetUserName;
 import com.hasan.storyvibrance.Utility.PostAdapterUtils.LikeHandler;
 import com.hasan.storyvibrance.Utility.PostAdapterUtils.PostSaver;
+import com.hasan.storyvibrance.Utility.PostAdapterUtils.UserDataFetcher;
 import com.hasan.storyvibrance.Utility.TimeUtils;
 import com.squareup.picasso.Picasso;
 
@@ -44,8 +45,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
     private final ArrayList<PostModel> postModels;
 
     FirebaseFirestore db;
-
-
 
 
     public PostAdapter(Context context, ArrayList<PostModel> postModels) {
@@ -69,27 +68,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
     public void onBindViewHolder(@NonNull PostHolder holder, int position) {
         PostModel post = postModels.get(position);
         db = FirebaseFirestore.getInstance();
-
+        //User Data Fetcher for set user details for post
         String postAuthor = post.getAuthorUsername();
-          db.collection("userdata").document(postAuthor).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        String name = document.getString("name");
-                        String profileImg = document.getString("ProfileImg");
-                        holder.authorName.setText(name);
-                        Picasso.get().load(profileImg).into(holder.authorImg);
-                    } else {
-                        Log.d("Userdata", "No such document");
-                    }
-                } else {
-                    Log.d("Userdata", "get failed with ", task.getException());
-                }
-            }
-        });
-
+        UserDataFetcher userDataFetcher = new UserDataFetcher(db);
+        userDataFetcher.fetchUserData(postAuthor, holder.authorName, holder.authorImg);
 
         // Populate post data directly from the PostModel object
         holder.postTextContent.setText(post.getPostTextContent());
