@@ -116,11 +116,12 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
     }
 
     public static class PostHolder extends RecyclerView.ViewHolder {
-          ImageView authorImg, postMedia, likeIcon, savedIcon;
+        ImageView authorImg, postMedia, likeIcon, savedIcon, optionIcon;
         TextView authorName, authorUsername, postTextContent, likeCount, commentCount, timeStamp;
 
         public PostHolder(@NonNull View itemView) {
             super(itemView);
+            optionIcon = itemView.findViewById(R.id.optionIcon);
             authorUsername = itemView.findViewById(R.id.authorUsername);
             savedIcon = itemView.findViewById(R.id.savedIcon);
             likeIcon = itemView.findViewById(R.id.likeIcon);
