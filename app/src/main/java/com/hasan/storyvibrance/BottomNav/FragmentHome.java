@@ -120,7 +120,7 @@ public class FragmentHome extends Fragment {
             // Create a list of PostModel objects from the map
             ArrayList<PostModel> postModels = new ArrayList<>(postMap.values());
 
-            // Sort the postModels list, if needed
+            // Sort the postModels list
             PostSorter.sortByTimestampDescending(postModels);
 
             // Update the data in the adapter

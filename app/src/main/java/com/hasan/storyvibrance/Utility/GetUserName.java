@@ -1,6 +1,9 @@
 package com.hasan.storyvibrance.Utility;
 
+import android.content.Context;
 import android.content.SharedPreferences;
+
+import androidx.preference.PreferenceManager;
 
 public class GetUserName {
     /**
@@ -8,7 +11,8 @@ public class GetUserName {
      *
      * @return The username stored in SharedPreferences.
      */
-    public static String getUsernameFromSharedPreferences(SharedPreferences sharedPreferences) {
+    public static String getUsernameFromSharedPreferences(Context context) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         return sharedPreferences.getString("username", "");
     }
 

@@ -30,10 +30,8 @@ public class UpdateProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_update_profile);
         db = FirebaseFirestore.getInstance();
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-
         // Get username from SharedPreferences
-        String userName = GetUserName.getUsernameFromSharedPreferences(sharedPreferences);
+        String userName = GetUserName.getUsernameFromSharedPreferences(this);
 
         // Fetch user data from Firestore
         db.collection("userdata").document(userName).get().addOnCompleteListener(task -> {

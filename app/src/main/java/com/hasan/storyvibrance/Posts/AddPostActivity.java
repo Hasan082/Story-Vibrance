@@ -1,14 +1,12 @@
 package com.hasan.storyvibrance.Posts;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.webkit.MimeTypeMap;
@@ -16,22 +14,18 @@ import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.preference.PreferenceManager;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.hasan.storyvibrance.R;
 import com.hasan.storyvibrance.Utility.DataBaseError;
+import com.hasan.storyvibrance.Utility.GetUserName;
 import com.hasan.storyvibrance.databinding.ActivityAddPostBinding;
 
 import java.io.ByteArrayOutputStream;
@@ -40,6 +34,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 public class AddPostActivity extends AppCompatActivity {
@@ -63,7 +58,6 @@ public class AddPostActivity extends AppCompatActivity {
 
         // Firebase Storage initialization
         storageReference = FirebaseStorage.getInstance().getReference().child("postImg");
-
         // Shared preferences initialization
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
@@ -72,7 +66,6 @@ public class AddPostActivity extends AppCompatActivity {
 
         // Click listener for posting content to the database
         binding.postButton.setOnClickListener(v -> {
-            // Show loading indicator when posting
             showLoadingIndicator();
             // Upload post data to Firestore
             UploadPostDataToFireStore(db, storageReference);
@@ -92,33 +85,12 @@ public class AddPostActivity extends AppCompatActivity {
      */
     private void UploadPostDataToFireStore(FirebaseFirestore db, StorageReference storageReference) {
         String postContent = binding.postContentInput.getText().toString().trim();
-        String userName = getUsernameFromSharedPreferences();
+        String userName = GetUserName.getUsernameFromSharedPreferences(getApplicationContext());
         String timeStamp = String.valueOf(System.currentTimeMillis());
 
         // Check if post content is not empty
         if (!TextUtils.isEmpty(postContent)) {
             Map<String, Object> posts = new HashMap<>();
-            String username = getUsernameFromSharedPreferences();
-            // Fetch user data from Firestore
-            db.collection("userdata").document(userName).get().addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot documentSnapshot = task.getResult();
-                    if (documentSnapshot != null && documentSnapshot.exists()) {
-                        // Extract user data from document
-                        String personName = documentSnapshot.getString("name");
-                        String userBio = documentSnapshot.getString("bio");
-                        // Set user data to UI
-                        DataBaseError.showDatabaseErrorMessage(getApplicationContext());
-                    } else {
-                        // Show error message if document does not exist
-                        DataBaseError.showDatabaseErrorMessage(getApplicationContext());
-                    }
-                } else {
-                    // Show error message if Firestore operation fails
-                    DataBaseError.showDatabaseErrorMessage(getApplicationContext());
-                }
-            });
-
             // Create a map to store post data
             posts.put("postTextContent", postContent);
             posts.put("authorUsername", userName);
@@ -198,7 +170,7 @@ public class AddPostActivity extends AppCompatActivity {
         Uri compressedUri = getImageUri(getApplicationContext(), bitmap);
 
         // Generate a unique filename
-        String fileExtension = MimeTypeMap.getFileExtensionFromUrl(compressedUri.toString());
+        String fileExtension = MimeTypeMap.getFileExtensionFromUrl(Objects.requireNonNull(compressedUri).toString());
         String uniqueId = UUID.randomUUID().toString();
         String fileName = System.currentTimeMillis() + "_" + uniqueId + "." + fileExtension;
 
@@ -302,21 +274,11 @@ public class AddPostActivity extends AppCompatActivity {
                 binding.mediaPreview.setVisibility(View.VISIBLE); // Make the preview image visible
             });
 
-    /**
-     * Retrieves the username from SharedPreferences.
-     *
-     * @return The username stored in SharedPreferences, or an empty string if not found.
-     */
-    private String getUsernameFromSharedPreferences() {
-        return sharedPreferences.getString("username", "");
-    }
-
 
     /**
      * Shows the loading indicator and disables touch events on the window.
      */
     private void showLoadingIndicator() {
-        // Make the spinner visible
         binding.spinner.setVisibility(View.VISIBLE);
         // Disable touch events on the window
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
@@ -326,7 +288,6 @@ public class AddPostActivity extends AppCompatActivity {
      * Hides the loading indicator and enables touch events on the window.
      */
     private void hideLoadingIndicator() {
-        // Hide the spinner
         binding.spinner.setVisibility(View.GONE);
         // Enable touch events on the window
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
@@ -341,31 +302,19 @@ public class AddPostActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Post Added Successfully");
         builder.setMessage("What would you like to do next?");
-
-        int backgroundColor = ContextCompat.getColor(this, R.color.primaryColor);
-
-        builder.setPositiveButton("Go Back", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // Handle "Go Back" action
-                dialog.dismiss(); // Dismiss the dialog
-                getOnBackPressedDispatcher().onBackPressed(); // Navigate back to the previous screen
-            }
+        builder.setPositiveButton("Go Back", (dialog, which) -> {
+            dialog.dismiss();
+            getOnBackPressedDispatcher().onBackPressed(); // Navigate back to the previous screen
         });
-        builder.setNegativeButton("Add Another Post", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // Handle "Add Another Post" action
-                dialog.dismiss(); // Dismiss the dialog
-                // Perform any action needed to add another post, such as clearing input fields
-                binding.postContentInput.setText(""); // Clear post content input
-                binding.mediaPreview.setImageURI(null); // Clear media preview
-                binding.mediaPreview.setVisibility(View.GONE); // Hide media preview
-            }
+        builder.setNegativeButton("Add Another Post", (dialog, which) -> {
+            dialog.dismiss(); // Dismiss the dialog
+            // Perform any action needed to add another post, such as clearing input fields
+            binding.postContentInput.setText("");
+            binding.mediaPreview.setImageURI(null);
+            binding.mediaPreview.setVisibility(View.GONE);
         });
         builder.show(); // Show the AlertDialog
     }
-
 
 
 

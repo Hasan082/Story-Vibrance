@@ -7,10 +7,9 @@ import java.util.List;
 public class PostModel {
     private String postId; //Post Id
     private String authorName; // Name of the author
-
     private String authorUsername; // Name of the author
-    private String postTextContent; // Content of the post
     private String authorImg; // URL or path of the author's profile image
+    private String postTextContent; // Content of the post
     private String postMedia; // URL or path of the post media (image or video)
     private List<LikeModel> likes; // List of likes on the post
     private List<CommentModel> comments; // List of comments on the post
@@ -22,9 +21,10 @@ public class PostModel {
     public PostModel() {
     }
 
-    public PostModel(String postId,String authorName, String authorUsername, String postTextContent,
+    public PostModel(String postId, String authorName, String authorUsername, String postTextContent,
                      String authorImg, String postMedia, List<LikeModel> likes,
                      List<CommentModel> comments, String timestamp) {
+        this.authorUsername = authorUsername;
         this.postId=postId;
         this.authorName = authorName;
         this.postTextContent = postTextContent;
@@ -57,7 +57,7 @@ public class PostModel {
         return authorUsername;
     }
 
-    public void setAuthorUsername(String authorName) {
+    public void setAuthorUsername(String authorUsername) {
         this.authorUsername = authorUsername;
     }
 
