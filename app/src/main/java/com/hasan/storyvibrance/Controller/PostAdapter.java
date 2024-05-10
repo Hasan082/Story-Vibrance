@@ -27,6 +27,7 @@ import com.hasan.storyvibrance.Model.PostModel;
 import com.hasan.storyvibrance.R;
 import com.hasan.storyvibrance.Utility.DataBaseError;
 import com.hasan.storyvibrance.Utility.GetUserName;
+import com.hasan.storyvibrance.Utility.PostAdapterUtils.LikeHandler;
 import com.hasan.storyvibrance.Utility.PostAdapterUtils.PostSaver;
 import com.hasan.storyvibrance.Utility.TimeUtils;
 import com.squareup.picasso.Picasso;
@@ -70,9 +71,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
         db = FirebaseFirestore.getInstance();
 
         String postAuthor = post.getAuthorUsername();
-        System.out.println("postAuthor: " + postAuthor);
-
-        db.collection("userdata").document(postAuthor).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+          db.collection("userdata").document(postAuthor).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
@@ -92,7 +91,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
         });
 
 
-
         // Populate post data directly from the PostModel object
         holder.postTextContent.setText(post.getPostTextContent());
         holder.authorUsername.setText(post.getAuthorUsername());
@@ -105,94 +103,29 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
         holder.commentCount.setText(String.valueOf(post.getComments() != null ? post.getComments().size() : 0));
 
 
+        // HANDLE LIKE UNLIKE ACTIVITIES===========================
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String userId = user != null ? user.getUid() : null;
+        // Set the Like icon based on the current Like state of the post
         holder.likeIcon.setImageResource(post.isLikedByUser(userId) ? R.drawable.post_liked : R.drawable.post_like);
-
-
-
-        // HANDLE LIKE UNLIKE ACTIVITIES===========================
+        // Post Like click Listener
         holder.likeIcon.setOnClickListener(v -> {
-            String currentUser = user != null ? user.getUid() : null;
-            boolean isLiked = post.isLikedByUser(currentUser);
-            if (!isLiked) {
-                holder.likeIcon.setImageResource(R.drawable.post_liked);
-                LikeModel like = new LikeModel(currentUser);
-                post.addLike(like);
-            } else {
-                holder.likeIcon.setImageResource(R.drawable.post_like);
-                post.removeLike(currentUser);
-            }
-
-            // Update like count in UI immediately
-            holder.likeCount.setText(String.valueOf(post.getLikes().size()));
-
-            // Update Firestore
-            Map<String, Object> updates = new HashMap<>();
-            updates.put("likes", post.getLikes());
-            db.collection("posts").document(post.getPostId()).update(updates)
-                    .addOnSuccessListener(aVoid -> Log.d("Likes done", "Likes updated"))
-                    .addOnFailureListener(e -> {
-                        Log.e("likes Error", "Error updating likes", e);
-                        // Revert UI changes if necessary
-                        if (!isLiked) {
-                            holder.likeIcon.setImageResource(R.drawable.post_like);
-                            post.removeLike(currentUser);
-                        } else {
-                            holder.likeIcon.setImageResource(R.drawable.post_liked);
-                            LikeModel like = new LikeModel(currentUser);
-                            post.addLike(like);
-                        }
-                        // Update like count in UI
-                        holder.likeCount.setText(String.valueOf(post.getLikes().size()));
-                    });
+            LikeHandler likeHandler = new LikeHandler(db);
+            likeHandler.handleLike(post, user, holder.likeIcon, holder.likeCount);
         });
 
 
-
-        // HANDLE POST SAVED==============================================
+        // HANDLE POST SAVED==========================================================
         // Set the saved icon based on the current saved state of the post
         holder.savedIcon.setImageResource(post.isSaved() ? R.drawable.post_saved : R.drawable.post_save);
-
+        // Post Save click Listener
         holder.savedIcon.setOnClickListener(v -> {
             boolean isSaved = post.isSaved();
             boolean newSavedState = !isSaved;
             PostSaver.handleSavePost(post, newSavedState, holder.savedIcon);
         });
 
-
-        // Set click listener for the saved icon
-//        holder.savedIcon.setOnClickListener(v -> {
-//            boolean isSaved = post.isSaved();
-//            boolean newSavedState = !isSaved;
-//
-//            if (newSavedState) holder.savedIcon.setImageResource(R.drawable.post_saved);
-//            else holder.savedIcon.setImageResource(R.drawable.post_save);
-//            // Save or remove the post as "saved" in the database
-//            saveOrRemovePostAsSaved(post, newSavedState);
-//            // Update the post's saved state
-//            post.setSaved(newSavedState);
-//        });
-
-
     }
-
-
-//    /**
-//     * Helper function to save or remove the post as saved in Firestore.
-//     *
-//     * @param post  The PostModel object representing the post to be saved or removed.
-//     * @param saved A boolean indicating whether the post should be saved (true) or removed (false).
-//     */
-//    private void saveOrRemovePostAsSaved(PostModel post, boolean saved) {
-//        FirebaseFirestore db = FirebaseFirestore.getInstance();
-//        DocumentReference postRef = db.collection("posts").document(post.getPostId());
-//
-//        // Update the "saved" field of the post in the database
-//        postRef.update("saved", saved)
-//                .addOnSuccessListener(aVoid -> Log.d("Post Saved", "Post saved state updated successfully"))
-//                .addOnFailureListener(e -> Log.e("Post not Saved", "Error updating post saved state: " + e.getMessage(), e));
-//    }
 
 
     @Override
