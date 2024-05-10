@@ -1,7 +1,6 @@
 package com.hasan.storyvibrance.Controller;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -23,6 +22,7 @@ import com.hasan.storyvibrance.Model.PostModel;
 import com.hasan.storyvibrance.Posts.EditPostActivity;
 import com.hasan.storyvibrance.R;
 import com.hasan.storyvibrance.Utility.DialogUtils;
+import com.hasan.storyvibrance.Utility.GetUserName;
 import com.hasan.storyvibrance.Utility.PostAdapterUtils.DeletePostUtils;
 import com.hasan.storyvibrance.Utility.PostAdapterUtils.LikeHandler;
 import com.hasan.storyvibrance.Utility.PostAdapterUtils.PostSaver;
@@ -104,6 +104,16 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
         });
 
         // UPDATE AND DELETE POST HANDLER=========================================
+        String currentUser = GetUserName.getUsernameFromSharedPreferences(context);
+        // Check if the current user is the owner of the post
+        if (userId != null && currentUser.equals(post.getAuthorUsername())) {
+            // Show the options icon and set click listener
+            holder.optionsIcon.setVisibility(View.VISIBLE);
+        } else {
+            // Hide the options icon if the current user is not the owner of the post
+            holder.optionsIcon.setVisibility(View.GONE);
+        }
+
         holder.optionsIcon.setOnClickListener(v -> {
             // Get the screen coordinates of the options icon
             int[] location = new int[2];
@@ -133,24 +143,26 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
             // Set click listeners for edit and delete options
             TextView editPost = popupView.findViewById(R.id.edit_post);
             TextView deletePost = popupView.findViewById(R.id.delete_post);
+            //Edit post click handler
             editPost.setOnClickListener(view -> {
-                // Handle edit option click
-                context.startActivity(new Intent(context, EditPostActivity.class));
-                popupWindow.dismiss(); // Dismiss the popup window after starting the activity
+                Intent intent = new Intent(context, EditPostActivity.class);
+                intent.putExtra("postId", post.getPostId());
+                context.startActivity(intent);
+                popupWindow.dismiss();
             });
-
+            //Delete Post click handler
             deletePost.setOnClickListener(view -> {
                 // Handle delete option click
                 DialogUtils.showConfirmationDialog(context, "Confirmation for Deletion",
                         "Are you sure you want to delete this post?",
-                        "Confirm", "No",
+                        "Confirm", "No",R.drawable.alert,
                         (dialogInterface, i) -> {
                             // Delete the post from Firebase and dismiss the popup window
                             DeletePostUtils.deletePostFromFirebase(post.getPostId());
                             popupWindow.dismiss();
                         },
                         (dialogInterface, i) -> {
-                            // Dismiss the confirmation dialog
+                            popupWindow.dismiss();
                             dialogInterface.dismiss();
                         });
             });
