@@ -1,42 +1,38 @@
 package com.hasan.storyvibrance.Controller;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.util.Log;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.hasan.storyvibrance.Model.LikeModel;
 import com.hasan.storyvibrance.Model.PostModel;
+import com.hasan.storyvibrance.Posts.EditPostActivity;
 import com.hasan.storyvibrance.R;
-import com.hasan.storyvibrance.Utility.DataBaseError;
-import com.hasan.storyvibrance.Utility.GetUserName;
+import com.hasan.storyvibrance.Utility.DialogUtils;
+import com.hasan.storyvibrance.Utility.PostAdapterUtils.DeletePostUtils;
 import com.hasan.storyvibrance.Utility.PostAdapterUtils.LikeHandler;
 import com.hasan.storyvibrance.Utility.PostAdapterUtils.PostSaver;
 import com.hasan.storyvibrance.Utility.PostAdapterUtils.UserDataFetcher;
 import com.hasan.storyvibrance.Utility.TimeUtils;
+import com.hasan.storyvibrance.Utility.dpToPx;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
@@ -107,6 +103,65 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
             PostSaver.handleSavePost(post, newSavedState, holder.savedIcon);
         });
 
+        // UPDATE AND DELETE POST HANDLER=========================================
+        holder.optionsIcon.setOnClickListener(v -> {
+            // Get the screen coordinates of the options icon
+            int[] location = new int[2];
+            holder.optionsIcon.getLocationOnScreen(location);
+
+            // Calculate the position for the popup window
+            int marginInPx = dpToPx.dpToPx(110, context);
+            int x = location[0] - marginInPx;
+            int y = location[1] + holder.optionsIcon.getHeight();
+
+            // Inflate the layout for the popup window
+            View popupView = LayoutInflater.from(context).inflate(R.layout.popup_options_layout, (ViewGroup) v.getParent(), false);
+
+            // Create the popup window
+            PopupWindow popupWindow = new PopupWindow(
+                    popupView,
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            );
+
+            // Set properties for the popup window
+            popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            popupWindow.setElevation(10);
+            popupWindow.setAnimationStyle(android.R.style.Animation_Dialog);
+            popupWindow.setFocusable(true);
+
+            // Set click listeners for edit and delete options
+            TextView editPost = popupView.findViewById(R.id.edit_post);
+            TextView deletePost = popupView.findViewById(R.id.delete_post);
+            editPost.setOnClickListener(view -> {
+                // Handle edit option click
+                context.startActivity(new Intent(context, EditPostActivity.class));
+                popupWindow.dismiss(); // Dismiss the popup window after starting the activity
+            });
+
+            deletePost.setOnClickListener(view -> {
+                // Handle delete option click
+                DialogUtils.showConfirmationDialog(context, "Confirmation for Deletion",
+                        "Are you sure you want to delete this post?",
+                        "Confirm", "No",
+                        (dialogInterface, i) -> {
+                            // Delete the post from Firebase and dismiss the popup window
+                            DeletePostUtils.deletePostFromFirebase(post.getPostId());
+                            popupWindow.dismiss();
+                        },
+                        (dialogInterface, i) -> {
+                            // Dismiss the confirmation dialog
+                            dialogInterface.dismiss();
+                        });
+            });
+
+            // Show the popup window at the specified position
+            popupWindow.showAtLocation(v, Gravity.TOP | Gravity.START, x, y);
+        });
+
+
+
+
     }
 
 
@@ -116,12 +171,12 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
     }
 
     public static class PostHolder extends RecyclerView.ViewHolder {
-        ImageView authorImg, postMedia, likeIcon, savedIcon, optionIcon;
+        ImageView authorImg, postMedia, likeIcon, savedIcon, optionsIcon;
         TextView authorName, authorUsername, postTextContent, likeCount, commentCount, timeStamp;
 
         public PostHolder(@NonNull View itemView) {
             super(itemView);
-            optionIcon = itemView.findViewById(R.id.optionIcon);
+            optionsIcon = itemView.findViewById(R.id.optionIcon);
             authorUsername = itemView.findViewById(R.id.authorUsername);
             savedIcon = itemView.findViewById(R.id.savedIcon);
             likeIcon = itemView.findViewById(R.id.likeIcon);

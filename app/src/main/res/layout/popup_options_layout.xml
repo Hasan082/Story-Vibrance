@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/radius"
+    android:padding="5dp">
+
+    <TextView
+        android:id="@+id/edit_post"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Edit"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        android:drawablePadding="8dp"
+        android:gravity="center_vertical"
+        android:paddingVertical="8dp"
+        android:paddingHorizontal="16dp"
+        app:drawableStartCompat="@drawable/edit_black" />
+
+    <TextView
+        android:id="@+id/delete_post"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Delete"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        android:drawablePadding="8dp"
+        android:gravity="center_vertical"
+        android:paddingVertical="8dp"
+        android:paddingHorizontal="16dp"
+        app:drawableStartCompat="@drawable/delete_black" />
+
+</LinearLayout>

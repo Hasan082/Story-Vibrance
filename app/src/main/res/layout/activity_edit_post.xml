@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <data>
-
-    </data>
-
-    <RelativeLayout
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        tools:context=".Posts.EditPostActivity"
+        >
 
         <ScrollView
             android:layout_width="match_parent"
@@ -45,7 +43,7 @@
                         android:layout_height="38dp"
                         android:layout_marginBottom="20dp"
                         android:gravity="center"
-                        android:text="Create a New Post"
+                        android:text="Edit post"
                         android:layout_marginStart="15dp"
                         android:textAlignment="center" />
                 </LinearLayout>
@@ -71,31 +69,31 @@
 
                 </androidx.cardview.widget.CardView>
 
-                <!-- Selected Media Preview -->
-                <ImageView
-                    android:id="@+id/mediaPreview"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/margin_large"
-                    android:adjustViewBounds="true"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/posts_img_sample"
-                    android:visibility="gone" />
+
 
                 <!--    add image-->
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/addMediaButton"
                     style="@style/AppButtonStyle"
                     android:layout_marginBottom="@dimen/margin_large"
-                    android:text="Add Picture" />
+                    android:text="Change Picture" />
 
                 <!-- Post Button -->
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/postButton"
                     style="@style/AppButtonStyle"
-                    android:text="Post" />
+                    android:text="Update" />
 
-
+                <!-- Current Media Preview -->
+                <ImageView
+                    android:id="@+id/mediaPreview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_large"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/posts_img_sample"
+                    android:visibility="visible" />
 
             </LinearLayout>
             <!--Spinner show until data fully loaded-->
@@ -119,4 +117,3 @@
 
         </LinearLayout>
     </RelativeLayout>
-</layout>

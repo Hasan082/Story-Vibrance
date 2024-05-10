@@ -7,6 +7,7 @@
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:windowBackground">@android:color/white</item>
         <item name="colorControlNormal">@color/white</item>
+        <item name="android:popupMenuStyle">@style/PopupMenuStyle</item>
 
         <!-- Text appearance styles -->
         <item name="textAppearanceHeadline1">@style/TextAppearance.Headline1</item>
@@ -16,6 +17,12 @@
         <item name="textAppearanceBodyMedium">@style/TextAppearance.Body2</item>
         <item name="textAppearanceBodySmall">@style/TextAppearance.Body3</item>
     </style>
+
+    <style name="PopupMenuStyle" parent="@style/Widget.AppCompat.PopupMenu">
+        <item name="android:popupBackground">@android:color/white</item>
+        <item name="android:dropDownWidth">70dp</item>
+    </style>
+
 
     <!--    Bottom Nav Icon Selected Stat background color chnage-->
     <style name="App.Custom.Indicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
