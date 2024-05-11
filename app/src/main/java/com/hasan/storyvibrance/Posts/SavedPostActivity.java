@@ -2,44 +2,60 @@ package com.hasan.storyvibrance.Posts;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import com.hasan.storyvibrance.Controller.SavedPostsAdapter;
 import com.hasan.storyvibrance.Model.PostModel;
 import com.hasan.storyvibrance.R;
+import com.hasan.storyvibrance.Utility.GetUserName;
 import com.hasan.storyvibrance.databinding.ActivitySavedPostBinding;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class SavedPostActivity extends AppCompatActivity {
 
     ActivitySavedPostBinding binding;
 
-
+    FirebaseFirestore db;
+    PostModel post;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_saved_post);
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        assert user != null;
-        String userId = user.getUid();
-        List<PostModel> savedPosts = getSavedPostsFromSharedPreferences(userId);
-        SavedPostsAdapter savedPostsAdapter = new SavedPostsAdapter(savedPosts);
-        binding.savedPostRecyclerView.setAdapter(savedPostsAdapter);
+        db = FirebaseFirestore.getInstance();
+        db.collection("posts").whereEqualTo("saved", true).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
 
-        if (savedPosts.isEmpty()) {
-            binding.noSavedPost.setVisibility(View.VISIBLE);
-        } else {
-            binding.noSavedPost.setVisibility(View.GONE);
-        }
+            }
+        });
+
+
+
+
+
+//        binding.savedPostRecyclerView.setAdapter();
+
+
+
+
+
 
         //Back to previous page====
         binding.backBtn.setOnClickListener(v->{
@@ -48,6 +64,7 @@ public class SavedPostActivity extends AppCompatActivity {
 
     }
 
+    //TODO== SAVED POST FROM DATABASE
 
     public List<PostModel> getSavedPostsFromSharedPreferences(String userId) {
         List<PostModel> savedPosts = new ArrayList<>();

@@ -94,14 +94,20 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
 
 
         // HANDLE POST SAVED==========================================================
+        // Check if the current user has saved the post
+        String username = GetUserName.getUsernameFromSharedPreferences(context);
+        boolean isSavedByCurrentUser = post.getSavedByUsers().containsKey(username);
+
         // Set the saved icon based on the current saved state of the post
-        holder.savedIcon.setImageResource(post.isSaved() ? R.drawable.post_saved : R.drawable.post_save);
+        holder.savedIcon.setImageResource(isSavedByCurrentUser ? R.drawable.post_saved : R.drawable.post_save);
+
         // Post Save click Listener
         holder.savedIcon.setOnClickListener(v -> {
-            boolean isSaved = post.isSaved();
-            boolean newSavedState = !isSaved;
-            PostSaver.handleSavePost(post, newSavedState, holder.savedIcon);
+            boolean newSavedState = !isSavedByCurrentUser;
+            PostSaver.handleSavePost(post, newSavedState, holder.savedIcon, username);
         });
+
+
 
         // UPDATE AND DELETE POST HANDLER=========================================
         String currentUser = GetUserName.getUsernameFromSharedPreferences(context);

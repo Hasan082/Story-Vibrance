@@ -1,8 +1,10 @@
 package com.hasan.storyvibrance.Model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 public class PostModel {
     private String postId; //Post Id
@@ -14,12 +16,15 @@ public class PostModel {
     private List<LikeModel> likes; // List of likes on the post
     private List<CommentModel> comments; // List of comments on the post
     private String timestamp; // Timestamp of when the post was created
-    private boolean saved; //Save post
+    private Map<String, Boolean> savedByUsers;
 
     // Constructors, getters, and setters
 
     public PostModel() {
+        savedByUsers = new HashMap<>();
     }
+
+
 
     public PostModel(String postId, String authorName, String authorUsername, String postTextContent,
                      String authorImg, String postMedia, List<LikeModel> likes,
@@ -33,6 +38,7 @@ public class PostModel {
         this.likes = likes;
         this.comments = comments;
         this.timestamp = timestamp;
+        savedByUsers = new HashMap<>();
     }
 
     public String getPostId() {
@@ -161,14 +167,18 @@ public class PostModel {
     }
 
 
-    public boolean isSaved() {
-        return saved;
+    /**
+     * Retrieves the savedByUsers map from the PostModel object.
+     *
+     * @return The savedByUsers map containing user IDs as keys and their save state as values.
+     */
+    public Map<String, Boolean> getSavedByUsers() {
+        return savedByUsers;
     }
 
 
-    public void setSaved(boolean saved) {
-        this.saved = saved;
+    public void setSavedByUsers(Map<String, Boolean> savedByUsers) {
+        this.savedByUsers = savedByUsers;
     }
-
 
 }
