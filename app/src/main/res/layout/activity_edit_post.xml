@@ -5,7 +5,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <variable
+            name="postContent"
+            type="String" />
     </data>
 
     <RelativeLayout
@@ -68,6 +70,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="top"
                         android:hint="Write your story here..."
+                        android:text="@{postContent}"
                         android:maxLines="10"
                         android:minLines="5"
                         android:padding="@dimen/padding_small" />
@@ -77,14 +80,14 @@
 
                 <!--    add image-->
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/addMediaButton"
+                    android:id="@+id/editAddMediaButton"
                     style="@style/AppButtonStyle"
                     android:layout_marginBottom="@dimen/margin_large"
                     android:text="Change Picture" />
 
                 <!-- Post Button -->
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/updateButton"
+                    android:id="@+id/updatePostButton"
                     style="@style/AppButtonStyle"
                     android:text="Update" />
 
