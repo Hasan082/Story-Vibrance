@@ -149,10 +149,10 @@ public class EditPostActivity extends AppCompatActivity {
             dialog.dismiss();
             getOnBackPressedDispatcher().onBackPressed(); // Navigate back to the previous screen
         });
-        builder.setNegativeButton("Add Another Post", (dialog, which) -> {
-            dialog.dismiss(); // Dismiss the dialog
+        builder.setNegativeButton("Edit Again?", (dialog, which) -> {
+            dialog.dismiss();
         });
-        builder.show(); // Show the AlertDialog
+        builder.show();
     }
 
 
