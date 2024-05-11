@@ -39,6 +39,8 @@ public class LikeHandler {
         Map<String, Object> updates = new HashMap<>();
         updates.put("likes", post.getLikes());
 
+
+
         db.collection("posts").document(post.getPostId()).update(updates)
                 .addOnSuccessListener(aVoid -> Log.d("Likes done", "Likes updated"))
                 .addOnFailureListener(e -> {
@@ -56,4 +58,6 @@ public class LikeHandler {
                     likeCount.setText(String.valueOf(post.getLikes().size()));
                 });
     }
+
+
 }

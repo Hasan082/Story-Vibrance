@@ -1,12 +1,9 @@
 package com.hasan.storyvibrance.Utility.PostAdapterUtils;
 
 import android.util.Log;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.squareup.picasso.Picasso;
 
 public class UserDataFetcher {
     private final FirebaseFirestore db;
@@ -15,15 +12,14 @@ public class UserDataFetcher {
         this.db = db;
     }
 
-    public void fetchUserData(String username, TextView authorName, ImageView authorImg) {
+    public void fetchUserData(String username, UserDataFetchListener listener) {
         db.collection("userdata").document(username).get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
                 if (document.exists()) {
                     String name = document.getString("name");
                     String profileImg = document.getString("ProfileImg");
-                    authorName.setText(name);
-                    Picasso.get().load(profileImg).into(authorImg);
+                    listener.onUserDataFetched(name, profileImg);
                 } else {
                     Log.d("Userdata", "No such document");
                 }
@@ -32,5 +28,12 @@ public class UserDataFetcher {
             }
         });
     }
+
+    // Define a callback interface for handling data retrieval
+    public interface UserDataFetchListener {
+        void onUserDataFetched(String name, String profileImg);
+    }
+
+
 }
 

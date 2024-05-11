@@ -8,10 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LifecycleOwner;
 import androidx.preference.PreferenceManager;
 
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -19,8 +17,6 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.hasan.storyvibrance.Controller.PostAdapter;
 import com.hasan.storyvibrance.Controller.StoryAdapter;
 import com.hasan.storyvibrance.Messenger.MessengerActivity;
-import com.hasan.storyvibrance.Model.CommentModel;
-import com.hasan.storyvibrance.Model.LikeModel;
 import com.hasan.storyvibrance.Model.PostModel;
 import com.hasan.storyvibrance.Model.StoryModel;
 import com.hasan.storyvibrance.Notification.NotificationActivity;
@@ -30,9 +26,7 @@ import com.hasan.storyvibrance.databinding.FragmentHomeBinding;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 public class FragmentHome extends Fragment {
 
@@ -125,6 +119,7 @@ public class FragmentHome extends Fragment {
 
             // Update the data in the adapter
             postAdapter.updateData(postModels);
+
         }
         );
     }

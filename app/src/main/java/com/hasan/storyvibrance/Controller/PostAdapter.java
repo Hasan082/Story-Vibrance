@@ -67,7 +67,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
         //User Data Fetcher for set user details for post
         String postAuthor = post.getAuthorUsername();
         UserDataFetcher userDataFetcher = new UserDataFetcher(db);
-        userDataFetcher.fetchUserData(postAuthor, holder.authorName, holder.authorImg);
+        userDataFetcher.fetchUserData(postAuthor, (name, profileImg) -> {
+            holder.authorName.setText(name);
+            Picasso.get().load(profileImg).into(holder.authorImg);
+        });
 
         // Populate post data directly from the PostModel object
         holder.postTextContent.setText(post.getPostTextContent());
@@ -81,9 +84,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
         holder.commentCount.setText(String.valueOf(post.getComments() != null ? post.getComments().size() : 0));
 
 
-        // HANDLE LIKE UNLIKE ACTIVITIES===========================
+        //Fetch the current user
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String userId = user != null ? user.getUid() : null;
+
+        // HANDLE LIKE UNLIKE ACTIVITIES===========================
         // Set the Like icon based on the current Like state of the post
         holder.likeIcon.setImageResource(post.isLikedByUser(userId) ? R.drawable.post_liked : R.drawable.post_like);
         // Post Like click Listener
@@ -94,7 +99,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
 
 
         // HANDLE POST SAVED==========================================================
-
         holder.savedIcon.setImageResource(post.isPostSavedByUser(userId) ? R.drawable.post_saved : R.drawable.post_save);
         holder.savedIcon.setOnClickListener(v-> {
             SavedPostHandler savedPostHandler = new SavedPostHandler(db);
