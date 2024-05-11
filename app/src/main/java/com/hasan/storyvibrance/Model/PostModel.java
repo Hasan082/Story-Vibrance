@@ -1,10 +1,8 @@
 package com.hasan.storyvibrance.Model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 public class PostModel {
     private String postId; //Post Id
@@ -16,19 +14,21 @@ public class PostModel {
     private List<LikeModel> likes; // List of likes on the post
     private List<CommentModel> comments; // List of comments on the post
     private String timestamp; // Timestamp of when the post was created
-    private Map<String, Boolean> savedByUsers;
+    private List<PostSavedModel> postSaved; // List of postSaved on the post
 
     // Constructors, getters, and setters
 
+
+
     public PostModel() {
-        savedByUsers = new HashMap<>();
+
     }
 
 
 
     public PostModel(String postId, String authorName, String authorUsername, String postTextContent,
                      String authorImg, String postMedia, List<LikeModel> likes,
-                     List<CommentModel> comments, String timestamp) {
+                     List<CommentModel> comments, String timestamp, List<PostSavedModel> postSaved) {
         this.authorUsername = authorUsername;
         this.postId=postId;
         this.authorName = authorName;
@@ -38,7 +38,16 @@ public class PostModel {
         this.likes = likes;
         this.comments = comments;
         this.timestamp = timestamp;
-        savedByUsers = new HashMap<>();
+        this.postSaved = postSaved;
+
+    }
+
+    public List<PostSavedModel> getPostSaved() {
+        return postSaved;
+    }
+
+    public void setPostSaved(List<PostSavedModel> postSaved) {
+        this.postSaved = postSaved;
     }
 
     public String getPostId() {
@@ -167,18 +176,41 @@ public class PostModel {
     }
 
 
-    /**
-     * Retrieves the savedByUsers map from the PostModel object.
-     *
-     * @return The savedByUsers map containing user IDs as keys and their save state as values.
-     */
-    public Map<String, Boolean> getSavedByUsers() {
-        return savedByUsers;
+
+    // post saved
+
+    public void addSaved(PostSavedModel saved) {
+        if (postSaved == null) {
+            postSaved = new ArrayList<>();
+        }
+        postSaved.add(saved);
+    }
+
+    public void removeSavePost(String userId) {
+        if (postSaved != null) {
+            for (Iterator<PostSavedModel> iterator = postSaved.iterator(); iterator.hasNext();) {
+                PostSavedModel savedPost = iterator.next();
+                if (savedPost.getUserId().equals(userId)) {
+                    iterator.remove();
+                    break;
+                }
+            }
+        }
+    }
+
+    public boolean isPostSavedByUser(String userId) {
+        if (postSaved != null) {
+            for (PostSavedModel savePost : postSaved) {
+                if (savePost.getUserId().equals(userId)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 
-    public void setSavedByUsers(Map<String, Boolean> savedByUsers) {
-        this.savedByUsers = savedByUsers;
-    }
+
+
 
 }

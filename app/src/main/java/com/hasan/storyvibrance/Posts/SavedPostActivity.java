@@ -1,32 +1,26 @@
 package com.hasan.storyvibrance.Posts;
+
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.hasan.storyvibrance.Model.PostModel;
 import com.hasan.storyvibrance.R;
 import com.hasan.storyvibrance.Utility.GetUserName;
 import com.hasan.storyvibrance.databinding.ActivitySavedPostBinding;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 public class SavedPostActivity extends AppCompatActivity {
 
@@ -39,12 +33,30 @@ public class SavedPostActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_saved_post);
         db = FirebaseFirestore.getInstance();
-        db.collection("posts").whereEqualTo("saved", true).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+        String username = GetUserName.getUsernameFromSharedPreferences(this);
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String userId = user.getUid();
+        db.collection("posts")
+                .whereEqualTo("savedByUsers.", userId)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    // Iterate through queryDocumentSnapshots to access each post
+                    for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                        PostModel post = documentSnapshot.toObject(PostModel.class);
+                        assert post != null;
+                        // Log the post data
+                        assert post != null;
+                        Log.d("PostData", "Post ID: " + post.getPostId());
+                        Log.d("PostData", "Author Name: " + post.getAuthorName());
+                        // Log other post fields as needed
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    // Handle failure
+                    Log.e("Firestore", "Error getting posts: " + e.getMessage());
+                });
 
-            }
-        });
+
 
 
 

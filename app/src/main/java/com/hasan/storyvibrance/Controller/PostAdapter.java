@@ -25,7 +25,7 @@ import com.hasan.storyvibrance.Utility.DialogUtils;
 import com.hasan.storyvibrance.Utility.GetUserName;
 import com.hasan.storyvibrance.Utility.PostAdapterUtils.DeletePostUtils;
 import com.hasan.storyvibrance.Utility.PostAdapterUtils.LikeHandler;
-import com.hasan.storyvibrance.Utility.PostAdapterUtils.PostSaver;
+import com.hasan.storyvibrance.Utility.PostAdapterUtils.SavedPostHandler;
 import com.hasan.storyvibrance.Utility.PostAdapterUtils.UserDataFetcher;
 import com.hasan.storyvibrance.Utility.TimeUtils;
 import com.hasan.storyvibrance.Utility.dpToPx;
@@ -94,20 +94,12 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
 
 
         // HANDLE POST SAVED==========================================================
-        // Check if the current user has saved the post
-        String username = GetUserName.getUsernameFromSharedPreferences(context);
-        boolean isSavedByCurrentUser = post.getSavedByUsers().containsKey(username);
 
-        // Set the saved icon based on the current saved state of the post
-        holder.savedIcon.setImageResource(isSavedByCurrentUser ? R.drawable.post_saved : R.drawable.post_save);
-
-        // Post Save click Listener
-        holder.savedIcon.setOnClickListener(v -> {
-            boolean newSavedState = !isSavedByCurrentUser;
-            PostSaver.handleSavePost(post, newSavedState, holder.savedIcon, username);
+        holder.savedIcon.setImageResource(post.isPostSavedByUser(userId) ? R.drawable.post_saved : R.drawable.post_save);
+        holder.savedIcon.setOnClickListener(v-> {
+            SavedPostHandler savedPostHandler = new SavedPostHandler(db);
+            savedPostHandler.handlePostSaved(post, user, holder.savedIcon);
         });
-
-
 
         // UPDATE AND DELETE POST HANDLER=========================================
         String currentUser = GetUserName.getUsernameFromSharedPreferences(context);
