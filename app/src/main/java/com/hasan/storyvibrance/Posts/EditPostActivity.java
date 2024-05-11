@@ -75,13 +75,18 @@ public class EditPostActivity extends AppCompatActivity {
         updatedData.put("postTextContent", updatedTextContent);
 
         if (addMediaUri != null) {
-            // If image is available, upload it to storage and then update the post data in Firestore
-            uploadImageToStorage(addMediaUri, postId, updatedData);
+            // If image is available, compress it and then upload it to storage
+            Bitmap bitmap = getBitmapFromUri(addMediaUri);
+            assert bitmap != null;
+            Uri compressedUri = getImageUri(getApplicationContext(), bitmap);
+            assert compressedUri != null;
+            uploadImageToStorage(compressedUri, postId, updatedData);
         } else {
             // If no image is selected, directly update the post data in Firestore
             updatePostDataInFirestore(postId, updatedData);
         }
     }
+
 
     private void uploadImageToStorage(Uri addMediaUri, String postId, Map<String, Object> updatedData) {
         showLoadingIndicator();
