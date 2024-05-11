@@ -1,21 +1,26 @@
 package com.hasan.storyvibrance.Controller;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import com.hasan.storyvibrance.Model.PostModel;
+
+import com.hasan.storyvibrance.Model.PostSavedModel;
 import com.hasan.storyvibrance.R;
 import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 public class SavedPostsAdapter extends RecyclerView.Adapter<SavedPostsAdapter.PostViewHolder> {
 
-    private final List<PostModel> savedPosts;
+    private final List<PostSavedModel> savedPosts;
 
-    public SavedPostsAdapter(List<PostModel> savedPosts) {
+    public SavedPostsAdapter(
+            List<PostSavedModel> savedPosts) {
         this.savedPosts = savedPosts;
     }
 
@@ -28,7 +33,7 @@ public class SavedPostsAdapter extends RecyclerView.Adapter<SavedPostsAdapter.Po
 
     @Override
     public void onBindViewHolder(@NonNull PostViewHolder holder, int position) {
-        PostModel post = savedPosts.get(position);
+        PostSavedModel post = savedPosts.get(position);
         holder.bind(post);
     }
 
@@ -49,10 +54,10 @@ public class SavedPostsAdapter extends RecyclerView.Adapter<SavedPostsAdapter.Po
             savedPostTitle = itemView.findViewById(R.id.savedPostTitle);
         }
 
-        public void bind(PostModel post) {
+        public void bind(PostSavedModel post) {
             // Bind post data to views
             Picasso.get().load(post.getPostMedia()).into(savedPostImg);
-            savedPostTitle.setText(post.getPostTextContent());
+            savedPostTitle.setText(post.getPostContent());
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.hasan.storyvibrance.Utility.PostAdapterUtils;
 
+
 import android.util.Log;
 import android.widget.ImageView;
 
@@ -23,37 +24,34 @@ public class SavedPostHandler {
         String currentUser = user != null ? user.getUid() : null;
         boolean isPostSaved = post.isPostSavedByUser(currentUser);
 
-        // Toggle the saved state
-        boolean newSavedState = !isPostSaved;
-
-        // Update UI immediately
-        savedIcon.setImageResource(newSavedState ? R.drawable.post_saved : R.drawable.post_save);
-
-        // Update Firestore document asynchronously
-        Map<String, Object> updates = new HashMap<>();
-        if (newSavedState) {
-            // Add the post to the saved list
+        if (!isPostSaved) {
+            savedIcon.setImageResource(R.drawable.post_saved);
             PostSavedModel postSavedModel = new PostSavedModel(currentUser);
             post.addSaved(postSavedModel);
-            updates.put("postSaved", post.getPostSaved());
         } else {
-            // Remove the post from the saved list
+            savedIcon.setImageResource(R.drawable.post_save);
             post.removeSavePost(currentUser);
-            updates.put("postSaved", post.getPostSaved());
         }
 
-        db.collection("posts").document(post.getPostId()).update(updates)
+        // Update the Firestore document to reflect the changes in the saved state
+        Map<String, Object> updates2 = new HashMap<>();
+        updates2.put("postSaved", post.getPostSaved());
+        db.collection("posts").document(post.getPostId()).update(updates2)
                 .addOnSuccessListener(aVoid -> Log.d("Post saved", "Post saved state updated successfully"))
                 .addOnFailureListener(e -> {
                     Log.e("Post saved Error", "Error updating post saved state: " + e.getMessage(), e);
                     // Revert UI changes if necessary
-                    savedIcon.setImageResource(isPostSaved ? R.drawable.post_saved : R.drawable.post_save);
-                    if (newSavedState) {
+                    if (!isPostSaved) {
+                        savedIcon.setImageResource(R.drawable.post_save);
                         post.removeSavePost(currentUser);
                     } else {
+                        savedIcon.setImageResource(R.drawable.post_saved);
                         PostSavedModel postSavedModel = new PostSavedModel(currentUser);
                         post.addSaved(postSavedModel);
                     }
                 });
     }
+
+
+
 }
