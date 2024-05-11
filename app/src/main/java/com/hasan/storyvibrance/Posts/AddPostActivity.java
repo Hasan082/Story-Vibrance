@@ -19,12 +19,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.preference.PreferenceManager;
 
-import com.google.firebase.firestore.DocumentSnapshot;
+
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.hasan.storyvibrance.R;
-import com.hasan.storyvibrance.Utility.DataBaseError;
 import com.hasan.storyvibrance.Utility.GetUserName;
 import com.hasan.storyvibrance.databinding.ActivityAddPostBinding;
 
