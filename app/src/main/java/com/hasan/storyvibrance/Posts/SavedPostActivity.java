@@ -39,14 +39,20 @@ public class SavedPostActivity extends AppCompatActivity {
         String userId = user.getUid();
         // Initialize the list to hold saved posts data and create an adapter for the RecyclerView
         savedPostsList = new ArrayList<>();
-        savedPostsAdapter = new SavedPostsAdapter(savedPostsList);
+        savedPostsAdapter = new SavedPostsAdapter(savedPostsList, this);
         // Set the adapter to the RecyclerView in the layout
         binding.savedPostRecyclerView.setAdapter(savedPostsAdapter);
         // Fetch saved posts data for the current user from Firestore
         fetchSavedPostsData(db, userId);
         // Set click listener for the back button to navigate back to the previous page
         binding.backBtn.setOnClickListener(v-> getOnBackPressedDispatcher().onBackPressed());
+        // In your activity or fragment where you initialize the RecyclerView and adapter
+
+
     }
+
+
+
 
     /**
      * Fetches saved posts data from Firestore for a specific user.
@@ -60,6 +66,7 @@ public class SavedPostActivity extends AppCompatActivity {
             for (DocumentSnapshot document : queryDocumentSnapshots) {
                 // Get the data from the document
                 Map<String, Object> postData = document.getData();
+
                 List<Map<String, Object>> postSavedList = (List<Map<String, Object>>) (postData != null ? postData.get("postSaved") : null);
 
                 if (postSavedList != null) {
@@ -68,10 +75,12 @@ public class SavedPostActivity extends AppCompatActivity {
                         if (userId != null && userId.equals(savedUserId)) {
                             String postMedia = (String) postData.get("postMedia");
                             String postTextContent = (String) postData.get("postTextContent");
+                            String postId = document.getId();
                             // Create a new PostSavedModel object
                             PostSavedModel postSavedModel = new PostSavedModel();
                             postSavedModel.setPostContent(postTextContent);
                             postSavedModel.setPostMedia(postMedia);
+                            postSavedModel.setPostId(postId);
                             // Add the new post to the saved posts list
                             savedPostsList.add(postSavedModel);
                         }

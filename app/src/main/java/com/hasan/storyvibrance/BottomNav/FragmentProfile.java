@@ -26,13 +26,17 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.hasan.storyvibrance.Controller.ProfilePostAdapter;
+import com.hasan.storyvibrance.Model.ProfilePostModel;
 import com.hasan.storyvibrance.Profile.UpdateProfileActivity;
 import com.hasan.storyvibrance.R;
+import com.hasan.storyvibrance.Utility.GetUserName;
 import com.hasan.storyvibrance.databinding.FragmentProfileBinding;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,7 +46,9 @@ public class FragmentProfile extends Fragment {
     FragmentProfileBinding binding;
     FirebaseFirestore db;
 
-
+    ProfilePostModel profilePostModel;
+    ArrayList<ProfilePostModel> profilePostImg;
+    ProfilePostAdapter profilePostAdapter;
     Uri profileUri;
 
     SharedPreferences sharedPreferences;
@@ -54,7 +60,7 @@ public class FragmentProfile extends Fragment {
         View view = binding.getRoot();
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
-        String userName = getUsernameFromSharedPreferences();
+        String userName = GetUserName.getUsernameFromSharedPreferences(requireContext());
         db = FirebaseFirestore.getInstance();
 
         binding.spinner.setVisibility(View.VISIBLE);
@@ -75,6 +81,35 @@ public class FragmentProfile extends Fragment {
 
         binding.goToUpdateProfile.setOnClickListener(v -> startActivity(new Intent(getActivity(), UpdateProfileActivity.class)));
         binding.profileImgEdit.setOnClickListener(v -> mGetContent.launch("image/*"));
+
+
+
+        //Self Post recyclerview
+
+
+        profilePostImg = new ArrayList<>();
+        profilePostAdapter = new ProfilePostAdapter(profilePostImg, requireContext());
+        binding.ownPostRecyclerView.setAdapter(profilePostAdapter);
+        profilePostAdapter.notifyDataSetChanged();
+
+
+        profilePostImg.add(new ProfilePostModel("https://picsum.photos/seed/picsum/200/300"));
+        profilePostImg.add(new ProfilePostModel("https://picsum.photos/400/300.jpg"));
+        profilePostImg.add(new ProfilePostModel("https://picsum.photos/seed/picsum/500/250"));
+        profilePostImg.add(new ProfilePostModel("https://picsum.photos/425/300.jpg"));
+        profilePostImg.add(new ProfilePostModel("https://picsum.photos/seed/picsum/400/300"));
+        profilePostImg.add(new ProfilePostModel("https://picsum.photos/300/300.jpg"));
+        profilePostImg.add(new ProfilePostModel("https://picsum.photos/seed/picsum/220/300"));
+        profilePostImg.add(new ProfilePostModel("https://picsum.photos/200/300.jpg"));
+        profilePostImg.add(new ProfilePostModel("https://picsum.photos/seed/picsum/250/300"));
+        profilePostImg.add(new ProfilePostModel("https://picsum.photos/200/300.jpg"));
+        profilePostImg.add(new ProfilePostModel("https://picsum.photos/seed/picsum/100/300"));
+        profilePostImg.add(new ProfilePostModel("https://picsum.photos/600/300.jpg"));
+
+        profilePostAdapter.notifyDataSetChanged();
+
+
+
 
         return view;
     }
@@ -162,7 +197,7 @@ public class FragmentProfile extends Fragment {
 
     private void handleImageUploadSuccess(StorageReference imgRef) {
         imgRef.getDownloadUrl().addOnSuccessListener(downloadUri -> {
-            String username = getUsernameFromSharedPreferences();
+            String username = GetUserName.getUsernameFromSharedPreferences(requireContext());
             uploadDataToFirestore(username, downloadUri.toString());
         });
     }
@@ -217,9 +252,7 @@ public class FragmentProfile extends Fragment {
                 });
     }
 
-    private String getUsernameFromSharedPreferences() {
-        return sharedPreferences.getString("username", "");
-    }
+
 
     private void showLoadingIndicator() {
         binding.spinner.setVisibility(View.VISIBLE);

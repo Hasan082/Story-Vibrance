@@ -14,7 +14,7 @@ public class PostModel {
     private List<LikeModel> likes; // List of likes on the post
     private List<CommentModel> comments; // List of comments on the post
     private String timestamp; // Timestamp of when the post was created
-    private List<PostSavedModel> postSaved; // List of postSaved on the post
+    private List<PostSaveUserIdFireBase> postSaved; // List of postSaved on the post
 
     // Constructors, getters, and setters
 
@@ -28,7 +28,7 @@ public class PostModel {
 
     public PostModel(String postId, String authorName, String authorUsername, String postTextContent,
                      String authorImg, String postMedia, List<LikeModel> likes,
-                     List<CommentModel> comments, String timestamp, List<PostSavedModel> postSaved) {
+                     List<CommentModel> comments, String timestamp, List<PostSaveUserIdFireBase> postSaved) {
         this.authorUsername = authorUsername;
         this.postId=postId;
         this.authorName = authorName;
@@ -42,11 +42,11 @@ public class PostModel {
 
     }
 
-    public List<PostSavedModel> getPostSaved() {
+    public List<PostSaveUserIdFireBase> getPostSaved() {
         return postSaved;
     }
 
-    public void setPostSaved(List<PostSavedModel> postSaved) {
+    public void setPostSaved(List<PostSaveUserIdFireBase> postSaved) {
         this.postSaved = postSaved;
     }
 
@@ -179,7 +179,7 @@ public class PostModel {
 
     // post saved
 
-    public void addSaved(PostSavedModel saved) {
+    public void addSaved(PostSaveUserIdFireBase saved) {
         if (postSaved == null) {
             postSaved = new ArrayList<>();
         }
@@ -188,8 +188,8 @@ public class PostModel {
 
     public void removeSavePost(String userId) {
         if (postSaved != null) {
-            for (Iterator<PostSavedModel> iterator = postSaved.iterator(); iterator.hasNext();) {
-                PostSavedModel savedPost = iterator.next();
+            for (Iterator<PostSaveUserIdFireBase> iterator = postSaved.iterator(); iterator.hasNext();) {
+                PostSaveUserIdFireBase savedPost = iterator.next();
                 if (savedPost.getUserId().equals(userId)) {
                     iterator.remove();
                     break;
@@ -200,7 +200,7 @@ public class PostModel {
 
     public boolean isPostSavedByUser(String userId) {
         if (postSaved != null) {
-            for (PostSavedModel savePost : postSaved) {
+            for (PostSaveUserIdFireBase savePost : postSaved) {
                 if (savePost.getUserId().equals(userId)) {
                     return true;
                 }
