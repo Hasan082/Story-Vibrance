@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
-
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hasan.storyvibrance.Model.ProfilePostModel;
@@ -35,7 +34,6 @@ public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostAdapter.
     @Override
     public void onBindViewHolder(@NonNull PostViewHolder holder, int position) {
         ProfilePostModel post = profilePostModel.get(position);
-        // Load the actual image into the ImageView using Picasso
         Picasso.get().load(post.getProfilePostMedia()).resize(300, 300).centerCrop().into(holder.profilePostMedia);
     }
 

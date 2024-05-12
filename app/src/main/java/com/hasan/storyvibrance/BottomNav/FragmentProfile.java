@@ -38,6 +38,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -90,21 +91,36 @@ public class FragmentProfile extends Fragment {
         profilePostImg = new ArrayList<>();
         profilePostAdapter = new ProfilePostAdapter(profilePostImg, requireContext());
         binding.ownPostRecyclerView.setAdapter(profilePostAdapter);
-        profilePostAdapter.notifyDataSetChanged();
+
+        String ownAuthor = GetUserName.getUsernameFromSharedPreferences(requireContext());
+        db = FirebaseFirestore.getInstance();
+        db.collection("posts").whereEqualTo("authorUsername", ownAuthor).get().addOnSuccessListener(queryDocumentSnapshots -> {
+            List<DocumentSnapshot> doc = queryDocumentSnapshots.getDocuments();
+            for (DocumentSnapshot ownPost : doc) {
+                String profileMedia = (String) ownPost.get("postMedia");
+                ProfilePostModel postModel = new ProfilePostModel(profileMedia); // Create a ProfilePostModel object
+                profilePostImg.add(postModel); // Add the post to the list
+            }
+            profilePostAdapter.notifyDataSetChanged(); // Notify the adapter that the data set has changed
+        });
 
 
-        profilePostImg.add(new ProfilePostModel("https://picsum.photos/seed/picsum/200/300"));
-        profilePostImg.add(new ProfilePostModel("https://picsum.photos/400/300.jpg"));
-        profilePostImg.add(new ProfilePostModel("https://picsum.photos/seed/picsum/500/250"));
-        profilePostImg.add(new ProfilePostModel("https://picsum.photos/425/300.jpg"));
-        profilePostImg.add(new ProfilePostModel("https://picsum.photos/seed/picsum/400/300"));
-        profilePostImg.add(new ProfilePostModel("https://picsum.photos/300/300.jpg"));
-        profilePostImg.add(new ProfilePostModel("https://picsum.photos/seed/picsum/220/300"));
-        profilePostImg.add(new ProfilePostModel("https://picsum.photos/200/300.jpg"));
-        profilePostImg.add(new ProfilePostModel("https://picsum.photos/seed/picsum/250/300"));
-        profilePostImg.add(new ProfilePostModel("https://picsum.photos/200/300.jpg"));
-        profilePostImg.add(new ProfilePostModel("https://picsum.photos/seed/picsum/100/300"));
-        profilePostImg.add(new ProfilePostModel("https://picsum.photos/600/300.jpg"));
+
+
+
+
+//        profilePostImg.add(new ProfilePostModel("https://picsum.photos/seed/picsum/200/300"));
+//        profilePostImg.add(new ProfilePostModel("https://picsum.photos/400/300.jpg"));
+//        profilePostImg.add(new ProfilePostModel("https://picsum.photos/seed/picsum/500/250"));
+//        profilePostImg.add(new ProfilePostModel("https://picsum.photos/425/300.jpg"));
+//        profilePostImg.add(new ProfilePostModel("https://picsum.photos/seed/picsum/400/300"));
+//        profilePostImg.add(new ProfilePostModel("https://picsum.photos/300/300.jpg"));
+//        profilePostImg.add(new ProfilePostModel("https://picsum.photos/seed/picsum/220/300"));
+//        profilePostImg.add(new ProfilePostModel("https://picsum.photos/200/300.jpg"));
+//        profilePostImg.add(new ProfilePostModel("https://picsum.photos/seed/picsum/250/300"));
+//        profilePostImg.add(new ProfilePostModel("https://picsum.photos/200/300.jpg"));
+//        profilePostImg.add(new ProfilePostModel("https://picsum.photos/seed/picsum/100/300"));
+//        profilePostImg.add(new ProfilePostModel("https://picsum.photos/600/300.jpg"));
 
         profilePostAdapter.notifyDataSetChanged();
 
