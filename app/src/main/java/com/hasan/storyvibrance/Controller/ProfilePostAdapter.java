@@ -34,7 +34,9 @@ public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostAdapter.
     @Override
     public void onBindViewHolder(@NonNull PostViewHolder holder, int position) {
         ProfilePostModel post = profilePostModel.get(position);
-        Picasso.get().load(post.getProfilePostMedia()).resize(300, 300).centerCrop().into(holder.profilePostMedia);
+        Picasso.get().load(post.getProfilePostMedia())
+                .resize(100, 100)
+                .centerCrop().into(holder.profilePostMedia);
     }
 
     @Override

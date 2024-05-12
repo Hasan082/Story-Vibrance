@@ -21,6 +21,7 @@ import com.hasan.storyvibrance.Model.PostModel;
 import com.hasan.storyvibrance.Model.StoryModel;
 import com.hasan.storyvibrance.Notification.NotificationActivity;
 import com.hasan.storyvibrance.R;
+import com.hasan.storyvibrance.Utility.GetUserName;
 import com.hasan.storyvibrance.Utility.PostSorter;
 import com.hasan.storyvibrance.databinding.FragmentHomeBinding;
 
@@ -50,7 +51,7 @@ public class FragmentHome extends Fragment {
         db=FirebaseFirestore.getInstance();
         //CREATE sharedPreferences INSTANCES==========
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
-        String username = getUsernameFromSharedPreferences();
+        String username = GetUserName.getUsernameFromSharedPreferences(requireContext());
         // Set up click listener for opening drawer on app bar icon click
         binding.customAppBar.findViewById(R.id.appbarImg).setOnClickListener(v -> {
             // Call the openDrawer method of NavigationActivity
@@ -68,6 +69,9 @@ public class FragmentHome extends Fragment {
             // Start the MessengerActivity
             startActivity(new Intent(getActivity(), MessengerActivity.class));
         });
+
+
+
 
 
 
@@ -119,7 +123,7 @@ public class FragmentHome extends Fragment {
 
             // Update the data in the adapter
             postAdapter.updateData(postModels);
-
+            postAdapter.notifyDataSetChanged();
         }
         );
     }
@@ -149,14 +153,6 @@ public class FragmentHome extends Fragment {
         storyModels.add(new StoryModel("Rozina Parvin", R.drawable.hasan, R.drawable.hasan));
         storyModels.add(new StoryModel("Hafizul Islam", R.drawable.hasan, R.drawable.hasan));
         return storyModels;
-    }
-
-
-
-
-
-    private String getUsernameFromSharedPreferences() {
-        return sharedPreferences.getString("username", "");
     }
 
 

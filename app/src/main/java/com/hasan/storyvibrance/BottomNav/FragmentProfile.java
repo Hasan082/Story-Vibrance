@@ -83,11 +83,7 @@ public class FragmentProfile extends Fragment {
         binding.goToUpdateProfile.setOnClickListener(v -> startActivity(new Intent(getActivity(), UpdateProfileActivity.class)));
         binding.profileImgEdit.setOnClickListener(v -> mGetContent.launch("image/*"));
 
-
-
-        //Self Post recyclerview
-
-
+        //Profile page post list=======================
         profilePostImg = new ArrayList<>();
         profilePostAdapter = new ProfilePostAdapter(profilePostImg, requireContext());
         binding.ownPostRecyclerView.setAdapter(profilePostAdapter);
@@ -98,31 +94,16 @@ public class FragmentProfile extends Fragment {
             List<DocumentSnapshot> doc = queryDocumentSnapshots.getDocuments();
             for (DocumentSnapshot ownPost : doc) {
                 String profileMedia = (String) ownPost.get("postMedia");
-                ProfilePostModel postModel = new ProfilePostModel(profileMedia); // Create a ProfilePostModel object
-                profilePostImg.add(postModel); // Add the post to the list
+                ProfilePostModel postModel = new ProfilePostModel(profileMedia);
+                System.out.println("profileImg: " + profileMedia);
+                if(profileMedia != null){
+                    profilePostImg.add(postModel);
+                }
+
             }
-            profilePostAdapter.notifyDataSetChanged(); // Notify the adapter that the data set has changed
+            profilePostAdapter.notifyDataSetChanged();
         });
 
-
-
-
-
-
-//        profilePostImg.add(new ProfilePostModel("https://picsum.photos/seed/picsum/200/300"));
-//        profilePostImg.add(new ProfilePostModel("https://picsum.photos/400/300.jpg"));
-//        profilePostImg.add(new ProfilePostModel("https://picsum.photos/seed/picsum/500/250"));
-//        profilePostImg.add(new ProfilePostModel("https://picsum.photos/425/300.jpg"));
-//        profilePostImg.add(new ProfilePostModel("https://picsum.photos/seed/picsum/400/300"));
-//        profilePostImg.add(new ProfilePostModel("https://picsum.photos/300/300.jpg"));
-//        profilePostImg.add(new ProfilePostModel("https://picsum.photos/seed/picsum/220/300"));
-//        profilePostImg.add(new ProfilePostModel("https://picsum.photos/200/300.jpg"));
-//        profilePostImg.add(new ProfilePostModel("https://picsum.photos/seed/picsum/250/300"));
-//        profilePostImg.add(new ProfilePostModel("https://picsum.photos/200/300.jpg"));
-//        profilePostImg.add(new ProfilePostModel("https://picsum.photos/seed/picsum/100/300"));
-//        profilePostImg.add(new ProfilePostModel("https://picsum.photos/600/300.jpg"));
-
-        profilePostAdapter.notifyDataSetChanged();
 
 
 
@@ -145,7 +126,7 @@ public class FragmentProfile extends Fragment {
         binding.setUserBio(userBio != null ? userBio : getString(R.string.about_me));
 
         if (profileImgUrl != null) {
-            Picasso.get().load(profileImgUrl)
+            Picasso.get().load(profileImgUrl).resize(250, 250)
                     .placeholder(R.drawable.edit_person)
                     .error(R.drawable.edit_person)
                     .into(binding.profileImg);

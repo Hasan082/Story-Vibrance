@@ -66,7 +66,7 @@ public class SavedPostsAdapter extends RecyclerView.Adapter<SavedPostsAdapter.Po
 
         public void bind(PostSavedModel post) {
             // Bind post data to views
-            Picasso.get().load(post.getPostMedia()).into(savedPostImg);
+            Picasso.get().load(post.getPostMedia()).resize(400,300 ).centerCrop().into(savedPostImg);
             savedPostTitle.setText(post.getPostContent());
         }
 

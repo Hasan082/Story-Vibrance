@@ -16,6 +16,4 @@
         android:src="@drawable/posts_img_sample"
         />
 
-
-
 </androidx.cardview.widget.CardView>
