@@ -60,6 +60,7 @@ public class CommentBottomSheetDialog extends BottomSheetDialogFragment {
                 String commentContent = commentEditText.getText().toString().trim();
 
                 if (!commentContent.isEmpty()) {
+
                     CommentModel newComment = new CommentModel(postId, userId, commentContent, System.currentTimeMillis());
 
                     db.collection("comments")
@@ -78,6 +79,12 @@ public class CommentBottomSheetDialog extends BottomSheetDialogFragment {
             }
         });
 
+        //if no comment set recyclerview to hide
+        recyclerViewComments.post(() -> {
+            if (commentAdapter.getItemCount() == 0) {
+                recyclerViewComments.setVisibility(View.GONE);
+            }
+        });
 
         return v;
     }

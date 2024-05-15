@@ -15,6 +15,7 @@ import com.hasan.storyvibrance.Model.CommentModel;
 import com.hasan.storyvibrance.R;
 import com.hasan.storyvibrance.Utility.GetUserName;
 import com.hasan.storyvibrance.Utility.PostAdapterUtils.UserDataFetcher;
+import com.hasan.storyvibrance.Utility.TimeUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -49,7 +50,8 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         db = FirebaseFirestore.getInstance();
         holder.commentUserName.setText(comment.getUserId());
         holder.commentContent.setText(comment.getCommentText());
-        holder.commentTime.setText(String.valueOf(comment.getTimestamp()));
+        String commentTime = TimeUtils.getTimeAgo(comment.getTimestamp());
+        holder.commentTime.setText(commentTime);
         UserDataFetcher userDataFetcher = new UserDataFetcher(db);
         String username = GetUserName.getUsernameFromSharedPreferences(context);
         userDataFetcher.fetchUserData(username, (name, profileImg) -> {
