@@ -13,6 +13,8 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -23,6 +25,7 @@ import com.hasan.storyvibrance.Posts.EditPostActivity;
 import com.hasan.storyvibrance.R;
 import com.hasan.storyvibrance.Utility.DialogUtils;
 import com.hasan.storyvibrance.Utility.GetUserName;
+import com.hasan.storyvibrance.Utility.PostAdapterUtils.CommentBottomSheetDialog;
 import com.hasan.storyvibrance.Utility.PostAdapterUtils.DeletePostUtils;
 import com.hasan.storyvibrance.Utility.PostAdapterUtils.LikeHandler;
 import com.hasan.storyvibrance.Utility.PostAdapterUtils.SavedPostHandler;
@@ -37,10 +40,11 @@ import java.util.List;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
 
+    private FragmentManager fragmentManager;
     private final Context context;
     private final ArrayList<PostModel> postModels;
 
-    FirebaseFirestore db;
+        FirebaseFirestore db;
 
 
     public PostAdapter(Context context, ArrayList<PostModel> postModels) {
@@ -116,6 +120,43 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
             holder.optionsIcon.setVisibility(View.GONE);
         }
 
+
+
+//        holder.commentIcon.setOnClickListener(v -> {
+//            // Use the context passed to the adapter's constructor
+//            BottomSheetDialog bottomSheet = new BottomSheetDialog(context);
+//            bottomSheet.show();
+//        });
+
+        holder.commentIcon.setOnClickListener(v -> {
+            // Create an instance of CommentBottomSheetDialog
+            CommentBottomSheetDialog bottomSheetDialog = new CommentBottomSheetDialog();
+
+            // Show the bottom sheet dialog
+            bottomSheetDialog.show(((AppCompatActivity)context).getSupportFragmentManager(), bottomSheetDialog.getTag());
+        });
+
+
+
+
+
+//        holder.commentIcon.setOnClickListener(v -> {
+//            // Create a new BottomSheetDialog
+//            BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);
+//
+//            // Inflate the layout for the bottom sheet content
+//            View bottomSheetView = LayoutInflater.from(context).inflate(R.layout.comment_bottom_sheet_layout, null);
+//
+//            // Set the inflated layout as the content view of the dialog
+//            bottomSheetDialog.setContentView(bottomSheetView);
+//
+//            // Show the bottom sheet dialog
+//            bottomSheetDialog.show();
+//        });
+
+
+
+
         holder.optionsIcon.setOnClickListener(v -> {
             // Get the screen coordinates of the options icon
             int[] location = new int[2];
@@ -185,7 +226,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
     }
 
     public static class PostHolder extends RecyclerView.ViewHolder {
-        ImageView authorImg, postMedia, likeIcon, savedIcon, optionsIcon;
+        ImageView authorImg, postMedia, likeIcon, savedIcon, optionsIcon, commentIcon;
         TextView authorName, authorUsername, postTextContent, likeCount, commentCount, timeStamp;
 
         public PostHolder(@NonNull View itemView) {
@@ -201,6 +242,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
             likeCount = itemView.findViewById(R.id.likeCount);
             commentCount = itemView.findViewById(R.id.commentCount);
             timeStamp = itemView.findViewById(R.id.timeStamp);
+            commentIcon = itemView.findViewById(R.id.commentIcon);
         }
 
     }

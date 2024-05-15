@@ -40,7 +40,6 @@ public class LikeHandler {
         updates.put("likes", post.getLikes());
 
 
-
         db.collection("posts").document(post.getPostId()).update(updates)
                 .addOnSuccessListener(aVoid -> Log.d("Likes done", "Likes updated"))
                 .addOnFailureListener(e -> {

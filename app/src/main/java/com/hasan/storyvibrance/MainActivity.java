@@ -49,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     //ToDo===To be done=====
-    // Glitch on like  and save
     // remove post from save post page
     // save post query
     // single post view

@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hasan.storyvibrance.Model.PostSavedModel;
@@ -44,7 +45,7 @@ public class SavedPostsAdapter extends RecyclerView.Adapter<SavedPostsAdapter.Po
     @Override
     public void onBindViewHolder(@NonNull PostViewHolder holder, int position) {
         PostSavedModel post = savedPosts.get(position);
-        holder.bind(post);
+        holder.bind(post, context);
     }
 
     @Override
@@ -58,16 +59,24 @@ public class SavedPostsAdapter extends RecyclerView.Adapter<SavedPostsAdapter.Po
         private final ImageView savedPostImg;
         private final TextView savedPostTitle;
 
+        private final CardView singleSavedPost;
+
         public PostViewHolder(@NonNull View itemView) {
             super(itemView);
+            singleSavedPost = itemView.findViewById(R.id.SinglePostSaved);
             savedPostImg = itemView.findViewById(R.id.savedPostImg);
             savedPostTitle = itemView.findViewById(R.id.savedPostTitle);
+
         }
 
-        public void bind(PostSavedModel post) {
+        public void bind(PostSavedModel post, Context context) {
             // Bind post data to views
             Picasso.get().load(post.getPostMedia()).resize(400,300 ).centerCrop().into(savedPostImg);
             savedPostTitle.setText(post.getPostContent());
+
+
+
+
         }
 
 
