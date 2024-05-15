@@ -13,7 +13,7 @@
         android:orientation="horizontal">
         <!-- Profile Picture -->
         <ImageView
-            android:id="@+id/CommentProfilePic"
+            android:id="@+id/commentProfilePic"
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:src="@drawable/edit_person"
@@ -30,7 +30,7 @@
             android:paddingBottom="5dp">
             <!-- User Name -->
             <TextView
-                android:id="@+id/CommentUserName"
+                android:id="@+id/commentUserName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="User Name"
@@ -38,7 +38,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/CommentContent"
+                android:id="@+id/commentContent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"

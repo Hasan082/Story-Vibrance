@@ -1,21 +1,28 @@
 package com.hasan.storyvibrance.Model;
 
-import java.util.List;
-
 public class CommentModel {
+
+    private String postId;
     private String userId;
     private String commentText;
     private long timestamp;
-    private List<ReplyModel> replies;
 
     public CommentModel() {
     }
 
-    public CommentModel(String userId, String commentText, long timestamp, List<ReplyModel> replies) {
+    public CommentModel(String postId, String userId, String commentText, long timestamp) {
+        this.postId = postId;
         this.userId = userId;
         this.commentText = commentText;
         this.timestamp = timestamp;
-        this.replies = replies;
+    }
+
+    public String getPostId() {
+        return postId;
+    }
+
+    public void setPostId(String postId) {
+        this.postId = postId;
     }
 
     public String getUserId() {
@@ -42,11 +49,4 @@ public class CommentModel {
         this.timestamp = timestamp;
     }
 
-    public List<ReplyModel> getReplies() {
-        return replies;
-    }
-
-    public void setReplies(List<ReplyModel> replies) {
-        this.replies = replies;
-    }
 }

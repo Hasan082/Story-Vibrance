@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,9 +19,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.hasan.storyvibrance.Model.PostModel;
 import com.hasan.storyvibrance.Posts.EditPostActivity;
 import com.hasan.storyvibrance.R;
@@ -44,7 +51,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
     private final Context context;
     private final ArrayList<PostModel> postModels;
 
-        FirebaseFirestore db;
+    FirebaseFirestore db;
+
+    private RecyclerView recyclerViewComments;
+    private CommentAdapter commentAdapter;
+
 
 
     public PostAdapter(Context context, ArrayList<PostModel> postModels) {
@@ -85,7 +96,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
         holder.timeStamp.setText(timeAgo);
 
         holder.likeCount.setText(String.valueOf(post.getLikes() != null ? post.getLikes().size() : 0));
-        holder.commentCount.setText(String.valueOf(post.getComments() != null ? post.getComments().size() : 0));
+
 
 
         //Fetch the current user
@@ -120,43 +131,47 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
             holder.optionsIcon.setVisibility(View.GONE);
         }
 
+        //Open a bottom Sheet when open click on comment Icon
+        // Create a Firestore query for comments of the specific post
+        Query commentsQuery = db.collection("comments")
+                .whereEqualTo("postId", post.getPostId());
+
+        // Create a listener registration
+        ListenerRegistration registration = commentsQuery.addSnapshotListener((querySnapshot, error) -> {
+            if (error != null) {
+                Log.e("Comment count", "Error getting comments: " + error);
+                return;
+            }
+
+            if (querySnapshot != null) {
+                // Get the count of comments
+                int commentCount = querySnapshot.size();
+                Log.d("Comment count by post", "onBindViewHolder: "+ post.getPostId()+ ":" + commentCount);
+                holder.commentCount.setText(String.valueOf(commentCount));
+            }
+        });
+
+        // Store the registration in the holder for later cleanup (e.g., in onViewRecycled)
+        holder.commentCountListenerRegistration = registration;
 
 
-//        holder.commentIcon.setOnClickListener(v -> {
-//            // Use the context passed to the adapter's constructor
-//            BottomSheetDialog bottomSheet = new BottomSheetDialog(context);
-//            bottomSheet.show();
-//        });
+
 
         holder.commentIcon.setOnClickListener(v -> {
             // Create an instance of CommentBottomSheetDialog
             CommentBottomSheetDialog bottomSheetDialog = new CommentBottomSheetDialog();
-
+            // Pass the post ID to the CommentBottomSheetDialog
+            Bundle args = new Bundle();
+            args.putString("postId", post.getPostId());
+            bottomSheetDialog.setArguments(args);
             // Show the bottom sheet dialog
             bottomSheetDialog.show(((AppCompatActivity)context).getSupportFragmentManager(), bottomSheetDialog.getTag());
+
         });
 
 
 
-
-
-//        holder.commentIcon.setOnClickListener(v -> {
-//            // Create a new BottomSheetDialog
-//            BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);
-//
-//            // Inflate the layout for the bottom sheet content
-//            View bottomSheetView = LayoutInflater.from(context).inflate(R.layout.comment_bottom_sheet_layout, null);
-//
-//            // Set the inflated layout as the content view of the dialog
-//            bottomSheetDialog.setContentView(bottomSheetView);
-//
-//            // Show the bottom sheet dialog
-//            bottomSheetDialog.show();
-//        });
-
-
-
-
+        //Edit and Delete==========
         holder.optionsIcon.setOnClickListener(v -> {
             // Get the screen coordinates of the options icon
             int[] location = new int[2];
@@ -220,6 +235,14 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
     }
 
 
+    public void fetchCommentsForPost(String postId, OnSuccessListener<QuerySnapshot> successListener, OnFailureListener failureListener) {
+        db.collection("comments")
+                .whereEqualTo("postId", postId)
+                .get()
+                .addOnSuccessListener(successListener)
+                .addOnFailureListener(failureListener);
+    }
+
     @Override
     public int getItemCount() {
         return postModels.size();
@@ -228,7 +251,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
     public static class PostHolder extends RecyclerView.ViewHolder {
         ImageView authorImg, postMedia, likeIcon, savedIcon, optionsIcon, commentIcon;
         TextView authorName, authorUsername, postTextContent, likeCount, commentCount, timeStamp;
-
+        ListenerRegistration commentCountListenerRegistration;
         public PostHolder(@NonNull View itemView) {
             super(itemView);
             optionsIcon = itemView.findViewById(R.id.optionIcon);
