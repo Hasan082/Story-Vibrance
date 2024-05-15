@@ -18,6 +18,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.hasan.storyvibrance.Controller.CommentAdapter;
 import com.hasan.storyvibrance.Model.CommentModel;
 import com.hasan.storyvibrance.R;
+import com.hasan.storyvibrance.Utility.CommentSorter;
 import com.hasan.storyvibrance.Utility.GetUserName;
 
 import java.util.ArrayList;
@@ -43,9 +44,6 @@ public class CommentBottomSheetDialog extends BottomSheetDialogFragment {
         db = FirebaseFirestore.getInstance();
 
         recyclerViewComments = v.findViewById(R.id.recyclerViewComments);
-//        commentAdapter = new CommentAdapter(new ArrayList<>(), requireContext());
-//        recyclerViewComments.setAdapter(commentAdapter);
-
 
         Bundle args = getArguments();
         if (args != null) {
@@ -101,6 +99,7 @@ public class CommentBottomSheetDialog extends BottomSheetDialogFragment {
                         existingComments.add(comment);
                     }
                     // Initialize RecyclerView and adapter with the existing comment list
+                    CommentSorter.sortByTimestampDescending(existingComments);
                     commentAdapter = new CommentAdapter(existingComments, requireContext());
                     recyclerViewComments.setAdapter(commentAdapter);
                 })
