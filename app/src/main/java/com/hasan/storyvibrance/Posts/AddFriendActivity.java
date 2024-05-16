@@ -32,6 +32,11 @@ public class AddFriendActivity extends AppCompatActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_add_friend);
         db = FirebaseFirestore.getInstance();
 
+        //return back to main page
+        binding.backBtn.setOnClickListener(v->{
+            getOnBackPressedDispatcher().onBackPressed();
+        });
+
         setupViews();
     }
 
