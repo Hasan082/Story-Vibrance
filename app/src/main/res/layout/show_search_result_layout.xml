@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:background="@drawable/rounded_gray_bg"
+    android:layout_marginBottom="6dp"
+    android:padding="@dimen/padding_medium">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/friendSearchImg"
+        android:layout_width="85dp"
+        android:layout_height="85dp"
+        android:padding="2dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/posts_img_sample"
+        app:civ_border_color="@color/gray"
+        app:civ_border_width="1dp"
+        android:layout_marginEnd="10dp"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+        <!-- TextView for displaying user name -->
+        <TextView
+            android:id="@+id/textViewUserName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Friend Name"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <!-- Button for sending friend request -->
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/buttonSendRequest"
+            android:layout_height="48dp"
+            style="@style/AppButtonStyle"
+            android:layout_marginTop="@dimen/margin_medium"
+            android:text="Add Friend" />
+    </LinearLayout>
+
+
+</LinearLayout>

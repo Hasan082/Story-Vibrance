@@ -65,7 +65,8 @@ public class SignupActivity extends AppCompatActivity {
                                     Map<String, String> userData = new HashMap<>(); // Declare a HashMap
                                     userData.put("id", uid); //Put the UID to HashMap
                                     userData.put("email", username); //Put the Email to HashMap
-                                    userData.put("name", name); //Put the Name to HashMap
+                                    String lowercaseName = name.toLowerCase();
+                                    userData.put("name", lowercaseName);
                                     db.collection("userdata").document(username).set(userData).addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
