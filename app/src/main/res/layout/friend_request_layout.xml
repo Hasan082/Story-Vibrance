@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginBottom="10dp"
+    android:background="@color/gray"
+    android:orientation="horizontal"
+    android:padding="@dimen/padding_small">
+
+     <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/friendRequestSenderImg"
+        android:layout_width="85dp"
+        android:layout_height="85dp"
+        android:padding="2dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/posts_img_sample"
+        app:civ_border_color="@color/gray"
+        app:civ_border_width="1dp"
+         android:layout_marginEnd="10dp"
+        />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <!-- TextView for displaying friend request name -->
+        <TextView
+            android:id="@+id/textViewFriendRequestName"
+            style="@style/TextAppearance.Body1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Friend Request Sender Name" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <!-- Button to Confirm friend request -->
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/friendAcceptBtn"
+                style="@style/AppButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="@dimen/margin_medium"
+                android:layout_marginEnd="@dimen/margin_small"
+                android:layout_weight="1"
+                android:text="Confirm" />
+
+            <!-- Button to Delete friend request -->
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/friendDeleteBtn"
+                style="@style/AppButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="@dimen/margin_small"
+                android:layout_marginTop="@dimen/margin_medium"
+                android:layout_weight="1"
+                android:text="Delete" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>
