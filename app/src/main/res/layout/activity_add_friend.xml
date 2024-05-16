@@ -1,9 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Posts.AddFriendActivity">
+    android:padding="16dp"
+    >
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <!-- Search Bar -->
+       <EditText
+        android:id="@+id/editTextSearch"
+        style="@style/TextAppearance.Body2"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:gravity="top"
+        android:hint="Search a friend..."
+        android:padding="@dimen/padding_small" />
+
+    <!-- Search Button -->
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/friendSearchBtn"
+        android:layout_below="@id/editTextSearch"
+        android:layout_height="48dp"
+        style="@style/AppButtonStyle"
+        android:layout_marginTop="@dimen/margin_large"
+        android:text="Search" />
+
+    <!-- Search Results RecyclerView -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewSearchResults"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/friendSearchBtn"
+        android:visibility="gone" />
+
+</RelativeLayout>
