@@ -32,6 +32,7 @@ import com.hasan.storyvibrance.Posts.EditPostActivity;
 import com.hasan.storyvibrance.R;
 import com.hasan.storyvibrance.Utility.DialogUtils;
 import com.hasan.storyvibrance.Utility.GetUserName;
+import com.hasan.storyvibrance.Utility.NameCapitalize;
 import com.hasan.storyvibrance.Utility.PostAdapterUtils.CommentBottomSheetDialog;
 import com.hasan.storyvibrance.Utility.PostAdapterUtils.DeletePostUtils;
 import com.hasan.storyvibrance.Utility.PostAdapterUtils.LikeHandler;
@@ -83,7 +84,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
         String postAuthor = post.getAuthorUsername();
         UserDataFetcher userDataFetcher = new UserDataFetcher(db);
         userDataFetcher.fetchUserData(postAuthor, (name, profileImg) -> {
-            holder.authorName.setText(name);
+            String fullName = NameCapitalize.capitalize(name);
+            holder.authorName.setText(fullName);
             Picasso.get().load(profileImg).into(holder.authorImg);
         });
 

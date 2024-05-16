@@ -31,6 +31,7 @@ import com.hasan.storyvibrance.Model.ProfilePostModel;
 import com.hasan.storyvibrance.Profile.UpdateProfileActivity;
 import com.hasan.storyvibrance.R;
 import com.hasan.storyvibrance.Utility.GetUserName;
+import com.hasan.storyvibrance.Utility.NameCapitalize;
 import com.hasan.storyvibrance.databinding.FragmentProfileBinding;
 import com.squareup.picasso.Picasso;
 
@@ -120,8 +121,8 @@ public class FragmentProfile extends Fragment {
         String personName = documentSnapshot.getString("name");
         String userBio = documentSnapshot.getString("bio");
         String profileImgUrl = documentSnapshot.getString("ProfileImg");
-
-        binding.setPersonName(personName);
+        String fullName = NameCapitalize.capitalize(personName);
+        binding.setPersonName(fullName);
         binding.setUsername(documentSnapshot.getId());
         binding.setUserBio(userBio != null ? userBio : getString(R.string.about_me));
 

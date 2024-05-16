@@ -1,19 +1,18 @@
 package com.hasan.storyvibrance.Profile;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
-import androidx.preference.PreferenceManager;
 
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.hasan.storyvibrance.R;
 import com.hasan.storyvibrance.Utility.DataBaseError;
 import com.hasan.storyvibrance.Utility.GetUserName;
+import com.hasan.storyvibrance.Utility.NameCapitalize;
 import com.hasan.storyvibrance.databinding.ActivityUpdateProfileBinding;
 
 import java.util.HashMap;
@@ -43,7 +42,8 @@ public class UpdateProfileActivity extends AppCompatActivity {
                     String userBio = documentSnapshot.getString("bio");
                     // Set user data to UI
                     if (personName != null) {
-                        binding.setFullName(personName);
+                        String myName = NameCapitalize.capitalize(personName);
+                        binding.setFullName(myName);
                     } else {
                         binding.setFullName(getString(R.string.full_name));
                     }
