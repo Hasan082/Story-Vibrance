@@ -3,16 +3,14 @@ package com.hasan.storyvibrance.Posts;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.hasan.storyvibrance.Controller.FriendSearchAdapter;
 import com.hasan.storyvibrance.Model.FriendSearchModel;
 import com.hasan.storyvibrance.R;
@@ -34,11 +32,15 @@ public class AddFriendActivity extends AppCompatActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_add_friend);
         db = FirebaseFirestore.getInstance();
 
-        setupSearchEditText();
-        setupRecyclerView();
+        setupViews();
     }
 
-    private void setupSearchEditText() {
+    private void setupViews() {
+        binding.recyclerViewSearchResults.setLayoutManager(new LinearLayoutManager(this));
+        searchResults = new ArrayList<>();
+        friendSearchAdapter = new FriendSearchAdapter(searchResults);
+        binding.recyclerViewSearchResults.setAdapter(friendSearchAdapter);
+
         binding.editTextSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -53,62 +55,56 @@ public class AddFriendActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 String searchText = s.toString().trim();
-                if (searchText.length() >= 2) {
-                    searchFriendsByName(searchText.toLowerCase()); // Convert search text to lower case
+                if (searchText.length() < 2) {
+                    clearSearchResults();
+                } else {
+                    searchFriendsByPattern(searchText);
                 }
+            }
+
+            private void clearSearchResults() {
+                searchResults.clear();
+                friendSearchAdapter.notifyDataSetChanged();
             }
         });
     }
 
-    private void setupRecyclerView() {
-        searchResults = new ArrayList<>();
-        friendSearchAdapter = new FriendSearchAdapter(searchResults);
-        binding.recyclerViewSearchResults.setAdapter(friendSearchAdapter);
-    }
-
-//    private void searchFriendsByName(String searchQuery) {
-//        db.collection("userdata").whereEqualTo("name", searchQuery)
-//                .get()
-//                .addOnSuccessListener(this::handleSearchSuccess)
-//                .addOnFailureListener(this::handleSearchFailure);
-//    }
-
-//    private void searchFriendsByName(String searchQuery) {
-//        db.collection("userdata").whereGreaterThanOrEqualTo("name", searchQuery)
-//                .whereLessThan("name", searchQuery + "\uf8ff")
-//                .get()
-//                .addOnSuccessListener(this::handleSearchSuccess)
-//                .addOnFailureListener(this::handleSearchFailure);
-//    }
-
-    private void searchFriendsByName(String searchQuery) {
-        // Convert the search query to lowercase
-        String lowercaseQuery = searchQuery.toLowerCase();
-
+    private void searchFriendsByPattern(String pattern) {
         db.collection("userdata")
-                .whereGreaterThanOrEqualTo("name", lowercaseQuery)
-                .whereLessThanOrEqualTo("name", lowercaseQuery + "\uf8ff")
                 .get()
-                .addOnSuccessListener(this::handleSearchSuccess)
-                .addOnFailureListener(this::handleSearchFailure);
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    List<FriendSearchModel> filteredResults = new ArrayList<>();
+                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                        FriendSearchModel friendSearchModel = document.toObject(FriendSearchModel.class);
+                        if (matchesPattern(friendSearchModel.getName(), pattern)) {
+                            filteredResults.add(friendSearchModel);
+                        }
+                    }
+                    updateRecyclerView(filteredResults);
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(AddFriendActivity.this, "Failed to search for friends", Toast.LENGTH_SHORT).show();
+                });
     }
 
-
-
-
-
-
-    private void handleSearchSuccess(QuerySnapshot queryDocumentSnapshots) {
-        searchResults.clear();
-        for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-            FriendSearchModel friendSearchModel = document.toObject(FriendSearchModel.class);
-            searchResults.add(friendSearchModel);
-            Log.d("Fetch Friend data", "FriendSearchModel: " + friendSearchModel.toString());
+    private boolean matchesPattern(String name, String pattern) {
+        if (name == null || name.isEmpty()) {
+            return false;
         }
-        friendSearchAdapter.notifyDataSetChanged();
+        name = name.toLowerCase();
+        pattern = pattern.toLowerCase();
+        for (int i = 0; i <= name.length() - pattern.length(); i++) {
+            if (name.substring(i, i + pattern.length()).contains(pattern)) {
+                return true;
+            }
+        }
+        return false;
     }
 
-    private void handleSearchFailure(@NonNull Exception e) {
-        Toast.makeText(AddFriendActivity.this, "Failed to search for friends", Toast.LENGTH_SHORT).show();
+
+    private void updateRecyclerView(List<FriendSearchModel> searchResults) {
+        this.searchResults.clear();
+        this.searchResults.addAll(searchResults);
+        friendSearchAdapter.notifyDataSetChanged();
     }
 }

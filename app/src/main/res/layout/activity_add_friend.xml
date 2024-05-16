@@ -15,6 +15,7 @@
         <!-- Search Bar -->
         <EditText
             android:id="@+id/editTextSearch"
+            android:textSize="16sp"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:gravity="top"
@@ -22,22 +23,13 @@
             android:hint="Search a friend..."
             android:padding="@dimen/padding_small" />
 
-        <!-- Search Button -->
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/friendSearchBtn"
-            android:layout_below="@id/editTextSearch"
-            android:layout_height="48dp"
-            style="@style/AppButtonStyle"
-            android:layout_marginTop="@dimen/margin_large"
-            android:text="Search" />
-
         <!-- Search Results RecyclerView -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewSearchResults"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="@dimen/margin_small"
-            android:layout_below="@id/friendSearchBtn"
+            android:layout_below="@id/editTextSearch"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             />
 
