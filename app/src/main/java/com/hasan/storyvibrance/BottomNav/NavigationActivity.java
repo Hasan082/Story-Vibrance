@@ -92,10 +92,6 @@ public class NavigationActivity extends AppCompatActivity {
         binding.addPost.setOnClickListener(v -> startActivity(new Intent(NavigationActivity.this, AddPostActivity.class)));
 
 
-//
-//        TextView personName = binding.drawerLayout.findViewById(R.id.drawerHeader).findViewById(R.id.personName);
-//        personName.setText();
-
         String userName = GetUserName.getUsernameFromSharedPreferences(this);
         db.collection("userdata").document(userName).get().addOnSuccessListener(documentSnapshot -> {
             if (documentSnapshot.exists()) {
@@ -107,7 +103,7 @@ public class NavigationActivity extends AppCompatActivity {
                 ImageView drawerHeaderImg = binding.drawerLayout.findViewById(R.id.drawerHeaderImg);
                 TextView personNmId = binding.drawerLayout.findViewById(R.id.personName);
                 TextView personEmailAd = binding.drawerLayout.findViewById(R.id.personEmail);
-                if (appbarImg != null && profileUri != null)  Picasso.get().load(profileUri).resize(150, 150).centerCrop().into(appbarImg);
+                if (appbarImg != null && profileUri != null)  Picasso.get().load(profileUri).into(appbarImg);
                 else Log.e("appbarImg", "appbarImg or profileUri is null");
                 if (drawerHeaderImg != null && profileUri != null)  Picasso.get().load(profileUri).resize(250, 250).centerCrop().into(drawerHeaderImg);
                 else Log.e("appbarImg", "appbarImg or profileUri is null");

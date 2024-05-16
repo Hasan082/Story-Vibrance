@@ -2,15 +2,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/home"
+        android:id="@+id/search_bar"
         android:title="Search Post"
-        android:icon="@drawable/nav_home"
+        android:icon="@drawable/nav_search"
         android:iconTint="@color/white"
         />
     <item
         android:id="@+id/search_friend"
-        android:title="Search Friend"
-        android:icon="@drawable/person"
+        android:title="Add Friend"
+        android:icon="@drawable/add_friend"
         android:iconTint="@color/white"
         />
 
@@ -23,7 +23,7 @@
     <item
         android:id="@+id/logout"
         android:title="Logout"
-        android:icon="@drawable/nav_person"
+        android:icon="@drawable/logout"
         android:iconTint="@color/white"
         />
 </menu>
