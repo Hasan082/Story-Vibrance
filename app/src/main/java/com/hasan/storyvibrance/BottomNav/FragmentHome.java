@@ -94,7 +94,7 @@ public class FragmentHome extends Fragment {
         // Set the adapter to the post RecyclerView
         binding.postRecyclerview.setAdapter(postAdapter);
 
-//         Set up a real-time listener on the entire "posts" collection
+        // Set up a real-time listener on the entire "posts" collection
         db.collection("posts").addSnapshotListener((querySnapshot, error) -> {
             if (error != null) {
                 Log.e("hello", "Listen failed.", error);

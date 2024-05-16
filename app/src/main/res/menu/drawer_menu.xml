@@ -2,13 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/search_bar"
+        android:id="@+id/search_post"
         android:title="Search Post"
         android:icon="@drawable/nav_search"
         android:iconTint="@color/white"
         />
     <item
-        android:id="@+id/search_friend"
+        android:id="@+id/add_friend"
         android:title="Add Friend"
         android:icon="@drawable/add_friend"
         android:iconTint="@color/white"

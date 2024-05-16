@@ -16,6 +16,7 @@ import androidx.preference.PreferenceManager;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.hasan.storyvibrance.Posts.AddPostActivity;
 import com.hasan.storyvibrance.Posts.SavedPostActivity;
+import com.hasan.storyvibrance.Posts.SearchPostActivity;
 import com.hasan.storyvibrance.R;
 import com.hasan.storyvibrance.Utility.GetUserName;
 import com.hasan.storyvibrance.auth.LoginActivity;
@@ -44,6 +45,12 @@ public class NavigationActivity extends AppCompatActivity {
         //Drawer NAV FUNCTION======================
 
         binding.drawerNavView.setNavigationItemSelectedListener(item -> {
+            if (item.getItemId() == R.id.search_post) {
+                startActivity(new Intent(NavigationActivity.this, SearchPostActivity.class));
+            }
+            if (item.getItemId() == R.id.add_friend) {
+                startActivity(new Intent(NavigationActivity.this, SearchPostActivity.class));
+            }
             //LOGOUT=====================
             if (item.getItemId() == R.id.logout) {
                 sPrefEdit.remove("uid");
@@ -56,6 +63,7 @@ public class NavigationActivity extends AppCompatActivity {
             if (item.getItemId() == R.id.SavedPost) {
                 startActivity(new Intent(NavigationActivity.this, SavedPostActivity.class));
             }
+
             binding.drawerLayout.closeDrawer(GravityCompat.START);
             return true;
         });

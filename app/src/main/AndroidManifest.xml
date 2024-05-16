@@ -44,6 +44,12 @@
         android:theme="@style/Theme.StoryVibrance"
         tools:targetApi="31">
         <activity
+            android:name=".Posts.AddFriendActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Posts.SearchPostActivity"
+            android:exported="false" />
+        <activity
             android:name=".Posts.EditPostActivity"
             android:exported="false" />
         <activity
