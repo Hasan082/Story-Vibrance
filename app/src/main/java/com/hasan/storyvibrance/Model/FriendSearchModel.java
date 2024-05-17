@@ -5,16 +5,18 @@ public class FriendSearchModel {
     private String name;
     private String email;
     private String ProfileImg;
-
+    private String status;
 
     public FriendSearchModel() {
     }
 
-    public FriendSearchModel(String id, String name, String email, String profileImg) {
+    public FriendSearchModel(String id, String name, String email, String profileImg, String status) {
         this.id = id;
         this.name = name;
         this.email = email;
         ProfileImg = profileImg;
+        this.status = status;
+
     }
 
     public String getId() {

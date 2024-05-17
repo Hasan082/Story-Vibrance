@@ -1,7 +1,7 @@
 package com.hasan.storyvibrance.Model;
 
 public class FriendRequestModel {
-    private String requestId;
+    private String recipientId;
     private String senderId;
     private String senderName;
     private String senderProfileImageUrl;
@@ -10,7 +10,7 @@ public class FriendRequestModel {
 
     // Constructors, getters, and setters
 
-    public FriendRequestModel(long requestSendTime) {
+    public FriendRequestModel() {
 
     }
 
@@ -22,8 +22,8 @@ public class FriendRequestModel {
         this.requestSendTime = requestSendTime;
     }
 
-    public FriendRequestModel(String requestId, String senderId, String senderName, String senderProfileImageUrl, long requestSendTime) {
-        this.requestId = requestId;
+    public FriendRequestModel(String recipientId, String senderId, String senderName, String senderProfileImageUrl, long requestSendTime) {
+        this.recipientId = recipientId;
         this.senderId = senderId;
         this.senderName = senderName;
         this.senderProfileImageUrl = senderProfileImageUrl;
@@ -31,12 +31,12 @@ public class FriendRequestModel {
 
     }
 
-    public String getRequestId() {
-        return requestId;
+    public String getRecipientId() {
+        return recipientId;
     }
 
-    public void setRequestId(String requestId) {
-        this.requestId = requestId;
+    public void setRecipientId(String requestId) {
+        this.recipientId = recipientId;
     }
 
     public String getSenderId() {

@@ -19,7 +19,7 @@ import com.hasan.storyvibrance.Controller.StoryAdapter;
 import com.hasan.storyvibrance.Messenger.MessengerActivity;
 import com.hasan.storyvibrance.Model.PostModel;
 import com.hasan.storyvibrance.Model.StoryModel;
-import com.hasan.storyvibrance.Notification.NotificationActivity;
+import com.hasan.storyvibrance.Posts.ActivityFriendRequests;
 import com.hasan.storyvibrance.R;
 import com.hasan.storyvibrance.Utility.GetUserName;
 import com.hasan.storyvibrance.Utility.PostSorter;
@@ -48,7 +48,7 @@ public class FragmentHome extends Fragment {
         binding.setLifecycleOwner(this);
 
         //CREATE FIREBASE INSTANCES==========
-        db=FirebaseFirestore.getInstance();
+        db = FirebaseFirestore.getInstance();
         //CREATE sharedPreferences INSTANCES==========
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
         String username = GetUserName.getUsernameFromSharedPreferences(requireContext());
@@ -59,20 +59,27 @@ public class FragmentHome extends Fragment {
         });
 
         // Set up click listener for navigating to NotificationActivity on notification icon click
+//        binding.customAppBar.findViewById(R.id.notificationIcon).setOnClickListener(v -> {
+//            // Start the NotificationActivity
+//            startActivity(new Intent(getActivity(), NotificationActivity.class));
+//        });
+
+        // Set up click listener for navigating to NotificationActivity on notification icon click
         binding.customAppBar.findViewById(R.id.notificationIcon).setOnClickListener(v -> {
             // Start the NotificationActivity
-            startActivity(new Intent(getActivity(), NotificationActivity.class));
+            startActivity(new Intent(getActivity(), ActivityFriendRequests.class));
         });
+
+
+
+
+
 
         // Set up click listener for navigating to MessengerActivity on messenger icon click
         binding.customAppBar.findViewById(R.id.messengerIcon).setOnClickListener(v -> {
             // Start the MessengerActivity
             startActivity(new Intent(getActivity(), MessengerActivity.class));
         });
-
-
-
-
 
 
         // Set up story RecyclerView
@@ -96,35 +103,35 @@ public class FragmentHome extends Fragment {
 
         // Set up a real-time listener on the entire "posts" collection
         db.collection("posts").addSnapshotListener((querySnapshot, error) -> {
-            if (error != null) {
-                Log.e("hello", "Listen failed.", error);
-                return;
-            }
-            // Clear the postMap before adding new posts
-            postMap.clear();
+                    if (error != null) {
+                        Log.e("hello", "Listen failed.", error);
+                        return;
+                    }
+                    // Clear the postMap before adding new posts
+                    postMap.clear();
 
-            assert querySnapshot != null;
-            for (QueryDocumentSnapshot doc : querySnapshot) {
-                if (doc.exists()) {
-                    String postId = doc.getId();
-                    PostModel post = doc.toObject(PostModel.class);
-                    post.setPostId(postId);
-                    postMap.put(postId, post);
-                } else {
-                    Log.d("postError", "No such document");
+                    assert querySnapshot != null;
+                    for (QueryDocumentSnapshot doc : querySnapshot) {
+                        if (doc.exists()) {
+                            String postId = doc.getId();
+                            PostModel post = doc.toObject(PostModel.class);
+                            post.setPostId(postId);
+                            postMap.put(postId, post);
+                        } else {
+                            Log.d("postError", "No such document");
+                        }
+                    }
+
+                    // Create a list of PostModel objects from the map
+                    ArrayList<PostModel> postModels = new ArrayList<>(postMap.values());
+
+                    // Sort the postModels list
+                    PostSorter.sortByTimestampDescending(postModels);
+
+                    // Update the data in the adapter
+                    postAdapter.updateData(postModels);
+                    postAdapter.notifyDataSetChanged();
                 }
-            }
-
-            // Create a list of PostModel objects from the map
-            ArrayList<PostModel> postModels = new ArrayList<>(postMap.values());
-
-            // Sort the postModels list
-            PostSorter.sortByTimestampDescending(postModels);
-
-            // Update the data in the adapter
-            postAdapter.updateData(postModels);
-            postAdapter.notifyDataSetChanged();
-        }
         );
     }
 
@@ -154,7 +161,6 @@ public class FragmentHome extends Fragment {
         storyModels.add(new StoryModel("Hafizul Islam", R.drawable.hasan, R.drawable.hasan));
         return storyModels;
     }
-
 
 
 }

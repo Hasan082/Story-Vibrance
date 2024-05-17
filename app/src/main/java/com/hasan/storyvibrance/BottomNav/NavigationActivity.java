@@ -20,6 +20,7 @@ import com.hasan.storyvibrance.Posts.SavedPostActivity;
 import com.hasan.storyvibrance.Posts.SearchPostActivity;
 import com.hasan.storyvibrance.R;
 import com.hasan.storyvibrance.Utility.GetUserName;
+import com.hasan.storyvibrance.Utility.NameCapitalize;
 import com.hasan.storyvibrance.auth.LoginActivity;
 import com.hasan.storyvibrance.databinding.ActivityNavigationBinding;
 import com.squareup.picasso.Picasso;
@@ -116,7 +117,7 @@ public class NavigationActivity extends AppCompatActivity {
                 else Log.e("appbarImg", "appbarImg or profileUri is null");
                 if (drawerHeaderImg != null && profileUri != null)  Picasso.get().load(profileUri).resize(250, 250).centerCrop().into(drawerHeaderImg);
                 else Log.e("appbarImg", "appbarImg or profileUri is null");
-                if (personNmId != null && personName != null)  personNmId.setText(personName);
+                if (personNmId != null && personName != null)  personNmId.setText(NameCapitalize.capitalize(personName));
                 else Log.e("personNmId", "personNmId is null");
                 if (personEmailAd != null && personemail != null)  personEmailAd.setText(personemail);
                 else Log.e("personNmId", "personNmId is null");

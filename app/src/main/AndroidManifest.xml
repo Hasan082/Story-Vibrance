@@ -43,8 +43,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.StoryVibrance"
         tools:targetApi="31">
-        <activity
-            android:name=".Posts.activityFriendRequests"
+        <activity android:name=".Posts.ActivityFriendRequests"
             android:exported="false" />
         <activity
             android:name=".Posts.AddFriendActivity"

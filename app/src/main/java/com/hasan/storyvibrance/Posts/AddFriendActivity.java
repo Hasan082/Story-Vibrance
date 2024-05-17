@@ -38,12 +38,14 @@ public class AddFriendActivity extends AppCompatActivity {
         });
 
         setupViews();
+
+
     }
 
     private void setupViews() {
         binding.recyclerViewSearchResults.setLayoutManager(new LinearLayoutManager(this));
         searchResults = new ArrayList<>();
-        friendSearchAdapter = new FriendSearchAdapter(searchResults);
+        friendSearchAdapter = new FriendSearchAdapter(this, searchResults);
         binding.recyclerViewSearchResults.setAdapter(friendSearchAdapter);
 
         binding.editTextSearch.addTextChangedListener(new TextWatcher() {
