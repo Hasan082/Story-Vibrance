@@ -1,20 +1,18 @@
 package com.hasan.storyvibrance.Posts;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.hasan.storyvibrance.Controller.FriendRequestsAdapter;
 import com.hasan.storyvibrance.Model.FriendRequestModel;
 import com.hasan.storyvibrance.R;
@@ -31,15 +29,23 @@ public class ActivityFriendRequests extends AppCompatActivity {
 
     private FirebaseFirestore db;
 
+    ShimmerFrameLayout shimmerFrameLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_friend_requests);
 
+
+        // Initially hide the RecyclerView and show the shimmer effect
+        binding.recyclerViewFriendRequests.setVisibility(View.GONE);
+        // Find the ShimmerFrameLayout
+        shimmerFrameLayout = binding.shimmerLayout;
+        // Start shimmer animation
+        shimmerFrameLayout.startShimmer();
+
         //return back to main page
-        binding.backBtn.setOnClickListener(v->{
-            getOnBackPressedDispatcher().onBackPressed();
-        });
+        binding.backBtn.setOnClickListener(v-> getOnBackPressedDispatcher().onBackPressed());
 
         // Initialize Firestore
         db = FirebaseFirestore.getInstance();
@@ -65,31 +71,38 @@ public class ActivityFriendRequests extends AppCompatActivity {
                 .whereEqualTo("recipientId", recipientId)
                 .whereEqualTo("status", "pending")
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            List<FriendRequestModel> friendRequests = new ArrayList<>();
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                // Convert Firestore document to FriendRequestModel
-                                Log.d("Friend Name", "onComplete: " + document.get("senderId"));
-                                FriendRequestModel friendRequest = document.toObject(FriendRequestModel.class);
-                                friendRequest.setRequestId(document.getId());
-                                friendRequests.add(friendRequest);
-                            }
-                            // Update RecyclerView with fetched friend requests
-                            friendRequestsAdapter.updateFriendRequests(friendRequests);
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        List<FriendRequestModel> friendRequests = new ArrayList<>();
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            // Convert Firestore document to FriendRequestModel
+                            Log.d("Friend Name", "onComplete: " + document.get("senderId"));
+                            FriendRequestModel friendRequest = document.toObject(FriendRequestModel.class);
+                            friendRequest.setRequestId(document.getId());
+                            friendRequests.add(friendRequest);
+                        }
+                        // Update RecyclerView with fetched friend requests
+                        friendRequestsAdapter.updateFriendRequests(friendRequests);
+
+                        // Stop shimmer animation after data is loaded
+                        new Handler().postDelayed(() -> {
                             // Show message if there are no friend requests
                             if (friendRequests.isEmpty()) {
                                 binding.noPendingRequestMessage.setVisibility(View.VISIBLE);
                             } else {
                                 binding.noPendingRequestMessage.setVisibility(View.GONE);
                             }
-                        } else {
-                            // Log error or handle failure
-                            Log.e("Friend Request", "Error getting friend requests", task.getException());
-                        }
+                            binding.recyclerViewFriendRequests.setVisibility(View.VISIBLE);
+                            shimmerFrameLayout.setVisibility(View.GONE);
+                        }, 2500);
+
+                    } else {
+                        // Log error or handle failure
+                        Log.e("Friend Request", "Error getting friend requests", task.getException());
                     }
+
+
+
                 });
     }
 
