@@ -1,6 +1,8 @@
 package com.hasan.storyvibrance.Posts;
+
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,7 +27,6 @@ import java.util.List;
 public class ActivityFriendRequests extends AppCompatActivity {
 
     ActivityFriendRequestsBinding binding;
-    private RecyclerView recyclerViewFriendRequests;
     private FriendRequestsAdapter friendRequestsAdapter;
 
     private FirebaseFirestore db;
@@ -33,7 +34,6 @@ public class ActivityFriendRequests extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_friend_requests);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_friend_requests);
 
         //return back to main page
@@ -46,7 +46,7 @@ public class ActivityFriendRequests extends AppCompatActivity {
         String recipientId = GetUserName.getUsernameFromSharedPreferences(this);
 
         // Find RecyclerView in layout
-        recyclerViewFriendRequests = findViewById(R.id.recyclerViewFriendRequests);
+        RecyclerView recyclerViewFriendRequests = findViewById(R.id.recyclerViewFriendRequests);
 
         // Set up RecyclerView
         recyclerViewFriendRequests.setLayoutManager(new LinearLayoutManager(this));
@@ -74,10 +74,17 @@ public class ActivityFriendRequests extends AppCompatActivity {
                                 // Convert Firestore document to FriendRequestModel
                                 Log.d("Friend Name", "onComplete: " + document.get("senderId"));
                                 FriendRequestModel friendRequest = document.toObject(FriendRequestModel.class);
+                                friendRequest.setRequestId(document.getId());
                                 friendRequests.add(friendRequest);
                             }
                             // Update RecyclerView with fetched friend requests
                             friendRequestsAdapter.updateFriendRequests(friendRequests);
+                            // Show message if there are no friend requests
+                            if (friendRequests.isEmpty()) {
+                                binding.noPendingRequestMessage.setVisibility(View.VISIBLE);
+                            } else {
+                                binding.noPendingRequestMessage.setVisibility(View.GONE);
+                            }
                         } else {
                             // Log error or handle failure
                             Log.e("Friend Request", "Error getting friend requests", task.getException());
@@ -85,5 +92,10 @@ public class ActivityFriendRequests extends AppCompatActivity {
                     }
                 });
     }
+
+
+
+
+
 
 }

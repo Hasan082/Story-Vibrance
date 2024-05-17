@@ -1,6 +1,7 @@
 package com.hasan.storyvibrance.Model;
 
 public class FriendRequestModel {
+    private String requestId;
     private String recipientId;
     private String senderId;
     private String senderName;
@@ -29,6 +30,14 @@ public class FriendRequestModel {
         this.senderProfileImageUrl = senderProfileImageUrl;
         this.requestSendTime = requestSendTime;
 
+    }
+
+    public String getRequestId() {
+        return requestId;
+    }
+
+    public void setRequestId(String requestId) {
+        this.requestId = requestId;
     }
 
     public String getRecipientId() {

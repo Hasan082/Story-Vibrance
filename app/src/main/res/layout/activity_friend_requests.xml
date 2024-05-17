@@ -42,7 +42,7 @@
 
         <TextView
             style="@style/TextAppearance.Headline3"
-            android:id="@+id/noFriendMessage"
+            android:id="@+id/noPendingRequestMessage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/backWrapper"
@@ -55,7 +55,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewFriendRequests"
             android:layout_width="match_parent"
-            android:layout_below="@+id/noFriendMessage"
+            android:layout_below="@+id/noPendingRequestMessage"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:layout_height="match_parent" />
 

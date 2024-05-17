@@ -5,7 +5,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatButton;
@@ -48,41 +50,80 @@ public class FriendRequestsAdapter extends RecyclerView.Adapter<FriendRequestsAd
         db = FirebaseFirestore.getInstance();
 
         String currentUsername = GetUserName.getUsernameFromSharedPreferences(context);
-        hasPendingFriendRequest(currentUsername, new FriendCheckCallback() {
-            @Override
-            public void onFriendCheckResult(boolean hasPendingRequest) {
+        hasPendingFriendRequest(currentUsername, hasPendingRequest -> {
 
-                if (hasPendingRequest) {
-                    String senderUserId = friendRequest.getSenderId();
-                    Log.d("senderUserId check", "onFriendCheckResult: " + senderUserId);
-                    UserDataFetcher userDataFetcher = new UserDataFetcher(db);
-                    userDataFetcher.fetchUserData(senderUserId, (name, profileImg) -> {
-                        String fullName = NameCapitalize.capitalize(name);
-                        Log.d("onFriendCheckResultname", "onFriendCheckResult: " + fullName);
-                        Log.d("onFriendCheckResul profileImg", "onFriendCheckResult: " + profileImg);
-                        // Update the sender's name and profile image URL in the FriendRequestModel
-                        friendRequest.setSenderName(fullName);
-                        friendRequest.setSenderProfileImageUrl(profileImg);
+            if (hasPendingRequest) {
+                String senderUserId = friendRequest.getSenderId();
+                UserDataFetcher userDataFetcher = new UserDataFetcher(db);
+                userDataFetcher.fetchUserData(senderUserId, (name, profileImg) -> {
+                    String fullName = NameCapitalize.capitalize(name);
+                    // Update the sender's name and profile image URL in the FriendRequestModel
+                    friendRequest.setSenderName(fullName);
+                    friendRequest.setSenderProfileImageUrl(profileImg);
 
-                        // Now you can update the UI with the updated data
-                        holder.textViewFriendRequestName.setText(fullName);
-                        Picasso.get().load(friendRequest.getSenderProfileImageUrl()).placeholder(R.drawable.edit_person)
-                                .error(R.drawable.edit_person)
-                                .into(holder.friendRequestSenderImg);
-                    });
+                    // Update the UI with the updated data
+                    holder.textViewFriendRequestName.setText(fullName);
+                    Picasso.get().load(friendRequest.getSenderProfileImageUrl()).placeholder(R.drawable.edit_person)
+                            .error(R.drawable.edit_person)
+                            .into(holder.friendRequestSenderImg);
+                });
 
-                    holder.textViewFriendRequestName.setText(friendRequest.getSenderName());
-                    Picasso.get().load(friendRequest.getSenderProfileImageUrl()).into(holder.friendRequestSenderImg);
+                holder.textViewFriendRequestName.setText(friendRequest.getSenderName());
+                Picasso.get().load(friendRequest.getSenderProfileImageUrl()).into(holder.friendRequestSenderImg);
 
-                } else {
-                    holder.noFriendMessage.setVisibility(View.VISIBLE);
-                    holder.recyclerViewFriendRequests.setVisibility(View.GONE);
-                }
+                //Accept friend request================
+                holder.friendAcceptBtn.setOnClickListener(v-> {
+                    // Handle accept button click
+                    updateFriendRequestStatus(friendRequest.getRequestId(), holder);
+                });
+                //delete friend request=================
+                holder.friendDeleteBtn.setOnClickListener(v-> {
+                    // Handle delete button click
+                    deleteFriendRequest(friendRequest.getRequestId(), position);
+                });
             }
-
         });
 
 
+    }
+
+    private void deleteFriendRequest(String requestId, int position) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("friendRequests").document(requestId)
+                .delete()
+                .addOnSuccessListener(aVoid -> {
+            // Successfully deleted friend request
+            Toast.makeText(context, "Request deleted successfully", Toast.LENGTH_SHORT).show();
+            Log.d("deleteRequest", "Friend request deleted successfully");
+            removeItem(position);
+        }).addOnFailureListener(e-> {
+            // Failed to delete friend request
+            Log.e("deleteRequest", "Error deleting friend request", e);
+        });
+    }
+
+    private void removeItem(int position) {
+        friendRequests.remove(position);
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position, friendRequests.size());
+    }
+
+
+    private void updateFriendRequestStatus(String requestId, ViewHolder holder) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("friendRequests").document(requestId)
+                .update("status", "confirmed")
+                .addOnSuccessListener(aVoid -> {
+            // Successfully updated status
+            Log.d("updateStatus", "Friend request status updated successfully");
+            Toast.makeText(context, "Friend added successfully", Toast.LENGTH_SHORT).show();
+            // Update the UI to show the acceptance message and hide the buttons
+            holder.requestBtnWrapper.setVisibility(View.GONE);
+            holder.friendAdded.setVisibility(View.VISIBLE);
+        }).addOnFailureListener(e -> {
+            // Failed to update status
+            Log.e("updateStatus", "Error updating friend request status", e);
+        });
     }
 
 
@@ -135,9 +176,10 @@ public class FriendRequestsAdapter extends RecyclerView.Adapter<FriendRequestsAd
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         CircleImageView friendRequestSenderImg;
-        TextView textViewFriendRequestName, noFriendMessage;
+        TextView textViewFriendRequestName, friendAdded;
         AppCompatButton friendAcceptBtn, friendDeleteBtn;
-        RecyclerView recyclerViewFriendRequests;
+
+        LinearLayout requestBtnWrapper;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -145,8 +187,8 @@ public class FriendRequestsAdapter extends RecyclerView.Adapter<FriendRequestsAd
             textViewFriendRequestName = itemView.findViewById(R.id.textViewFriendRequestName);
             friendAcceptBtn = itemView.findViewById(R.id.friendAcceptBtn);
             friendDeleteBtn = itemView.findViewById(R.id.friendDeleteBtn);
-            noFriendMessage = itemView.findViewById(R.id.noFriendMessage);
-            recyclerViewFriendRequests = itemView.findViewById(R.id.recyclerViewFriendRequests);
+            friendAdded = itemView.findViewById(R.id.friendAdded);
+            requestBtnWrapper = itemView.findViewById(R.id.requestBtnWrapper);
         }
     }
 }
