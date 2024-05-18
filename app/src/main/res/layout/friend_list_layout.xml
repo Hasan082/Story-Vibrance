@@ -4,7 +4,8 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
-    android:padding="16dp">
+    android:background="@drawable/rounded_gray_bg"
+    android:padding="12dp">
 
     <!-- Friend's Profile Picture -->
     <de.hdodenhof.circleimageview.CircleImageView
@@ -24,6 +25,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:layout_gravity="center_horizontal"
         android:orientation="vertical">
 
         <!-- Friend's Name -->

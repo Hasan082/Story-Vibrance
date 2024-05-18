@@ -71,12 +71,8 @@ public class FriendRequestsAdapter extends RecyclerView.Adapter<FriendRequestsAd
                             .into(holder.friendRequestSenderImg);
                 });
 
-                holder.textViewFriendRequestName.setText(friendRequest.getSenderName());
-                Picasso.get().load(friendRequest.getSenderProfileImageUrl()).into(holder.friendRequestSenderImg);
-                // Convert the long time to a string representation using TimeUtils
                 Log.d("timeAgo", "onBindViewHolder: " + friendRequest.getTimestamp());
                 String timeAgo = TimeUtils.getTimeAgo(Long.parseLong(String.valueOf(friendRequest.getTimestamp())));
-
                 holder.friendRequestTime.setText(timeAgo);
 
                 //Accept friend request================
@@ -115,7 +111,6 @@ public class FriendRequestsAdapter extends RecyclerView.Adapter<FriendRequestsAd
         notifyItemRemoved(position);
         notifyItemRangeChanged(position, friendRequests.size());
     }
-
 
 
     private void updateFriendRequestStatus(String requestId, ViewHolder holder) {
