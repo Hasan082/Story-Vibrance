@@ -1,16 +1,19 @@
 package com.hasan.storyvibrance.Profile;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.hasan.storyvibrance.R;
 import com.hasan.storyvibrance.Utility.DataBaseError;
+import com.hasan.storyvibrance.Utility.FadeAnimator;
 import com.hasan.storyvibrance.Utility.GetUserName;
 import com.hasan.storyvibrance.Utility.NameCapitalize;
 import com.hasan.storyvibrance.databinding.ActivityUpdateProfileBinding;
@@ -23,14 +26,21 @@ public class UpdateProfileActivity extends AppCompatActivity {
 
     private ActivityUpdateProfileBinding binding;
     private FirebaseFirestore db;
+    ShimmerFrameLayout shimmerFrameLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_update_profile);
         db = FirebaseFirestore.getInstance();
+        // Find the ShimmerFrameLayout
+        shimmerFrameLayout = binding.shimmerLayout;
+        // Start shimmer animation
+        shimmerFrameLayout.startShimmer();
+        binding.editContentWrapper.setVisibility(View.GONE);
         // Get username from SharedPreferences
         String userName = GetUserName.getUsernameFromSharedPreferences(this);
+
 
         // Fetch user data from Firestore
         db.collection("userdata").document(userName).get().addOnCompleteListener(task -> {
@@ -53,7 +63,13 @@ public class UpdateProfileActivity extends AppCompatActivity {
                         binding.setUserBio(getString(R.string.about_me));
                     }
                     binding.setEmailAddress(userName);
-                    binding.spinner.setVisibility(View.GONE);
+//                    binding.spinner.setVisibility(View.GONE);
+                    // Stop shimmer animation after data is loaded
+                    new Handler().postDelayed(() -> {
+                        binding.editContentWrapper.setVisibility(View.GONE);
+                        FadeAnimator.showElement(binding.editContentWrapper);
+                        shimmerFrameLayout.setVisibility(View.GONE);
+                    }, 1000);
                 } else {
                     // Show error message if document does not exist
                     DataBaseError.showDatabaseErrorMessage(this);
@@ -72,6 +88,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
         binding.updateBtn.setOnClickListener(v -> {
             // Show loading spinner
             binding.spinner.setVisibility(View.VISIBLE);
+
             // Get username and update profile data
             updateProfileData(userName);
         });

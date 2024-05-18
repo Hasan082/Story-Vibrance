@@ -100,8 +100,9 @@ public class ActivityFriendRequests extends AppCompatActivity {
     }
 
 
-
-
-
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        shimmerFrameLayout.stopShimmer();
+    }
 }

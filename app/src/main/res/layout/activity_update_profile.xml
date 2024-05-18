@@ -24,6 +24,11 @@
         android:padding="16dp"
         tools:context=".Profile.UpdateProfileActivity">
 
+
+        <!--        Shimmer layout-->
+
+
+
         <!--Spinner show until data fully loaded-->
         <LinearLayout
             android:id="@+id/spinner"
@@ -46,7 +51,6 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_gravity="center"
-            android:layout_marginBottom="20dp"
             >
 
             <ImageView
@@ -68,7 +72,13 @@
                 android:textAlignment="center" />
         </LinearLayout>
 
-
+        <LinearLayout
+            android:id="@+id/editContentWrapper"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:alpha="0"
+            >
 
         <EditText
             android:id="@+id/personName"
@@ -109,6 +119,46 @@
             style="@style/AppButtonStyle"
             android:layout_marginTop="@dimen/margin_v_large"
             android:text="@string/update" />
+
+        </LinearLayout>
+
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmer_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="50dp"
+            tools:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <include layout="@layout/shimmer_effect_layout" />
+
+                <include layout="@layout/shimmer_effect_layout" />
+
+                <include layout="@layout/shimmer_effect_layout" />
+
+                <include layout="@layout/shimmer_effect_layout" />
+
+                <include layout="@layout/shimmer_effect_layout" />
+
+                <include layout="@layout/shimmer_effect_layout" />
+
+                <include layout="@layout/shimmer_effect_layout" />
+
+                <include layout="@layout/shimmer_effect_layout" />
+
+                <include layout="@layout/shimmer_effect_layout" />
+
+                <include layout="@layout/shimmer_effect_layout" />
+
+                <include layout="@layout/shimmer_effect_layout" />
+
+            </LinearLayout>
+
+        </com.facebook.shimmer.ShimmerFrameLayout>
 
     </LinearLayout>
 </layout>
