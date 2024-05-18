@@ -42,4 +42,5 @@
     <string name="update">Update</string>
     <string name="saved_post">Saved Post</string>
     <string name="saved_post_empty">You haven\'t saved any posts yet! Go back and start saving.</string>
+    <string name="don_t_have_any_friend">You don\'t have any friend yet. Make One?</string>
 </resources>

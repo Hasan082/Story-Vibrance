@@ -22,7 +22,9 @@ import com.hasan.storyvibrance.Utility.PostAdapterUtils.UserDataFetcher;
 import com.hasan.storyvibrance.Utility.TimeUtils;
 import com.squareup.picasso.Picasso;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -115,24 +117,27 @@ public class FriendRequestsAdapter extends RecyclerView.Adapter<FriendRequestsAd
     }
 
 
+
     private void updateFriendRequestStatus(String requestId, ViewHolder holder) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+        Map<String, Object> updates = new HashMap<>();
+        updates.put("status", "confirmed");
+        updates.put("timestamp", System.currentTimeMillis());
+
         db.collection("friendRequests").document(requestId)
-                .update("status", "confirmed")
+                .update(updates)
                 .addOnSuccessListener(aVoid -> {
-            // Successfully updated status
-            Log.d("updateStatus", "Friend request status updated successfully");
-            Toast.makeText(context, "Friend added successfully", Toast.LENGTH_SHORT).show();
-            // Update the UI to show the acceptance message and hide the buttons
-            holder.requestBtnWrapper.setVisibility(View.GONE);
-            holder.friendAdded.setVisibility(View.VISIBLE);
-        }).addOnFailureListener(e -> {
-            // Failed to update status
-            Log.e("updateStatus", "Error updating friend request status", e);
-        });
-
+                    // Successfully updated status
+                    Log.d("updateStatus", "Friend request status updated successfully");
+                    Toast.makeText(context, "Friend added successfully", Toast.LENGTH_SHORT).show();
+                    // Update the UI to show the acceptance message and hide the buttons
+                    holder.requestBtnWrapper.setVisibility(View.GONE);
+                    holder.friendAdded.setVisibility(View.VISIBLE);
+                }).addOnFailureListener(e -> {
+                    // Failed to update status
+                    Log.e("updateStatus", "Error updating friend request status", e);
+                });
     }
-
 
     //Pending friend request===
     private void hasPendingFriendRequest(String currentUserId, FriendCheckCallback callback) {

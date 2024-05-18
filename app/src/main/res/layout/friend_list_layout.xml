@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:padding="16dp">
+
+    <!-- Friend's Profile Picture -->
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/friendProfileImage"
+        android:layout_width="85dp"
+        android:layout_height="85dp"
+        android:padding="2dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/posts_img_sample"
+        app:civ_border_color="@color/gray"
+        app:civ_border_width="1dp"
+        android:layout_marginEnd="10dp"
+        />
+
+    <!-- Friend's Name and Request Time -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <!-- Friend's Name -->
+        <TextView
+            android:id="@+id/friendName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Friend's Name"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/black" />
+
+        <!-- Friend Request Accepted Time -->
+        <TextView
+            android:id="@+id/requestConfirmedTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Confirmed time"
+            android:textSize="14sp"
+            android:textColor="@android:color/darker_gray" />
+    </LinearLayout>
+</LinearLayout>

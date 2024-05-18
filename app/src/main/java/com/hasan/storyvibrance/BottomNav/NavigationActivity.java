@@ -16,6 +16,7 @@ import androidx.preference.PreferenceManager;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.hasan.storyvibrance.Posts.AddFriendActivity;
 import com.hasan.storyvibrance.Posts.AddPostActivity;
+import com.hasan.storyvibrance.Posts.FriendListActivity;
 import com.hasan.storyvibrance.Posts.SavedPostActivity;
 import com.hasan.storyvibrance.Posts.SearchPostActivity;
 import com.hasan.storyvibrance.R;
@@ -52,6 +53,9 @@ public class NavigationActivity extends AppCompatActivity {
             }
             if (item.getItemId() == R.id.add_friend) {
                 startActivity(new Intent(NavigationActivity.this, AddFriendActivity.class));
+            }
+            if (item.getItemId() == R.id.friend_list) {
+                startActivity(new Intent(NavigationActivity.this, FriendListActivity.class));
             }
             //LOGOUT=====================
             if (item.getItemId() == R.id.logout) {

@@ -3,27 +3,29 @@
 
     <item
         android:id="@+id/search_post"
-        android:title="Search Post"
         android:icon="@drawable/nav_search"
         android:iconTint="@color/white"
-        />
+        android:title="Search Post" />
     <item
         android:id="@+id/add_friend"
-        android:title="Add Friend"
         android:icon="@drawable/add_friend"
         android:iconTint="@color/white"
-        />
+        android:title="Add Friend" />
+
+    <item
+        android:id="@+id/friend_list"
+        android:icon="@drawable/friend_list"
+        android:iconTint="@color/white"
+        android:title="Friend List" />
 
     <item
         android:id="@+id/SavedPost"
-        android:title="Saved Post"
         android:icon="@drawable/post_save"
         android:iconTint="@color/white"
-        />
+        android:title="Saved Post" />
     <item
         android:id="@+id/logout"
-        android:title="Logout"
         android:icon="@drawable/logout"
         android:iconTint="@color/white"
-        />
+        android:title="Logout" />
 </menu>

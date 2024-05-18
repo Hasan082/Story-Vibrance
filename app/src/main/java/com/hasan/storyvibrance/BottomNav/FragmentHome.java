@@ -79,7 +79,7 @@ public class FragmentHome extends Fragment {
 
 
         // Set up story RecyclerView
-        setupStoryRecyclerView();
+//        setupStoryRecyclerView();
         // Set up post RecyclerView
         setupPostRecyclerView(db);
 
@@ -145,14 +145,14 @@ public class FragmentHome extends Fragment {
 
 
     // Method to set up RecyclerView for stories
-    private void setupStoryRecyclerView() {
+//    private void setupStoryRecyclerView() {
         // Create a list of story models
 //        ArrayList<StoryModel> storyModels = createStoryModels();
         // Create a StoryAdapter with the story models
 //        StoryAdapter storyAdapter = new StoryAdapter(getContext(), storyModels);
         // Set the adapter to the story RecyclerView
 //        binding.storyRecyclerview.setAdapter(storyAdapter);
-    }
+//    }
 
     // Method to create a list of story models
 //    private ArrayList<StoryModel> createStoryModels() {
