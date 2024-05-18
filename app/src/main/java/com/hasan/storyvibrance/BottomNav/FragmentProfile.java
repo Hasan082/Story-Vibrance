@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,6 +22,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
@@ -30,6 +32,7 @@ import com.hasan.storyvibrance.Controller.ProfilePostAdapter;
 import com.hasan.storyvibrance.Model.ProfilePostModel;
 import com.hasan.storyvibrance.Profile.UpdateProfileActivity;
 import com.hasan.storyvibrance.R;
+import com.hasan.storyvibrance.Utility.FadeAnimator;
 import com.hasan.storyvibrance.Utility.GetUserName;
 import com.hasan.storyvibrance.Utility.NameCapitalize;
 import com.hasan.storyvibrance.databinding.FragmentProfileBinding;
@@ -55,6 +58,8 @@ public class FragmentProfile extends Fragment {
 
     SharedPreferences sharedPreferences;
 
+    ShimmerFrameLayout shimmerFrameLayout;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -64,8 +69,12 @@ public class FragmentProfile extends Fragment {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
         String userName = GetUserName.getUsernameFromSharedPreferences(requireContext());
         db = FirebaseFirestore.getInstance();
-
-        binding.spinner.setVisibility(View.VISIBLE);
+        // Find the ShimmerFrameLayout
+        shimmerFrameLayout = binding.shimmerLayout;
+        // Start shimmer animation
+        shimmerFrameLayout.startShimmer();
+        binding.profileWrapper.setVisibility(View.GONE);
+//        binding.spinner.setVisibility(View.VISIBLE);
 
         db.collection("userdata").document(userName)
                 .addSnapshotListener((documentSnapshot, e) -> {
@@ -133,13 +142,25 @@ public class FragmentProfile extends Fragment {
                     .into(binding.profileImg);
         }
 
-        binding.spinner.setVisibility(View.GONE);
+//        binding.spinner.setVisibility(View.GONE);
+        // Stop shimmer animation after data is loaded
+        new Handler().postDelayed(() -> {
+            binding.profileWrapper.setVisibility(View.VISIBLE);
+            FadeAnimator.showElement(binding.profileWrapper);
+            shimmerFrameLayout.setVisibility(View.GONE);
+        }, 1000);
     }
 
     private void handleNoDataAvailable() {
         if (getActivity() != null) {
             Toast.makeText(getActivity(), "Data Not Available", Toast.LENGTH_SHORT).show();
             binding.spinner.setVisibility(View.GONE);
+            // Stop shimmer animation after data is loaded
+            new Handler().postDelayed(() -> {
+                binding.profileWrapper.setVisibility(View.VISIBLE);
+                FadeAnimator.showElement(binding.profileWrapper);
+                shimmerFrameLayout.setVisibility(View.GONE);
+            }, 1000);
         }
     }
 

@@ -76,8 +76,10 @@
                     android:layout_height="match_parent">
 
                     <LinearLayout
+                        android:id="@+id/profileWrapper"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:alpha="0"
                         android:orientation="vertical">
 
                         <LinearLayout
@@ -243,6 +245,45 @@
                 android:theme="@style/progressBarColor" />
 
         </LinearLayout>
+
+        <!--        Shimmer layout-->
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmer_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="70dp"
+            tools:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <include layout="@layout/shimmer_effect_layout" />
+
+                <include layout="@layout/shimmer_effect_layout" />
+
+                <include layout="@layout/shimmer_effect_layout" />
+
+                <include layout="@layout/shimmer_effect_layout" />
+
+                <include layout="@layout/shimmer_effect_layout" />
+
+                <include layout="@layout/shimmer_effect_layout" />
+
+                <include layout="@layout/shimmer_effect_layout" />
+
+                <include layout="@layout/shimmer_effect_layout" />
+
+                <include layout="@layout/shimmer_effect_layout" />
+
+                <include layout="@layout/shimmer_effect_layout" />
+
+                <include layout="@layout/shimmer_effect_layout" />
+
+            </LinearLayout>
+
+        </com.facebook.shimmer.ShimmerFrameLayout>
 
     </RelativeLayout>
 </layout>
