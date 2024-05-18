@@ -6,7 +6,7 @@ public class FriendRequestModel {
     private String senderId;
     private String senderName;
     private String senderProfileImageUrl;
-    private long requestSendTime;
+    private Long timestamp;
 
 
     // Constructors, getters, and setters
@@ -15,20 +15,20 @@ public class FriendRequestModel {
 
     }
 
-    public long getRequestSendTime() {
-        return requestSendTime;
+    public Long getTimestamp() {
+        return timestamp;
     }
 
-    public void setRequestSendTime(long requestSendTime) {
-        this.requestSendTime = requestSendTime;
+    public void setTimestamp(Long timestamp) {
+        this.timestamp = timestamp;
     }
 
-    public FriendRequestModel(String recipientId, String senderId, String senderName, String senderProfileImageUrl, long requestSendTime) {
+    public FriendRequestModel(String recipientId, String senderId, String senderName, String senderProfileImageUrl, Long timestamp) {
         this.recipientId = recipientId;
         this.senderId = senderId;
         this.senderName = senderName;
         this.senderProfileImageUrl = senderProfileImageUrl;
-        this.requestSendTime = requestSendTime;
+        this.timestamp = timestamp;
 
     }
 

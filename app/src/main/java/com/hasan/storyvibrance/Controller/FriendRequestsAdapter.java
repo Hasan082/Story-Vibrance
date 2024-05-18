@@ -19,6 +19,7 @@ import com.hasan.storyvibrance.R;
 import com.hasan.storyvibrance.Utility.GetUserName;
 import com.hasan.storyvibrance.Utility.NameCapitalize;
 import com.hasan.storyvibrance.Utility.PostAdapterUtils.UserDataFetcher;
+import com.hasan.storyvibrance.Utility.TimeUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -70,6 +71,11 @@ public class FriendRequestsAdapter extends RecyclerView.Adapter<FriendRequestsAd
 
                 holder.textViewFriendRequestName.setText(friendRequest.getSenderName());
                 Picasso.get().load(friendRequest.getSenderProfileImageUrl()).into(holder.friendRequestSenderImg);
+                // Convert the long time to a string representation using TimeUtils
+                Log.d("timeAgo", "onBindViewHolder: " + friendRequest.getTimestamp());
+                String timeAgo = TimeUtils.getTimeAgo(Long.parseLong(String.valueOf(friendRequest.getTimestamp())));
+
+                holder.friendRequestTime.setText(timeAgo);
 
                 //Accept friend request================
                 holder.friendAcceptBtn.setOnClickListener(v-> {
@@ -124,6 +130,7 @@ public class FriendRequestsAdapter extends RecyclerView.Adapter<FriendRequestsAd
             // Failed to update status
             Log.e("updateStatus", "Error updating friend request status", e);
         });
+
     }
 
 
@@ -176,7 +183,7 @@ public class FriendRequestsAdapter extends RecyclerView.Adapter<FriendRequestsAd
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         CircleImageView friendRequestSenderImg;
-        TextView textViewFriendRequestName, friendAdded;
+        TextView textViewFriendRequestName, friendAdded, friendRequestTime;
         AppCompatButton friendAcceptBtn, friendDeleteBtn;
 
         LinearLayout requestBtnWrapper;
@@ -189,6 +196,7 @@ public class FriendRequestsAdapter extends RecyclerView.Adapter<FriendRequestsAd
             friendDeleteBtn = itemView.findViewById(R.id.friendDeleteBtn);
             friendAdded = itemView.findViewById(R.id.friendAdded);
             requestBtnWrapper = itemView.findViewById(R.id.requestBtnWrapper);
+            friendRequestTime = itemView.findViewById(R.id.friendRequestTime);
         }
     }
 }

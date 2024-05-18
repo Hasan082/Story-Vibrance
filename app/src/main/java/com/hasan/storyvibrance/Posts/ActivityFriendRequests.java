@@ -72,6 +72,7 @@ public class ActivityFriendRequests extends AppCompatActivity {
                             Log.d("Friend Name", "onComplete: " + document.get("senderId"));
                             FriendRequestModel friendRequest = document.toObject(FriendRequestModel.class);
                             friendRequest.setRequestId(document.getId());
+                            friendRequest.setTimestamp(document.getLong("timestamp"));
                             friendRequests.add(friendRequest);
                         }
                         // Update RecyclerView with fetched friend requests
