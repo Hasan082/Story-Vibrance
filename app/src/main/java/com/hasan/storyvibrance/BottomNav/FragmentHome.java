@@ -3,6 +3,7 @@ package com.hasan.storyvibrance.BottomNav;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,15 +13,15 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.hasan.storyvibrance.Controller.PostAdapter;
-import com.hasan.storyvibrance.Controller.StoryAdapter;
 import com.hasan.storyvibrance.Messenger.MessengerActivity;
 import com.hasan.storyvibrance.Model.PostModel;
-import com.hasan.storyvibrance.Model.StoryModel;
 import com.hasan.storyvibrance.Posts.ActivityFriendRequests;
 import com.hasan.storyvibrance.R;
+import com.hasan.storyvibrance.Utility.FadeAnimator;
 import com.hasan.storyvibrance.Utility.GetUserName;
 import com.hasan.storyvibrance.Utility.PostSorter;
 import com.hasan.storyvibrance.databinding.FragmentHomeBinding;
@@ -37,6 +38,8 @@ public class FragmentHome extends Fragment {
 
     SharedPreferences sharedPreferences;
 
+    ShimmerFrameLayout shimmerFrameLayout;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -46,6 +49,9 @@ public class FragmentHome extends Fragment {
         View view = binding.getRoot();
         // Set the lifecycle owner for observing LiveData
         binding.setLifecycleOwner(this);
+        binding.mainHome.setVisibility(View.GONE);
+        shimmerFrameLayout = binding.shimmerLayout;
+        shimmerFrameLayout.startShimmer();
 
         //CREATE FIREBASE INSTANCES==========
         db = FirebaseFirestore.getInstance();
@@ -59,20 +65,10 @@ public class FragmentHome extends Fragment {
         });
 
         // Set up click listener for navigating to NotificationActivity on notification icon click
-//        binding.customAppBar.findViewById(R.id.notificationIcon).setOnClickListener(v -> {
-//            // Start the NotificationActivity
-//            startActivity(new Intent(getActivity(), NotificationActivity.class));
-//        });
-
-        // Set up click listener for navigating to NotificationActivity on notification icon click
         binding.customAppBar.findViewById(R.id.notificationIcon).setOnClickListener(v -> {
             // Start the NotificationActivity
             startActivity(new Intent(getActivity(), ActivityFriendRequests.class));
         });
-
-
-
-
 
 
         // Set up click listener for navigating to MessengerActivity on messenger icon click
@@ -105,6 +101,11 @@ public class FragmentHome extends Fragment {
         db.collection("posts").addSnapshotListener((querySnapshot, error) -> {
                     if (error != null) {
                         Log.e("hello", "Listen failed.", error);
+                        new Handler().postDelayed(() -> {
+                            binding.mainHome.setVisibility(View.VISIBLE);
+                            FadeAnimator.showElement(binding.mainHome);
+                            shimmerFrameLayout.setVisibility(View.GONE);
+                        }, 1000);
                         return;
                     }
                     // Clear the postMap before adding new posts
@@ -131,6 +132,13 @@ public class FragmentHome extends Fragment {
                     // Update the data in the adapter
                     postAdapter.updateData(postModels);
                     postAdapter.notifyDataSetChanged();
+
+                    // Stop shimmer animation after data is loaded
+                    new Handler().postDelayed(() -> {
+                        binding.mainHome.setVisibility(View.VISIBLE);
+                        FadeAnimator.showElement(binding.mainHome);
+                        shimmerFrameLayout.setVisibility(View.GONE);
+                    }, 1000);
                 }
         );
     }
@@ -139,28 +147,28 @@ public class FragmentHome extends Fragment {
     // Method to set up RecyclerView for stories
     private void setupStoryRecyclerView() {
         // Create a list of story models
-        ArrayList<StoryModel> storyModels = createStoryModels();
+//        ArrayList<StoryModel> storyModels = createStoryModels();
         // Create a StoryAdapter with the story models
-        StoryAdapter storyAdapter = new StoryAdapter(getContext(), storyModels);
+//        StoryAdapter storyAdapter = new StoryAdapter(getContext(), storyModels);
         // Set the adapter to the story RecyclerView
-        binding.storyRecyclerview.setAdapter(storyAdapter);
+//        binding.storyRecyclerview.setAdapter(storyAdapter);
     }
 
     // Method to create a list of story models
-    private ArrayList<StoryModel> createStoryModels() {
-        ArrayList<StoryModel> storyModels = new ArrayList<>();
-        // Add story models to the list
-        storyModels.add(new StoryModel("Md Hasan", R.drawable.hasan, R.drawable.hasan));
-        storyModels.add(new StoryModel("Sadman Safin Neloy", R.drawable.hasan, R.drawable.hasan));
-        storyModels.add(new StoryModel("Mahmood Moon", R.drawable.hasan, R.drawable.hasan));
-        storyModels.add(new StoryModel("Mollika Mukta", R.drawable.hasan, R.drawable.hasan));
-        storyModels.add(new StoryModel("Nusrat Sara", R.drawable.hasan, R.drawable.hasan));
-        storyModels.add(new StoryModel("Faria Maahi", R.drawable.hasan, R.drawable.hasan));
-        storyModels.add(new StoryModel("Abd Razzak", R.drawable.hasan, R.drawable.hasan));
-        storyModels.add(new StoryModel("Rozina Parvin", R.drawable.hasan, R.drawable.hasan));
-        storyModels.add(new StoryModel("Hafizul Islam", R.drawable.hasan, R.drawable.hasan));
-        return storyModels;
-    }
+//    private ArrayList<StoryModel> createStoryModels() {
+//        ArrayList<StoryModel> storyModels = new ArrayList<>();
+//        // Add story models to the list
+//        storyModels.add(new StoryModel("Md Hasan", R.drawable.hasan, R.drawable.hasan));
+//        storyModels.add(new StoryModel("Sadman Safin Neloy", R.drawable.hasan, R.drawable.hasan));
+//        storyModels.add(new StoryModel("Mahmood Moon", R.drawable.hasan, R.drawable.hasan));
+//        storyModels.add(new StoryModel("Mollika Mukta", R.drawable.hasan, R.drawable.hasan));
+//        storyModels.add(new StoryModel("Nusrat Sara", R.drawable.hasan, R.drawable.hasan));
+//        storyModels.add(new StoryModel("Faria Maahi", R.drawable.hasan, R.drawable.hasan));
+//        storyModels.add(new StoryModel("Abd Razzak", R.drawable.hasan, R.drawable.hasan));
+//        storyModels.add(new StoryModel("Rozina Parvin", R.drawable.hasan, R.drawable.hasan));
+//        storyModels.add(new StoryModel("Hafizul Islam", R.drawable.hasan, R.drawable.hasan));
+//        return storyModels;
+//    }
 
 
 }

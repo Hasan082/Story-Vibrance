@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -32,8 +33,10 @@
         <!-- Content -->
 
         <androidx.core.widget.NestedScrollView
+            android:id="@+id/mainHome"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:alpha="0"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <RelativeLayout
@@ -42,33 +45,33 @@
 
 
                 <!-- HorizontalScrollView with RecyclerView and Add Story card -->
-                <HorizontalScrollView
-                    android:id="@+id/scrolView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fillViewport="true"
-                    android:layout_margin="@dimen/margin_small"
-                    android:layout_marginTop="?actionBarSize"
-                    android:scrollbars="none">
+<!--                <HorizontalScrollView-->
+<!--                    android:id="@+id/scrolView"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:fillViewport="true"-->
+<!--                    android:layout_margin="@dimen/margin_small"-->
+<!--                    android:layout_marginTop="?actionBarSize"-->
+<!--                    android:scrollbars="none">-->
 
-                    <RelativeLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
+<!--                    <RelativeLayout-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content">-->
 
-                        <!-- Add Story card -->
-                        <include layout="@layout/feed_story_add_card" />
+<!--                        &lt;!&ndash; Add Story card &ndash;&gt;-->
+<!--                        <include layout="@layout/feed_story_add_card" />-->
 
-                        <!-- Story RecyclerView -->
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/story_recyclerview"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+<!--                        &lt;!&ndash; Story RecyclerView &ndash;&gt;-->
+<!--                        <androidx.recyclerview.widget.RecyclerView-->
+<!--                            android:id="@+id/story_recyclerview"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:orientation="horizontal"-->
+<!--                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />-->
 
-                    </RelativeLayout>
-
-                </HorizontalScrollView>
+<!--                    </RelativeLayout>-->
+<!--                android:layout_below="@id/scrolView"-->
+<!--                </HorizontalScrollView>-->
 
                 <!-- Posts RecyclerView -->
                 <androidx.recyclerview.widget.RecyclerView
@@ -77,7 +80,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:layout_below="@id/scrolView"
                     android:layout_marginTop="@dimen/margin_small"
                     android:layout_marginBottom="?attr/actionBarSize"
                     android:paddingBottom="20dp"
@@ -86,5 +88,32 @@
             </RelativeLayout>
 
         </androidx.core.widget.NestedScrollView>
+
+        <!--        Shimmer layout-->
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmer_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="80dp"
+            tools:visibility="gone">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <include layout="@layout/shimmer_effect_layout" />
+                <include layout="@layout/shimmer_effect_layout" />
+                <include layout="@layout/shimmer_effect_layout" />
+                <include layout="@layout/shimmer_effect_layout" />
+                <include layout="@layout/shimmer_effect_layout" />
+                <include layout="@layout/shimmer_effect_layout" />
+                <include layout="@layout/shimmer_effect_layout" />
+                <include layout="@layout/shimmer_effect_layout" />
+                <include layout="@layout/shimmer_effect_layout" />
+                <include layout="@layout/shimmer_effect_layout" />
+                <include layout="@layout/shimmer_effect_layout" />
+            </LinearLayout>
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
+
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
