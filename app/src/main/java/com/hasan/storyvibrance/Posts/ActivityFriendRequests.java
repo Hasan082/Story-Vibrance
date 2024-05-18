@@ -7,7 +7,6 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
@@ -16,6 +15,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.hasan.storyvibrance.Controller.FriendRequestsAdapter;
 import com.hasan.storyvibrance.Model.FriendRequestModel;
 import com.hasan.storyvibrance.R;
+import com.hasan.storyvibrance.Utility.FadeAnimator;
 import com.hasan.storyvibrance.Utility.GetUserName;
 import com.hasan.storyvibrance.databinding.ActivityFriendRequestsBinding;
 
@@ -36,9 +36,6 @@ public class ActivityFriendRequests extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_friend_requests);
 
-
-        // Initially hide the RecyclerView and show the shimmer effect
-        binding.recyclerViewFriendRequests.setVisibility(View.GONE);
         // Find the ShimmerFrameLayout
         shimmerFrameLayout = binding.shimmerLayout;
         // Start shimmer animation
@@ -50,12 +47,8 @@ public class ActivityFriendRequests extends AppCompatActivity {
         // Initialize Firestore
         db = FirebaseFirestore.getInstance();
         String recipientId = GetUserName.getUsernameFromSharedPreferences(this);
-
         // Find RecyclerView in layout
-        RecyclerView recyclerViewFriendRequests = findViewById(R.id.recyclerViewFriendRequests);
-
-        // Set up RecyclerView
-        recyclerViewFriendRequests.setLayoutManager(new LinearLayoutManager(this));
+        RecyclerView recyclerViewFriendRequests = binding.recyclerViewFriendRequests;
 
         // Initialize adapter with empty list
         friendRequestsAdapter = new FriendRequestsAdapter(this, new ArrayList<>());
@@ -92,9 +85,9 @@ public class ActivityFriendRequests extends AppCompatActivity {
                             } else {
                                 binding.noPendingRequestMessage.setVisibility(View.GONE);
                             }
-                            binding.recyclerViewFriendRequests.setVisibility(View.VISIBLE);
+                            FadeAnimator.showElement(binding.recyclerViewFriendRequests);
                             shimmerFrameLayout.setVisibility(View.GONE);
-                        }, 2500);
+                        }, 1000);
 
                     } else {
                         // Log error or handle failure
