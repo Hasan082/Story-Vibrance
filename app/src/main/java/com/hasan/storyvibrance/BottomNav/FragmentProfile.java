@@ -136,7 +136,7 @@ public class FragmentProfile extends Fragment {
         binding.setUserBio(userBio != null ? userBio : getString(R.string.about_me));
 
         if (profileImgUrl != null) {
-            Picasso.get().load(profileImgUrl).resize(250, 250)
+            Picasso.get().load(profileImgUrl)
                     .placeholder(R.drawable.edit_person)
                     .error(R.drawable.edit_person)
                     .into(binding.profileImg);
