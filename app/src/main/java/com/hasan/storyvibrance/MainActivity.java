@@ -49,13 +49,14 @@ public class MainActivity extends AppCompatActivity {
 
 
     //ToDo===To be done=====
-    // remove post from save post page
-    // save post query
-    // single post view
-    // Add friend
+    // home remove recyclerview hidden
+    // Badge
+    // Page viewer
+    // User profile click over image
+    // Single post view
     // Chat message
     // Audio/Video calling
-    // Shimmer effect
+
 
 
 

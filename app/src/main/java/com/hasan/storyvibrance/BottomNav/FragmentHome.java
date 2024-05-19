@@ -49,7 +49,6 @@ public class FragmentHome extends Fragment {
         View view = binding.getRoot();
         // Set the lifecycle owner for observing LiveData
         binding.setLifecycleOwner(this);
-        binding.mainHome.setVisibility(View.GONE);
         shimmerFrameLayout = binding.shimmerLayout;
         shimmerFrameLayout.startShimmer();
 
@@ -102,7 +101,6 @@ public class FragmentHome extends Fragment {
                     if (error != null) {
                         Log.e("hello", "Listen failed.", error);
                         new Handler().postDelayed(() -> {
-                            binding.mainHome.setVisibility(View.VISIBLE);
                             FadeAnimator.showElement(binding.mainHome);
                             shimmerFrameLayout.setVisibility(View.GONE);
                         }, 1000);
