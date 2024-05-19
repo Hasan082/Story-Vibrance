@@ -119,7 +119,7 @@ public class NavigationActivity extends AppCompatActivity {
                 TextView personEmailAd = binding.drawerLayout.findViewById(R.id.personEmail);
                 if (appbarImg != null && profileUri != null)  Picasso.get().load(profileUri).into(appbarImg);
                 else Log.e("appbarImg", "appbarImg or profileUri is null");
-                if (drawerHeaderImg != null && profileUri != null)  Picasso.get().load(profileUri).resize(250, 250).centerCrop().into(drawerHeaderImg);
+                if (drawerHeaderImg != null && profileUri != null)  Picasso.get().load(profileUri).into(drawerHeaderImg);
                 else Log.e("appbarImg", "appbarImg or profileUri is null");
                 if (personNmId != null && personName != null)  personNmId.setText(NameCapitalize.capitalize(personName));
                 else Log.e("personNmId", "personNmId is null");

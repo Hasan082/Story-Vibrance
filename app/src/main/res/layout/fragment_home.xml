@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -14,64 +13,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <LinearLayout
+            <include
+                android:id="@+id/customAppBar"
+                layout="@layout/appbar_layout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <!-- AppBar -->
-                <include
-                    android:id="@+id/customAppBar"
-                    layout="@layout/appbar_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-
-            </LinearLayout>
+                android:layout_height="wrap_content" />
 
         </com.google.android.material.appbar.AppBarLayout>
 
         <!-- Content -->
 
-        <androidx.core.widget.NestedScrollView
-            android:id="@+id/mainHome"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:alpha="0"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-            <RelativeLayout
+            <LinearLayout
+                android:id="@+id/mainHome"
+                android:alpha="0"
                 android:layout_width="match_parent"
+                android:paddingTop="?actionBarSize"
                 android:layout_height="wrap_content">
-
-
-                <!-- HorizontalScrollView with RecyclerView and Add Story card -->
-<!--                <HorizontalScrollView-->
-<!--                    android:id="@+id/scrolView"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:fillViewport="true"-->
-<!--                    android:layout_margin="@dimen/margin_small"-->
-<!--                    android:layout_marginTop="?actionBarSize"-->
-<!--                    android:scrollbars="none">-->
-
-<!--                    <RelativeLayout-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content">-->
-
-<!--                        &lt;!&ndash; Add Story card &ndash;&gt;-->
-<!--                        <include layout="@layout/feed_story_add_card" />-->
-
-<!--                        &lt;!&ndash; Story RecyclerView &ndash;&gt;-->
-<!--                        <androidx.recyclerview.widget.RecyclerView-->
-<!--                            android:id="@+id/story_recyclerview"-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:orientation="horizontal"-->
-<!--                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />-->
-
-<!--                    </RelativeLayout>-->
-<!--                android:layout_below="@id/scrolView"-->
-<!--                </HorizontalScrollView>-->
 
                 <!-- Posts RecyclerView -->
                 <androidx.recyclerview.widget.RecyclerView
@@ -85,21 +42,25 @@
                     android:paddingBottom="20dp"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
-            </RelativeLayout>
+            </LinearLayout>
 
-        </androidx.core.widget.NestedScrollView>
 
-        <!--        Shimmer layout-->
+
+        <!-- Shimmer layout -->
         <com.facebook.shimmer.ShimmerFrameLayout
             android:id="@+id/shimmer_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="80dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="70dp"
+            app:layout_anchor="@id/mainHome"
+            app:layout_anchorGravity="top"
             tools:visibility="gone">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
+
                 <include layout="@layout/shimmer_effect_layout" />
                 <include layout="@layout/shimmer_effect_layout" />
                 <include layout="@layout/shimmer_effect_layout" />
@@ -113,7 +74,6 @@
                 <include layout="@layout/shimmer_effect_layout" />
             </LinearLayout>
         </com.facebook.shimmer.ShimmerFrameLayout>
-
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

@@ -112,10 +112,6 @@ public class FragmentHome extends Fragment {
                 });
     }
 
-//    public void onNewFriendRequest() {
-//        int currentCount = notificationBadge.getText().toString().isEmpty() ? 0 : Integer.parseInt(notificationBadge.getText().toString());
-//        updateBadgeCount(currentCount + 1);
-//    }
 
     // Method to update the badge count
     private void updateBadgeCount(int count) {
@@ -177,7 +173,6 @@ public class FragmentHome extends Fragment {
 
                     // Stop shimmer animation after data is loaded
                     new Handler().postDelayed(() -> {
-                        binding.mainHome.setVisibility(View.VISIBLE);
                         FadeAnimator.showElement(binding.mainHome);
                         shimmerFrameLayout.setVisibility(View.GONE);
                     }, 1000);
@@ -185,32 +180,9 @@ public class FragmentHome extends Fragment {
         );
     }
 
-
-    // Method to set up RecyclerView for stories
-//    private void setupStoryRecyclerView() {
-        // Create a list of story models
-//        ArrayList<StoryModel> storyModels = createStoryModels();
-        // Create a StoryAdapter with the story models
-//        StoryAdapter storyAdapter = new StoryAdapter(getContext(), storyModels);
-        // Set the adapter to the story RecyclerView
-//        binding.storyRecyclerview.setAdapter(storyAdapter);
-//    }
-
-    // Method to create a list of story models
-//    private ArrayList<StoryModel> createStoryModels() {
-//        ArrayList<StoryModel> storyModels = new ArrayList<>();
-//        // Add story models to the list
-//        storyModels.add(new StoryModel("Md Hasan", R.drawable.hasan, R.drawable.hasan));
-//        storyModels.add(new StoryModel("Sadman Safin Neloy", R.drawable.hasan, R.drawable.hasan));
-//        storyModels.add(new StoryModel("Mahmood Moon", R.drawable.hasan, R.drawable.hasan));
-//        storyModels.add(new StoryModel("Mollika Mukta", R.drawable.hasan, R.drawable.hasan));
-//        storyModels.add(new StoryModel("Nusrat Sara", R.drawable.hasan, R.drawable.hasan));
-//        storyModels.add(new StoryModel("Faria Maahi", R.drawable.hasan, R.drawable.hasan));
-//        storyModels.add(new StoryModel("Abd Razzak", R.drawable.hasan, R.drawable.hasan));
-//        storyModels.add(new StoryModel("Rozina Parvin", R.drawable.hasan, R.drawable.hasan));
-//        storyModels.add(new StoryModel("Hafizul Islam", R.drawable.hasan, R.drawable.hasan));
-//        return storyModels;
-//    }
-
-
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        shimmerFrameLayout.stopShimmer();
+    }
 }
