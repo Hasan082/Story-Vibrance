@@ -53,8 +53,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         String commentTime = TimeUtils.getTimeAgo(comment.getTimestamp());
         holder.commentTime.setText(commentTime);
         UserDataFetcher userDataFetcher = new UserDataFetcher(db);
-        String username = GetUserName.getUsernameFromSharedPreferences(context);
-        userDataFetcher.fetchUserData(username, (name, profileImg) -> {
+        userDataFetcher.fetchUserData(comment.getUserId(), (name, profileImg) -> {
             holder.commentUserName.setText(name);
             Picasso.get().load(profileImg).into(holder.commentProfilePic);
         });
