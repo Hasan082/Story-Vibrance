@@ -2,12 +2,13 @@
     <string name="app_name">Story Vibrance</string>
     <string name="open">open</string>
     <string name="close">close</string>
-    <string name="Welcome">Welcome to Story Vibrance!</string>
+    <string name="Welcome">Welcome</string>
+    <string name="onBoard1_title">Welcome to Story Vibrance!</string>
     <string name="onboard1_desc">Embark on a journey of creativity and connection as you dive into the vibrant world of storytelling with our unique platform. We\'re thrilled to have you join us!</string>
     <string name="next">Next</string>
-    <string name="onBoard2title">Unleash Creative Potential</string>
-    <string name="onboard2_title">Explore a variety of features designed to ignite your creativity and bring your stories to life. From captivating visuals to immersive experiences, Story Vibrance offers everything you need to craft compelling narratives.</string>
-    <string name="thirdTitle">Follow a few simple steps</string>
+    <string name="onBoard2_title">Unleash Creative Potential</string>
+    <string name="onboard2_desc">Explore a variety of features designed to ignite your creativity and bring your stories to life. From captivating visuals to immersive experiences, Story Vibrance offers everything you need to craft compelling narratives.</string>
+    <string name="onBoard3_title">Follow a few simple steps</string>
     <string name="onboard3_desc">Sign Up or Log In, Discover Inspiring Content, Create Your First Story, Inspiration at Your Fingertips, Community Connection and finally Personalized Experience</string>
     <string name="get_started">Get Started</string>
     <string name="register">Register</string>

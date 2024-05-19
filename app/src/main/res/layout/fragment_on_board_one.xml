@@ -27,7 +27,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_large"
-        android:text="@string/Welcome"
+        android:text="@string/onBoard1_title"
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.333"
@@ -48,7 +48,7 @@
 
     <androidx.appcompat.widget.AppCompatButton
         style="@style/AppButtonStyle"
-        android:id="@+id/nextOnboardBtn"
+        android:id="@+id/button"
         android:layout_margin="16dp"
         android:stateListAnimator="@null"
         android:layout_marginBottom="52dp"

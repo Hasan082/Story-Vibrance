@@ -28,7 +28,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_small"
-        android:text="@string/thirdTitle"
+        android:text="@string/onBoard3_title"
         android:textAlignment="center"
         android:textSize="@dimen/title_large"
         app:layout_constraintEnd_toEndOf="parent"

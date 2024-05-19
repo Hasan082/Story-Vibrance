@@ -4,15 +4,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
-
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.preference.PreferenceManager;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.hasan.storyvibrance.BottomNav.NavigationActivity;
-import com.hasan.storyvibrance.OnBoard.OnBoardOne;
 import com.hasan.storyvibrance.auth.LoginActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -39,18 +35,19 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(this, LoginActivity.class));
             finish();
         } else {
+            startActivity(new Intent(MainActivity.this, NavigationActivity.class));
             // Show on boarding fragment
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.add(R.id.mainFrame, new OnBoardOne());
-            fragmentTransaction.commit();
+//            FragmentManager fragmentManager = getSupportFragmentManager();
+//            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//            fragmentTransaction.add(R.id.mainFrame, new OnBoardOne());
+//            fragmentTransaction.commit();
         }
     }
 
 
     //ToDo===To be done=====
-    // Badge
     // Page viewer
+    // profile page fix
     // User profile click over image
     // Single post view
     // Chat message
