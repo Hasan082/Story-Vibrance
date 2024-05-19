@@ -36,23 +36,19 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(this, LoginActivity.class));
             finish();
         } else {
-            startActivity(new Intent(MainActivity.this, OnBoardActivity.class));
             // Show on boarding fragment
-//            FragmentManager fragmentManager = getSupportFragmentManager();
-//            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//            fragmentTransaction.add(R.id.mainFrame, new OnBoardOne());
-//            fragmentTransaction.commit();
+            startActivity(new Intent(MainActivity.this, OnBoardActivity.class));
         }
     }
 
 
     //ToDo===To be done=====
-    // Page viewer
     // profile page fix
     // User profile click over image
     // Single post view
     // Chat message
     // Audio/Video calling
+    // appbar image
 
 
 

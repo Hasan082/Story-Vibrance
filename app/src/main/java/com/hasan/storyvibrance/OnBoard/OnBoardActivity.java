@@ -1,11 +1,13 @@
 package com.hasan.storyvibrance.OnBoard;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
+import androidx.preference.PreferenceManager;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.hasan.storyvibrance.R;
@@ -74,6 +76,10 @@ public class OnBoardActivity extends AppCompatActivity {
                 } else {
                     // Navigate to WelcomeActivity
                     startActivity(new Intent(OnBoardActivity.this, WelcomeActivity.class));
+                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putBoolean("onBoardDone", true);
+                    editor.apply();
                     finish();
                 }
             });
