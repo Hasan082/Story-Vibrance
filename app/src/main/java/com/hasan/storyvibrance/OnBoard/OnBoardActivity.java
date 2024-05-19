@@ -1,5 +1,6 @@
 package com.hasan.storyvibrance.OnBoard;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -8,6 +9,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.hasan.storyvibrance.R;
+import com.hasan.storyvibrance.auth.WelcomeActivity;
 import com.hasan.storyvibrance.databinding.ActivityOnBoardBinding;
 
 import java.util.ArrayList;
@@ -51,29 +53,33 @@ public class OnBoardActivity extends AppCompatActivity {
             viewPager2.setAdapter(vpAdapter);
             viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
                 @Override
-                // This method is triggered when there is any scrolling activity for the current page
                 public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                     super.onPageScrolled(position, positionOffset, positionOffsetPixels);
                 }
-
-                // triggered when you select a new page
                 @Override
                 public void onPageSelected(int position) {
                     super.onPageSelected(position);
                 }
-
-                // triggered when there is
-                // scroll state will be changed
                 @Override
                 public void onPageScrollStateChanged(int state) {
                     super.onPageScrollStateChanged(state);
                 }
             });
 
+            //Change page on button click======
+            binding.nextOnboardBtn.setOnClickListener(v -> {
+                int currentItem = viewPager2.getCurrentItem();
+                if (currentItem < vpAdapter.getItemCount() - 1) {
+                    viewPager2.setCurrentItem(currentItem + 1);
+                } else {
+                    // Navigate to WelcomeActivity
+                    startActivity(new Intent(OnBoardActivity.this, WelcomeActivity.class));
+                    finish();
+                }
+            });
+
         } catch (Exception e) {
             Log.e("viewpager error 1", "onCreate: ", e);
-            System.out.println("viewpager error 2" + e.getMessage());
-            System.out.println("viewpager error 2" + e.getCause());
             e.printStackTrace();
         }
     }

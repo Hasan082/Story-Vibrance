@@ -9,6 +9,7 @@ import androidx.preference.PreferenceManager;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.hasan.storyvibrance.BottomNav.NavigationActivity;
+import com.hasan.storyvibrance.OnBoard.OnBoardActivity;
 import com.hasan.storyvibrance.auth.LoginActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -35,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(this, LoginActivity.class));
             finish();
         } else {
-            startActivity(new Intent(MainActivity.this, NavigationActivity.class));
+            startActivity(new Intent(MainActivity.this, OnBoardActivity.class));
             // Show on boarding fragment
 //            FragmentManager fragmentManager = getSupportFragmentManager();
 //            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

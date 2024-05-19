@@ -25,7 +25,7 @@ public class VPAdapter extends RecyclerView.Adapter<VPAdapter.ViewHolder> {
     @NonNull
     @Override
     public VPAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.onboarding_viewpager_item, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.onboarding_viewpager_layout, parent, false);
         return new ViewHolder(view);
     }
 
