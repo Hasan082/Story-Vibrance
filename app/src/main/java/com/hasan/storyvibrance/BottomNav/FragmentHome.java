@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
@@ -39,6 +40,7 @@ public class FragmentHome extends Fragment {
     SharedPreferences sharedPreferences;
 
     ShimmerFrameLayout shimmerFrameLayout;
+    TextView notificationBadge;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -76,6 +78,10 @@ public class FragmentHome extends Fragment {
             startActivity(new Intent(getActivity(), MessengerActivity.class));
         });
 
+        notificationBadge = binding.customAppBar.findViewById(R.id.notificationBadge);
+        String currentUserId = GetUserName.getUsernameFromSharedPreferences(requireContext());
+        // Fetch friend requests
+        fetchFriendRequests(currentUserId);
 
         // Set up story RecyclerView
 //        setupStoryRecyclerView();
@@ -85,6 +91,44 @@ public class FragmentHome extends Fragment {
         return view;
 
     }
+
+    private void fetchFriendRequests(String recipientId) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("friendRequests")
+                .whereEqualTo("recipientId", recipientId)
+                .whereEqualTo("status", "pending")
+                .addSnapshotListener((queryDocumentSnapshots, e) -> {
+                    if (e != null) {
+                        Log.w("Failed Home", "Listen failed.", e);
+                        return;
+                    }
+
+                    if (queryDocumentSnapshots != null) {
+                        int pendingCount = queryDocumentSnapshots.size();
+                        updateBadgeCount(pendingCount);
+                    } else {
+                        updateBadgeCount(0);
+                    }
+                });
+    }
+
+//    public void onNewFriendRequest() {
+//        int currentCount = notificationBadge.getText().toString().isEmpty() ? 0 : Integer.parseInt(notificationBadge.getText().toString());
+//        updateBadgeCount(currentCount + 1);
+//    }
+
+    // Method to update the badge count
+    private void updateBadgeCount(int count) {
+        if (count > 0) {
+            notificationBadge.setText(String.valueOf(count));
+            notificationBadge.setVisibility(View.VISIBLE);
+        } else {
+            notificationBadge.setVisibility(View.GONE);
+        }
+    }
+
+
+
     // Method to set up RecyclerView for posts
 
     private void setupPostRecyclerView(FirebaseFirestore db) {

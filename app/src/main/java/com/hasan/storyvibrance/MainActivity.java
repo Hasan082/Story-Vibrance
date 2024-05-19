@@ -49,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     //ToDo===To be done=====
-    // home remove recyclerview hidden
     // Badge
     // Page viewer
     // User profile click over image

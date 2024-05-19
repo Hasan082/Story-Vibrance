@@ -29,15 +29,43 @@
         android:text="@string/app_name"
         />
 
-    <!-- Notification icon -->
-    <ImageView
-        android:id="@+id/notificationIcon"
-        android:layout_width="wrap_content"
+    <!-- FrameLayout to hold notification icon and badge -->
+    <FrameLayout
+        android:layout_width="30dp"
         android:layout_height="wrap_content"
-        android:src="@drawable/notification"
         android:layout_gravity="center_vertical"
         android:layout_marginEnd="16dp"
-        />
+        >
+
+        <!-- Notification icon -->
+        <ImageView
+            android:id="@+id/notificationIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/notification"
+            />
+
+        <!-- Badge for notification icon -->
+        <TextView
+            android:id="@+id/notificationBadge"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_gravity="end|top"
+            android:background="@drawable/badge_background"
+            android:gravity="center"
+            android:textColor="@android:color/white"
+            android:textSize="11sp"
+            android:visibility="visible" />
+    </FrameLayout>
+
+<!--    <ImageView-->
+<!--        android:id="@+id/notificationIcon"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:src="@drawable/notification"-->
+<!--        android:layout_gravity="center_vertical"-->
+<!--        android:layout_marginEnd="16dp"-->
+<!--        />-->
 
     <!-- Messenger icon -->
     <ImageView
