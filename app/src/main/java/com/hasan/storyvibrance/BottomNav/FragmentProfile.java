@@ -105,7 +105,6 @@ public class FragmentProfile extends Fragment {
             for (DocumentSnapshot ownPost : doc) {
                 String profileMedia = (String) ownPost.get("postMedia");
                 ProfilePostModel postModel = new ProfilePostModel(profileMedia);
-                System.out.println("profileImg: " + profileMedia);
                 if(profileMedia != null){
                     profilePostImg.add(postModel);
                 }
@@ -183,7 +182,15 @@ public class FragmentProfile extends Fragment {
             return;
         }
 
-        uri = getImageUri(requireContext(), bitmap);
+//        uri = getImageUri(requireContext(), bitmap);
+        try {
+            uri = getImageUri(requireContext(), bitmap);
+            // Use the URI as needed
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Handle the exception
+        }
+
 
         StorageReference storageRef = FirebaseStorage.getInstance().getReference().child("profileImg");
         StorageReference imgRef = storageRef.child(System.currentTimeMillis() + ".jpg");

@@ -5,6 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:background="@drawable/rounded_gray_bg"
+    android:layout_marginBottom="10dp"
     android:padding="12dp">
 
     <!-- Friend's Profile Picture -->

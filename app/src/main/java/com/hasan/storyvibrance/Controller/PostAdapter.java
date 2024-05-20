@@ -99,8 +99,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
 
         holder.likeCount.setText(String.valueOf(post.getLikes() != null ? post.getLikes().size() : 0));
 
-
-
         //Fetch the current user
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String userId = user != null ? user.getUid() : null;
