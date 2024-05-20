@@ -2,11 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/search_post"
-        android:icon="@drawable/nav_search"
-        android:iconTint="@color/white"
-        android:title="Search Post" />
-    <item
         android:id="@+id/add_friend"
         android:icon="@drawable/add_friend"
         android:iconTint="@color/white"

@@ -18,7 +18,6 @@ import com.hasan.storyvibrance.Posts.AddFriendActivity;
 import com.hasan.storyvibrance.Posts.AddPostActivity;
 import com.hasan.storyvibrance.Posts.FriendListActivity;
 import com.hasan.storyvibrance.Posts.SavedPostActivity;
-import com.hasan.storyvibrance.Posts.SearchPostActivity;
 import com.hasan.storyvibrance.R;
 import com.hasan.storyvibrance.Utility.GetUserName;
 import com.hasan.storyvibrance.Utility.NameCapitalize;
@@ -48,9 +47,6 @@ public class NavigationActivity extends AppCompatActivity {
         //Drawer NAV FUNCTION======================
 
         binding.drawerNavView.setNavigationItemSelectedListener(item -> {
-            if (item.getItemId() == R.id.search_post) {
-                startActivity(new Intent(NavigationActivity.this, SearchPostActivity.class));
-            }
             if (item.getItemId() == R.id.add_friend) {
                 startActivity(new Intent(NavigationActivity.this, AddFriendActivity.class));
             }

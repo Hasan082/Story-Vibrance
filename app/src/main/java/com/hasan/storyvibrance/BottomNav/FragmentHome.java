@@ -83,8 +83,6 @@ public class FragmentHome extends Fragment {
         // Fetch friend requests
         fetchFriendRequests(currentUserId);
 
-        // Set up story RecyclerView
-//        setupStoryRecyclerView();
         // Set up post RecyclerView
         setupPostRecyclerView(db);
 
@@ -149,17 +147,6 @@ public class FragmentHome extends Fragment {
                     // Clear the postMap before adding new posts
                     postMap.clear();
 
-//                    assert querySnapshot != null;
-//                    for (QueryDocumentSnapshot doc : querySnapshot) {
-//                        if (doc.exists()) {
-//                            String postId = doc.getId();
-//                            PostModel post = doc.toObject(PostModel.class);
-//                            post.setPostId(postId);
-//                            postMap.put(postId, post);
-//                        } else {
-//                            Log.d("postError", "No such document");
-//                        }
-//                    }
 
                     assert querySnapshot != null;
                     for (QueryDocumentSnapshot doc : querySnapshot) {

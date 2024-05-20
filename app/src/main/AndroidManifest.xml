@@ -43,6 +43,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.StoryVibrance"
         tools:targetApi="31">
+
+
         <activity
             android:name=".OnBoard.OnBoardActivity"
             android:exported="false" />
@@ -54,9 +56,6 @@
             android:exported="false" />
         <activity
             android:name=".Posts.AddFriendActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Posts.SearchPostActivity"
             android:exported="false" />
         <activity
             android:name=".Posts.EditPostActivity"
