@@ -92,6 +92,8 @@ public class NavigationActivity extends AppCompatActivity {
 
             if (selectedFragment != null) {
                 getSupportFragmentManager().beginTransaction().replace(R.id.insertView, selectedFragment).commit();
+                //Call again when fragment changes
+                loadUserProfile();
             }
 
             return fragmentSelected;
@@ -104,39 +106,9 @@ public class NavigationActivity extends AppCompatActivity {
         //call the appbar data load method
         loadUserProfile();
 
-//        String userName = GetUserName.getUsernameFromSharedPreferences(this);
-//        db.collection("userdata").document(userName).get().addOnSuccessListener(documentSnapshot -> {
-//            if (documentSnapshot.exists()) {
-//                String profileUri = documentSnapshot.getString("ProfileImg");
-//                String personName = documentSnapshot.getString("name");
-//                String personemail = documentSnapshot.getString("email");
-//                // Load profile image into the ImageView if appbarOmg is not null
-//                ImageView appbarImg = binding.drawerLayout.findViewById(R.id.appbarImg);
-//                ImageView drawerHeaderImg = binding.drawerLayout.findViewById(R.id.drawerHeaderImg);
-//                TextView personNmId = binding.drawerLayout.findViewById(R.id.personName);
-//                TextView personEmailAd = binding.drawerLayout.findViewById(R.id.personEmail);
-//                if (appbarImg != null && profileUri != null)  Picasso.get().load(profileUri).into(appbarImg);
-//                else Log.e("appbarImg", "appbarImg or profileUri is null");
-//                if (drawerHeaderImg != null && profileUri != null)  Picasso.get().load(profileUri).into(drawerHeaderImg);
-//                else Log.e("appbarImg", "appbarImg or profileUri is null");
-//                if (personNmId != null && personName != null)  personNmId.setText(NameCapitalize.capitalize(personName));
-//                else Log.e("personNmId", "personNmId is null");
-//                if (personEmailAd != null && personemail != null)  personEmailAd.setText(personemail);
-//                else Log.e("personNmId", "personNmId is null");
-//
-//            } else {
-//                // Handle the case where the document does not exist
-//                Log.d("document", "No such document");
-//            }
-//        }).addOnFailureListener(e -> {
-//            // Handle any errors that occurred while retrieving the document
-//            Log.e("Database error", "Error fetching document: " + e.getMessage());
-//        });
-
-
-
 
     }
+
     private void loadUserProfile() {
         String userName = GetUserName.getUsernameFromSharedPreferences(this);
         db.collection("userdata").document(userName).get().addOnSuccessListener(documentSnapshot -> {
