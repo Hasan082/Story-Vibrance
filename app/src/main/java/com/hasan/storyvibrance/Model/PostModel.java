@@ -13,7 +13,6 @@ public class PostModel {
     private String authorImg; // URL or path of the author's profile image
     private String postTextContent; // Content of the post
     private String postMedia; // URL or path of the post media (image or video)
-//    private List<LikeModel> likes; // List of likes on the post
     private List<Map<String, Object>> likes; // List of likes on the post
     private List<CommentModel> comments; // List of comments on the post
     private String timestamp; // Timestamp of when the post was created
@@ -102,15 +101,6 @@ public class PostModel {
         this.postMedia = postMedia;
     }
 
-//    public List<LikeModel> getLikes() {
-//        return likes;
-//    }
-//    public List<LikeModel> getLikes() {
-//        return likes != null ? likes : Collections.emptyList(); // Return an empty list if 'likes' is null
-//    }
-//    public void setLikes(List<LikeModel> likes) {
-//        this.likes = likes;
-//    }
 
     public List<CommentModel> getComments() {
         return comments;
@@ -127,49 +117,6 @@ public class PostModel {
     public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
     }
-//
-//    /**
-//     * Adds a like to the post.
-//     * @param like The LikeModel object representing the like to be added.
-//     */
-//    public void addLike(LikeModel like) {
-//        if (likes == null) {
-//            likes = new ArrayList<>();
-//        }
-//        likes.add(like);
-//    }
-//
-//    /**
-//     * Removes a like from the post.
-//     * @param userId The ID of the user whose like is to be removed.
-//     */
-//    public void removeLike(String userId) {
-//        if (likes != null) {
-//            for (Iterator<LikeModel> iterator = likes.iterator(); iterator.hasNext();) {
-//                LikeModel like = iterator.next();
-//                if (like.getUserId().equals(userId)) {
-//                    iterator.remove();
-//                    break;
-//                }
-//            }
-//        }
-//    }
-//
-//    /**
-//     * Checks if the post is liked by a specific user.
-//     * @param userId The ID of the user to check for liking the post.
-//     * @return True if the post is liked by the specified user, otherwise false.
-//     */
-//    public boolean isLikedByUser(String userId) {
-//        if (likes != null) {
-//            for (LikeModel like : likes) {
-//                if (like.getUserId().equals(userId)) {
-//                    return true;
-//                }
-//            }
-//        }
-//        return false;
-//    }
 
 
     public List<Map<String, Object>> getLikes() {
