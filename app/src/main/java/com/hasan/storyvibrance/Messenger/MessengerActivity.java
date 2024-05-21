@@ -39,7 +39,6 @@ public class MessengerActivity extends AppCompatActivity {
 
     private MessageAdapter messageAdapter;
     private ArrayList<Message> messages;
-
     ActivityMessengerBinding binding;
     private FirebaseFirestore db;
 
@@ -52,7 +51,6 @@ public class MessengerActivity extends AppCompatActivity {
         messageAdapter = new MessageAdapter(messages);
         binding.recyclerViewChat.setLayoutManager(new LinearLayoutManager(this));
         binding.recyclerViewChat.setAdapter(messageAdapter);
-
         // Initialize Firestore
         db = FirebaseFirestore.getInstance();
 
@@ -69,6 +67,14 @@ public class MessengerActivity extends AppCompatActivity {
                 }
             }
         });
+
+        //back to previous page
+        binding.backBtn.setOnClickListener(v->{
+            getOnBackPressedDispatcher().onBackPressed();
+        });
+
+
+
     }
 
     private void loadMessages() {

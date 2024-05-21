@@ -44,9 +44,6 @@
         android:theme="@style/Theme.StoryVibrance"
         tools:targetApi="31">
         <activity
-            android:name=".Messenger.MessengerFriendActivity"
-            android:exported="false" />
-        <activity
             android:name=".OnBoard.OnBoardActivity"
             android:exported="false" />
         <activity
