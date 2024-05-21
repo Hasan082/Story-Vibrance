@@ -19,6 +19,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.hasan.storyvibrance.Controller.PostAdapter;
 import com.hasan.storyvibrance.Messenger.MessengerActivity;
+import com.hasan.storyvibrance.Messenger.MessengerFriendActivity;
 import com.hasan.storyvibrance.Model.PostModel;
 import com.hasan.storyvibrance.Posts.ActivityFriendRequests;
 import com.hasan.storyvibrance.R;

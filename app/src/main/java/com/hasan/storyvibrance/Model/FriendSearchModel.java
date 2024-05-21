@@ -19,6 +19,7 @@ public class FriendSearchModel {
 
     }
 
+
     public String getId() {
         return id;
     }
