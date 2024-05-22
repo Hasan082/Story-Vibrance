@@ -28,7 +28,7 @@ StoryVibrance is a social media application that allows users to connect with fr
 ## Screenshots
 
 *screenshots of app.*
-![](screenshots/1.png)![](screenshots/2.png)
+![](https://github.com/Hasan082/Story-Vibrance/blob/main/screenshots/1.png)![](https://github.com/Hasan082/Story-Vibrance/blob/main/screenshots/2.png)
 
 ## Installation
 
