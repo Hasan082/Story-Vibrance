@@ -4,34 +4,22 @@ package com.hasan.storyvibrance.Messenger;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
 
-
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.Timestamp;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.hasan.storyvibrance.Controller.MessageAdapter;
 import com.hasan.storyvibrance.Model.Message;
 import com.hasan.storyvibrance.R;
+import com.hasan.storyvibrance.Utility.GetUserName;
+import com.hasan.storyvibrance.Utility.PostAdapterUtils.UserDataFetcher;
 import com.hasan.storyvibrance.databinding.ActivityMessengerBinding;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 
@@ -53,31 +41,26 @@ public class MessengerActivity extends AppCompatActivity {
         binding.recyclerViewChat.setAdapter(messageAdapter);
         // Initialize Firestore
         db = FirebaseFirestore.getInstance();
-
+        String senderUserid = GetUserName.getUsernameFromSharedPreferences(this);
         // Load messages from Firestore
         loadMessages();
 
-        binding.buttonSend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String message = binding.editTextMessage.getText().toString().trim();
-                if (!TextUtils.isEmpty(message)) {
-                    sendMessage(message);
-                    binding.editTextMessage.setText("");
-                }
+        binding.buttonSend.setOnClickListener(v -> {
+            String message = binding.editTextMessage.getText().toString().trim();
+            if (!TextUtils.isEmpty(message)) {
+                sendMessage(message, senderUserid);
+                binding.editTextMessage.setText("");
             }
         });
 
         //back to previous page
-        binding.backBtn.setOnClickListener(v->{
-            getOnBackPressedDispatcher().onBackPressed();
-        });
-
+        binding.backBtn.setOnClickListener(v-> getOnBackPressedDispatcher().onBackPressed());
 
 
     }
 
     private void loadMessages() {
+
         db.collection("messages")
                 .orderBy("timestamp")
                 .addSnapshotListener((snapshot, e) -> {
@@ -85,15 +68,14 @@ public class MessengerActivity extends AppCompatActivity {
                         Log.e("error", "Error fetching messages", e);
                         return;
                     }
-
                     messages.clear();
                     if (snapshot != null) {
                         for (DocumentSnapshot document : snapshot.getDocuments()) {
                             String messageContent = document.getString("message");
                             Long timestamp = document.getLong("timestamp");
-
+                            String senderUserid = document.getString("currentSenderId");
                             if (timestamp != null && messageContent != null) {
-                                Message message = new Message(messageContent, timestamp);
+                                Message message = new Message(messageContent, senderUserid, timestamp);
                                 messages.add(message);
                             }
                         }
@@ -106,24 +88,19 @@ public class MessengerActivity extends AppCompatActivity {
 
 
 
-    private void sendMessage(String message) {
+    private void sendMessage(String message, String senderUserid) {
         Map<String, Object> data = new HashMap<>();
         data.put("message", message);
+        data.put("currentSenderId", senderUserid);
         data.put("timestamp", System.currentTimeMillis());
 
         db.collection("messages")
                 .add(data)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        // Message sent successfully
-                    }
+                .addOnSuccessListener(documentReference -> {
+                    // Message sent successfully
                 })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        // Handle failure
-                    }
+                .addOnFailureListener(e -> {
+                    // Handle failure
                 });
     }
 }
