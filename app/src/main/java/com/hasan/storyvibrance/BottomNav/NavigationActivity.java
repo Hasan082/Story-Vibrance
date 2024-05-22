@@ -121,9 +121,9 @@ public class NavigationActivity extends AppCompatActivity {
                 ImageView drawerHeaderImg = binding.drawerLayout.findViewById(R.id.drawerHeaderImg);
                 TextView personNmId = binding.drawerLayout.findViewById(R.id.personName);
                 TextView personEmailAd = binding.drawerLayout.findViewById(R.id.personEmail);
-                if (appbarImg != null && profileUri != null)  Picasso.get().load(profileUri).into(appbarImg);
+                if (appbarImg != null && profileUri != null)  Picasso.get().load(profileUri).placeholder(R.drawable.edit_person).into(appbarImg);
                 else Log.e("appbarImg", "appbarImg or profileUri is null");
-                if (drawerHeaderImg != null && profileUri != null)  Picasso.get().load(profileUri).into(drawerHeaderImg);
+                if (drawerHeaderImg != null && profileUri != null)  Picasso.get().load(profileUri).placeholder(R.drawable.edit_person).into(drawerHeaderImg);
                 else Log.e("appbarImg", "appbarImg or profileUri is null");
                 if (personNmId != null && personName != null)  personNmId.setText(NameCapitalize.capitalize(personName));
                 else Log.e("personNmId", "personNmId is null");

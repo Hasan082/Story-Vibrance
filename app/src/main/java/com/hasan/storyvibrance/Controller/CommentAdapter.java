@@ -55,7 +55,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         UserDataFetcher userDataFetcher = new UserDataFetcher(db);
         userDataFetcher.fetchUserData(comment.getUserId(), (name, profileImg) -> {
             holder.commentUserName.setText(name);
-            Picasso.get().load(profileImg).into(holder.commentProfilePic);
+            Picasso.get().load(profileImg).placeholder(R.drawable.edit_person).into(holder.commentProfilePic);
         });
     }
 

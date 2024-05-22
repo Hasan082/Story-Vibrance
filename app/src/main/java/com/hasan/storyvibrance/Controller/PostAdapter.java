@@ -86,7 +86,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
         userDataFetcher.fetchUserData(postAuthor, (name, profileImg) -> {
             String fullName = NameCapitalize.capitalize(name);
             holder.authorName.setText(fullName);
-            Picasso.get().load(profileImg).into(holder.authorImg);
+            Picasso.get().load(profileImg).placeholder(R.drawable.edit_person).into(holder.authorImg);
         });
 
         // Populate post data directly from the PostModel object

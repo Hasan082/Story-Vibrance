@@ -139,6 +139,8 @@ public class FragmentProfile extends Fragment {
                     .placeholder(R.drawable.edit_person)
                     .error(R.drawable.edit_person)
                     .into(binding.profileImg);
+        }else {
+            Picasso.get().load(R.drawable.edit_person).into(binding.profileImg);
         }
 
 //        binding.spinner.setVisibility(View.GONE);
