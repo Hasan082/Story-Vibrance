@@ -170,33 +170,27 @@
                             android:layout_marginTop="5dp"
                             android:layout_marginBottom="10dp"
                             android:orientation="horizontal"
-                            android:paddingHorizontal="@dimen/margin_medium">
+                            android:paddingHorizontal="@dimen/padding_v_large">
 
                             <TextView
-                                android:id="@+id/postcount"
+                                android:id="@+id/postCount"
                                 style="@style/TextAppearance.Body3"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentStart="true"
                                 android:layout_marginEnd="15dp"
-                                android:text="59 posts" />
+                                android:textStyle="bold"
+                                android:text="0 post" />
+
 
                             <TextView
-                                android:id="@+id/following"
-                                style="@style/TextAppearance.Body3"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerHorizontal="true"
-                                android:layout_marginEnd="15dp"
-                                android:text="125 following" />
-
-                            <TextView
-                                android:id="@+id/follower"
+                                android:id="@+id/friendNumber"
                                 style="@style/TextAppearance.Body3"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentEnd="true"
-                                android:text="850 follower" />
+                                android:textStyle="bold"
+                                android:text="0 follower" />
 
                         </RelativeLayout>
 

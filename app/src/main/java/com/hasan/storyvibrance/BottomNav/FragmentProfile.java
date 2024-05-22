@@ -23,8 +23,12 @@ import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -113,12 +117,40 @@ public class FragmentProfile extends Fragment {
             profilePostAdapter.notifyDataSetChanged();
         });
 
-
-
+        //Display Total Post By user
+        fetchAndDisplayTotalPosts(userName, db);
+        //Display Total Friend  for this user
+        fetchAndDisplayTotalFriends(userName, db);
 
 
         return view;
     }
+
+    private void fetchAndDisplayTotalFriends(String username, FirebaseFirestore db) {
+        db.collection("posts")
+                .whereEqualTo("authorUsername", username)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    long totalPosts = queryDocumentSnapshots.size();
+                    if(totalPosts>1) binding.postCount.setText(totalPosts + " Posts");
+                    else binding.postCount.setText(totalPosts + " Post");
+                });
+    }
+
+
+    private void fetchAndDisplayTotalPosts(String username, FirebaseFirestore db) {
+        db.collection("friendRequests").whereEqualTo("recipientId", username)
+                .whereEqualTo("status", "confirmed").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        int totalFriend = queryDocumentSnapshots.size();
+                        if (totalFriend > 1) binding.friendNumber.setText(totalFriend + " Friends");
+                        else binding.friendNumber.setText(totalFriend + " Friend");
+                    }
+                });
+    }
+
+
 
     private void handleFirestoreError(Exception e) {
         Toast.makeText(getContext(), "Database Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -143,7 +175,7 @@ public class FragmentProfile extends Fragment {
             Picasso.get().load(R.drawable.edit_person).into(binding.profileImg);
         }
 
-//        binding.spinner.setVisibility(View.GONE);
+
         // Stop shimmer animation after data is loaded
         new Handler().postDelayed(() -> {
             binding.profileWrapper.setVisibility(View.VISIBLE);
@@ -184,7 +216,7 @@ public class FragmentProfile extends Fragment {
             return;
         }
 
-//        uri = getImageUri(requireContext(), bitmap);
+
         try {
             uri = getImageUri(requireContext(), bitmap);
             // Use the URI as needed
