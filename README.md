@@ -1,7 +1,3 @@
-Sure, here’s a comprehensive README file for your social media application:
-
----
-
 # StoryVibrance
 
 StoryVibrance is a social media application that allows users to connect with friends, chat, comment on posts, save posts, add friends, view friend lists, and manage friend requests. This README file provides an overview of the project, setup instructions, and details about the various features and components.
